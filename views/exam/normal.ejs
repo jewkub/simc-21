@@ -1,0 +1,112 @@
+<%
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = (Math.random() * counter) | 0; // http://bit.ly/2LhrEt2
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+
+    return array;
+} // http://bit.ly/2uGCIFr
+%>
+<!DOCTYPE html>
+<html>
+<body>
+  <div class="container">
+    <form method="post" action="/exam" enctype="multipart/form-data">
+      <h3 style="text-align: center;">part <%= part %> exam!</h3>
+      <br>
+      <br>
+      <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
+      <%
+        exam.forEach(e => {
+      %>
+        <div class="card">
+          <div class="card-header">
+            <%= e.num %>. <%= e.question %>
+          </div>
+          <div class="card-body <%= e.answerType %>" id="div_<%= e.part %>_<%= e.num %>">
+            <%
+              let name = part + '_' + e.num;
+              // choice
+              if(e.answerType == 'choice') {
+                let sub = e.subQuestion.split('\n');
+                sub.forEach((choice, i, arr) => {
+                  arr[i] = new String(arr[i]);
+                  arr[i].real = i + 1;
+                });
+                shuffle(sub).forEach(choice => {
+                  let choicename = part + '_' + e.num + '_' + choice.real;
+            %>       
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="<%= name %>" id="<%= choicename %>" value="<%= choice.real %>">
+                <label class="form-check-label" for="<%= choicename %>">
+                  <%= choice %>
+                </label>
+              </div>
+            <%
+                });
+              } 
+              // essay
+              else if(e.answerType == 'essay') {
+            %>
+              <textarea class="form-control" id="<%= name %>" name="<%= name %>" rows="3"></textarea>
+              <!-- <input type="text" class="form-control" name="<%= name %>" id="<%= name %>" placeholder="Answer here"> -->
+            <%
+              }
+              // upload
+              else if(e.answerType == 'upload') {
+            %>
+              <div class="form-group">
+                <label for="<%= name %>">Upload file for No. <%= e.num %></label>
+                <input type="file" class="form-control-file" id="<%= name %>" name="<%= name %>">
+              </div>
+            <%
+              }
+            %>
+            <br>
+          </div>
+        </div>
+        <br>
+      <% }); %>
+      <div class="row">
+        <div class="col">
+          <a role="button" class="btn btn-primary" href="/exam?part=<%= part-1 %>">Discard change and go back</a>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Save and go next</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="/js/exam-bundle.js"></script>
+  <script>
+    <%
+      oldAnswer.forEach(e => {
+    %>
+    let $<%= e.num %> = $('#div_<%= e.num %>');
+    if($<%= e.num %>.hasClass('choice')) { // choice
+      $('#<%= e.num %>_<%= e.ans %>').attr('checked', '');
+    }
+    else if($<%= e.num %>.hasClass('essay')) {
+      $('#<%= e.num %>').val('<%= e.ans %>');
+    }
+    <%
+      });
+    %>
+  </script>
+</body>
+</html>

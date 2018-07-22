@@ -1,0 +1,8 @@
+indexes:
+
+- kind: Exam
+  properties:
+  - name: part
+    direction: asc
+  - name: num
+    direction: asc # http://bit.ly/2LcWR0m

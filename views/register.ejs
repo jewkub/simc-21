@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    </style>
+    <script src='https://www.google.com/recaptcha/api.js?render=6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu'></script>
+    <script>
+      let recaptcha = null;
+      grecaptcha.ready(function() {
+        (function foo() {
+          grecaptcha.execute('6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu', {action: 'login'})
+            .then(function(token) {
+              recaptcha = token;
+              $('#token').val(token);
+          });
+          window.setTimeout(foo, 1000*60);
+        })(); // http://bit.ly/2LhnMal
+      });</script>
+  </head>
+  <body>
+    <div class="container">
+      <br>
+      <h2>Register</h2>
+      <br>
+      <form method="post" action="/register" novalidate>
+        <div class="form-group">
+          <label for="emailInput">Email address</label>
+          <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email" name="email" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback" id="emailInvalid">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <input type="password" class="form-control" id="passwordInput" placeholder="Password" name="password" required>
+          <div class="invalid-feedback">
+            Password should be at least 4 characters.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="passwordConfirmInput">Confirm Password</label>
+          <input type="password" class="form-control" id="passwordConfirmInput" placeholder="Confirm Password" name="passwordConfirm" required>
+          <div class="invalid-feedback">
+            Password not match.
+          </div>
+        </div>
+        <input name="token" id="token" class="is-valid" style="display:none;">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <script src="/js/register-bundle.js"></script>
+  </body>
+</html>

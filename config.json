@@ -1,0 +1,4 @@
+{
+  "GCLOUD_PROJECT": "simc-20",
+  "DATA_BACKEND": "datastore"
+}
