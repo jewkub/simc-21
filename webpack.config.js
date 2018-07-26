@@ -5,7 +5,8 @@ module.exports = {
   entry: {
     home: './src/home.js',
     register: './src/register.js',
-    exam: './src/exam.js',
+    normal: './src/normal.js',
+    timelimit: './src/timelimit.js',
   },
   output: {
     filename: '[name]-bundle.js',

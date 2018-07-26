@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form method="post" action="/exam/start">
+        <h3 style="text-align: center;">ข้อสอบชุดที่ <%= part %></h3>
+        <p>จะมีการจับเวลา เมื่อกดปุ่มด้านล่างนี้จะเป็นการเปิดข้อสอบและเริ่มจับเวลา หากเกิดเหตุขัดข้องระหว่างทำข้อสอบ สามารถกลับมาทำใหม่ได้ภายในเวลา</p>
+        <p>แต่จะต้องตอบข้อที่ตอบไปแล้วทั้งหมด ทั้งนี้<b>ช้อยส์จะถูกสลับใหม่</b> ขอให้ทำด้วยความระมัดระวัง</p>
+        <input style="display: none;" name="part" value="<%= part %>">
+        <br>
+        <button type="submit" class="btn btn-primary">เริ่มจับเวลา</button>
+        <br>
+      </form>
+      <br>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="/exam?part=<%= part-1 %>" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          <li class="page-item"><a class="page-link" href="/exam?part=1">1</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
+          <li class="page-item active"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=4">4</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=5">5</a></li>
+          <li class="page-item">
+            <a class="page-link" href="/exam?part=<%= part+1 %>" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <script src="/js/normal-bundle.js"></script>
+  </body>
+</html>

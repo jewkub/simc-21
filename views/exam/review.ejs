@@ -1,0 +1,146 @@
+<%
+  let ex = [], cnt = 0;
+  exam.forEach(e => {
+    if(e.part == 3) return ;
+    if(!ex[e.part]) ex[e.part] = [];
+    ex[e.part][e.num] = true;
+    cnt++;
+  });
+  oldAnswer.forEach(e => {
+    if(e.part == 3) return ;
+    if(e.ans) {
+      delete ex[e.part][e.num];
+      cnt--;
+    }
+  });
+  if(!user.endTime) {
+    ex[3] = ['(ยังไม่ได้ทำข้อสอบชุดนี้)'];
+    cnt++;
+  }
+%>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-image: url("images/b.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      html, body, .container {
+        height: 100%;
+        margin: 0;
+      } /* http://bit.ly/2NvWtqh */
+      iframe {
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        /* border: 3px solid red; */
+      }
+      #frame {
+        width: 100%;
+        height: 80%;
+        /* border: 3px solid blue; */ /* http://bit.ly/2muq8ES */
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">[Logo]</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      </div>
+    </nav>
+    <div class="container">
+      <%
+        if(cnt) {
+      %>
+      <div class="row">
+        <div class="col">
+          <h3 style="text-align:center;">ข้อที่ยังไม่ได้ทำ</h3>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">ชุดที่</th>
+                <th scope="col">ข้อที่</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+                ex.forEach((i, i1) => {
+                  i.forEach((j, j1) => {
+                    if(j1 == 0) j1 = ex[i1][j1];
+              %>
+              <tr>
+                <td><%= i1 %></td>
+                <td><%= j1 %></td>
+              </tr>
+              <%
+                  });
+                });
+              %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <%
+        }
+        else {
+      %>
+      <div class="row">
+        <div class="col">
+          <h3 style="text-align:center;">ทบทวนคำตอบอีกครั้ง</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p style="text-align:center;">ถ้าพร้อมแล้วกดส่งได้เลย</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col" style="text-align:center;">
+          <button type="button" class="btn btn-primary" onclick="window.location='/submit';">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
+        </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <%
+        }
+      %>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="/exam?part=0">0</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=1">1</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=3">3</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=4">4</a></li>
+          <li class="page-item"><a class="page-link" href="/exam?part=5">5</a></li>
+        </ul>
+      </nav>
+    </div>
+    <script src="/js/home-bundle.js"></script>
+  </body>
+</html>

@@ -6,3 +6,12 @@ indexes:
     direction: asc
   - name: num
     direction: asc # http://bit.ly/2LcWR0m
+
+- kind: Answers
+  properties:
+  - name: email
+    direction: asc
+  - name: part
+    direction: asc
+  - name: num
+    direction: asc

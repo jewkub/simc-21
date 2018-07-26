@@ -1,0 +1,94 @@
+<%
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = (Math.random() * counter) | 0; // http://bit.ly/2LhrEt2
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+
+    return array;
+} // http://bit.ly/2uGCIFr
+%>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form method="post" action="/exam" enctype="multipart/form-data">
+        <h3 style="text-align: center;">ข้อสอบชุดที่ <%= part %></h3>
+        <p id="timeleft"></p>
+        <br>
+        <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
+        <%
+          exam.forEach(e => {
+        %>
+          <div class="card <%= e.answerType %>" id="div_<%= e.num %>">
+            <div class="card-header">
+              <%= e.num %>. <%= e.question %>
+            </div>
+            <div class="card-body">
+              <%
+                let name = e.num;
+                // choice
+                if(e.answerType == 'choice') {
+                  let sub = e.subQuestion.split('\n');
+                  sub.forEach((choice, i, arr) => {
+                    arr[i] = new String(arr[i]);
+                    arr[i].real = i + 1;
+                  });
+                  shuffle(sub).forEach(choice => {
+                    let choicename = e.num + '_' + choice.real;
+              %>       
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="<%= name %>" id="<%= choicename %>" value="<%= choice.real %>">
+                  <label class="form-check-label" for="<%= choicename %>">
+                    <%- choice %>
+                  </label>
+                </div>
+              <%
+                  });
+                } 
+              %>
+              <br>
+            </div>
+          </div>
+          <br>
+        <% }); %>
+        <br>
+        <button type="submit" class="btn btn-primary">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
+      </form>
+    </div>
+    <script src="/js/timelimit-bundle.js"></script>
+    <script>
+      let endTime = moment(<%= endTime %>);
+      (function foo() {
+        let timediff = moment.duration(endTime.diff(moment()));
+        if(timediff.asMilliseconds() <= 0) $('form').trigger('submit');
+        $('#timeleft').text('ขณะนี้เหลือเวลาอีก: ' + timediff.hours() + ' : ' + timediff.minutes() + ' : ' + timediff.seconds());
+        window.setTimeout(foo, 1000);
+      })(); // http://bit.ly/2LhnMal
+      <%
+        files.forEach(file => {
+          if(file.name.slice(-1)[0] != '/') {
+      %>
+            $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img align="middle" src="https://storage.googleapis.com/simc-20.appspot.com/<%= file.name %>">');
+      <%
+          }
+        });
+      %>
+    </script>
+  </body>
+</html>

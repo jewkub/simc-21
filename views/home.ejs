@@ -1,95 +1,131 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <style>
-    html, body, .container {
-      height: 100%;
-      margin: 0;
-    } /* http://bit.ly/2NvWtqh */
-    iframe {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      left: 0;
-      top: 0;
-      border: 3px solid red;
-    }
-    #frame {
-      margin: 0 auto;
-      width: 100%;
-      position: relative;
-      padding-top: 60%;
-      border: 3px solid blue; /* http://bit.ly/2muq8ES */
-    }
-  </style>
-</head>
-<body>
-  <% if (alertType != 'none') { %>
-    <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
-  <% } %>
-  <div class="container">
-    <h2>Woohoo!</h2>
-    <p>Welcome to SIMC! <%= name %></p>
-    <p
-      <% if (name) { %>
-        style="display:none;"
-      <% } %> 
-    >
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginModalButton">
-        Login
+  <head>
+    <style>
+      body {
+        background-image: url("images/b.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      html, body, .container {
+        height: 100%;
+        margin: 0;
+      } /* http://bit.ly/2NvWtqh */
+      iframe {
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        /* border: 3px solid red; */
+      }
+      #frame {
+        width: 100%;
+        height: 80%;
+        /* border: 3px solid blue; */ /* http://bit.ly/2muq8ES */
+      }
+      .navbar {
+        opacity: 0.92;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">[Logo]</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      or register <a href="/register">here!</a>
-    </p>
-    <p
-      <% if (!name) { %>
-        style="display:none;"
-      <% } %>
-    >
-      So, let's do the <a href="/exam">exam!</a> or <a href="/logout">logout</a>
-    </p>
-    <div id="frame">
-    <iframe frameborder="0" src="https://drive.google.com/file/d/1Zwe4qAV16acviqRfAQJpq42XFdne2iaB/preview"></iframe>
-    </div>
-  </div>
-  <!-- Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">Login</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      </div>
+    </nav>
+    <% if (alertType != 'none') { %>
+      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
+    <% } %>
+    <div class="container">
+      <br>
+      <div class="row">
+        <div class="col">
+          <h4 style="text-align:center;">ยินดีต้อนรับสู่ค่ายเส้นทางสู่หมอศิริราช ครั้งที่ 20 ! <%= name %></h4>
         </div>
-        <form id="loginForm" method="post" action="/login">
-          <div class="modal-body">
-            <div class="form-row">
-              <div class="col">
-                <div class="form-group">
-                  <label for="emailInput">Email</label>
-                  <input type="email" class="form-control" id="emailInput" name="email" aria-describedby="emailHelp" placeholder="Email" required>
-                  <small id="emailHelp" class="form-text text-muted">Just put your email here, y'know ?</small>
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="col">
-                <div class="form-group">
-                  <label for="passwordInput">Password</label>
-                  <input type="password" class="form-control" id="passwordInput" name="password" aria-describedby="passwordHelp" placeholder="Password" required>
-                  <small id="passwordHelp" class="form-text text-muted">Nah, Don't be paranoid. I will keep it secret.</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Login</button>
-          </div>
-        </form>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p
+            <% if (name) { %>
+              style="display:none;"
+            <% } %>
+          >
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginModalButton">
+              เข้าสู่ระบบ
+            </button>
+            หรือ สมัครสมาชิก <a href="/register">ที่นี่!</a>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p
+            <% if (!name) { %>
+              style="display:none;"
+            <% } else { %>
+              style="text-align: center;"
+            <% } %>
+          >
+            มาทำ<a href="/exam">ข้อสอบ</a>กันเถอะ!
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <a href="/logout" class="btn btn-primary"
+            <% if (!name) { %>
+              style="display:none;"
+            <% } %>
+          >
+            ออกจากระบบ
+          </a>
+        </div>
+      </div>
+      <br>
+      <div id="frame">
+        <iframe frameborder="0" src="https://drive.google.com/file/d/19xZOGsDt0v8NTFOojQhZTrVIVeYo7XEw/preview" width="640" height="480"></iframe>
       </div>
     </div>
-  </div>
-  <script src="/js/home-bundle.js"></script>
-</body>
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">เข้าสู่ระบบ</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="loginForm" method="post" action="/login">
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="emailInput">อีเมล</label>
+                    <input type="email" class="form-control" id="emailInput" name="email" aria-describedby="emailHelp" placeholder="อีเมล" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="passwordInput">รหัสผ่าน</label>
+                    <input type="password" class="form-control" id="passwordInput" name="password" aria-describedby="passwordHelp" placeholder="รหัสผ่าน" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="/js/home-bundle.js"></script>
+  </body>
 </html>

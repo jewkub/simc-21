@@ -1,4 +1,4 @@
-const url = require('url');
+// const url = require('url');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -6,6 +6,7 @@ const request = require('request');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const session = require('express-session');
+const moment = require('moment');
 const secret = require(__dirname + '/secret.json');
 const Multer = require('multer');
 const multer = Multer({
@@ -53,8 +54,8 @@ app.all('*', (req, res, next) => {
   // console.log(req.session);
   req.session.alert = req.session.alert || '';
   req.session.alertType = req.session.alertType || 'none';
-  req.session.name = req.session.name || '';
-  req.session.email = req.session.email || '';
+  req.session.userData = req.session.userData || {};
+  req.session.userData.email = req.session.userData.email || '';
   next();
 });
 
@@ -86,11 +87,11 @@ app.get('/', (req, res, next) => {
   let alert = {alert: req.session.alert, alertType: req.session.alertType};
   req.session.alert = '';
   req.session.alertType = 'none';
-  res.render('home.ejs', {name: req.session.email, alert: alert.alert, alertType: alert.alertType});
+  res.render('home.ejs', {name: req.session.userData.email, alert: alert.alert, alertType: alert.alertType});
   // console.log(req.session);
 });
 
-let register = {kind: 'Users'};
+let users = {kind: 'Users'};
 app.get('/register', (req, res, next) => {
   res.render('register.ejs');
 });
@@ -104,7 +105,7 @@ app.get('/register/validemail', (req, res, next) => {
   }); // http://bit.ly/2L7ZFM3
   let query = undefined;
   if(req.query.email) query = datastore
-    .createQuery(register.kind)
+    .createQuery(users.kind)
     .filter('email', '=', req.query.email);
   if(query) datastore
     .runQuery(query)
@@ -149,7 +150,7 @@ app.post('/register', (req, res, next) => {
         return next(new Error('failed recaptcha -> ' + JSON.stringify(body)));
       }
       let query = datastore
-        .createQuery(register.kind)
+        .createQuery(users.kind)
         .filter('email', '=', req.body.email);
       datastore
         .runQuery(query)
@@ -170,7 +171,7 @@ app.post('/register', (req, res, next) => {
           })
           .catch(next);
           return datastore.save({
-            key: datastore.key(register.kind),
+            key: datastore.key(users.kind),
             excludeFromIndexes: [
               'password',
             ],
@@ -181,7 +182,7 @@ app.post('/register', (req, res, next) => {
           });
         })
         .then(() => {
-          req.session.alert = 'register success';
+          req.session.alert = 'สมัครสมาชิกสำเร็จ';
           req.session.alertType = 'success';
           res.redirect('/'); // http://bit.ly/2L75DwK
         })
@@ -191,23 +192,27 @@ app.post('/register', (req, res, next) => {
 
 app.post('/login', (req, res, next) => {
   if(!req.body || !req.body.email || !req.body.password) return next(new Error('missing email or password -> ' + JSON.stringify(req.body)));
+  let userData;
   let query = datastore
-    .createQuery(register.kind)
+    .createQuery(users.kind)
     .filter('email', '=', req.body.email);
   datastore
     .runQuery(query)
     .then(result => {
-      if(result[0].length == 0) throw new Error('email not found -> ' + req.body.email);
+      if(result[0].length == 0) throw new Error('ไม่พบอีเมลนี้ -> ' + req.body.email);
       if(result[0].length > 1) throw new Error('duplicate email in Datastore -> ' + req.body.email); // http://bit.ly/2JBEGMf
-      req.tempdata = result[0][0];
+      userData = result[0][0];
+      // console.log(result[0][0]);
+      // console.log(userData);
       return bcrypt.compare(req.body.password, result[0][0].password);
     })
     .then(result => {
-      if(!result) throw new Error('wrong password -> ' + req.body.email);
+      if(!result) throw new Error('รหัสผ่านผิดในการเข้าสู่ระบบด้วยอีเมลนี้ -> ' + req.body.email);
       else {
-        req.session.email = req.tempdata.email;
-        console.log(req.session.email + ' just logged in');
-        req.session.alert = 'login success';
+        req.session.userData = userData;
+        req.session.userKey = userData[datastore.KEY];
+        console.log(req.session.userData.email + ' just logged in');
+        req.session.alert = 'เข้าสู่ระบบสำเร็จ';
         req.session.alertType = 'success';
         res.redirect('/'); // http://bit.ly/2L75DwK
       }
@@ -219,7 +224,7 @@ app.get('/logout', (req, res, next) => {
   req.session.regenerate(function(err) {
     if(err) return next(err);
     delete req.tempdata;
-    req.session.alert = 'logout success';
+    req.session.alert = 'ออกจากระบบสำเร็จ';
     req.session.alertType = 'success';
     res.redirect('/'); // http://bit.ly/2L75DwK
   });
@@ -229,41 +234,111 @@ let exam = {kind: 'Exam'};
 let answers = {kind: 'Answers'};
 
 app.get('/exam', (req, res, next) => {
-  if(!req.session.email) return next(new Error('You are currently not logged in, please go login first.'));
-  req.query.part = req.query.part || '0';
-  let examData;
+  if(!req.session.userData.email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  if(req.session.userData.done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
+  req.query.part = parseInt(req.query.part || '0');
+  let renderData = {};
   let query = datastore
     .createQuery(exam.kind)
-    .filter('part', '=', parseInt(req.query.part))
+    // .filter('part', '=', req.query.part)
     .order('num', {
       ascending: true
     });
   datastore
     .runQuery(query)
     .then(result => {
-      examData = result[0];
+      renderData.exam = result[0];
       let query = datastore
         .createQuery(answers.kind)
-        .filter('part', '=', parseInt(req.query.part))
-        .filter('email', '=', req.session.email)
+        .filter('email', '=', req.session.userData.email)
+        .order('part')
+        .order('num');
       return datastore.runQuery(query)
     })
     .then(oldAnswer => {
       oldAnswer = oldAnswer[0];
       // console.log(oldAnswer);
-      res.render('exam/normal.ejs', {part: req.query.part, exam: examData, oldAnswer: oldAnswer});
+      renderData.oldAnswer = oldAnswer;
+      return bucket.getFiles({prefix: 'public/question/' + req.query.part});
+    })
+    .then(pic => {
+      if(req.query.part == 3) {
+        res.render('exam/prepare.ejs', {part: req.query.part});
+      }
+      else if(req.query.part == 6) {
+        res.render('exam/review.ejs', {
+          oldAnswer: renderData.oldAnswer,
+          exam: renderData.exam,
+          user: req.session.userData,
+        });
+      }
+      else if(req.query.part > 6 || req.query.part < 0) {
+        throw new Error('ไม่มีข้อสอบชุดนี้')
+      }
+      else res.render('exam/normal.ejs', {
+        part: req.query.part,
+        exam: renderData.exam,
+        oldAnswer: renderData.oldAnswer,
+        files: pic[0]
+      });
+    })
+    .catch(next);
+});
+
+app.post('/exam/start', (req, res, next) => {
+  let now = moment().valueOf();
+  let renderData = {};
+  req.body.part = parseInt(req.body.part || '-1');
+  if(!req.session.userData.email) return next(new Error('Session error, no login data #1'));
+  if(req.session.userData.done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
+  if(req.session.userData.endTime) return next(new Error('ข้อสอบชุดนี้ถูกเก็บแล้ว'));
+  if(req.session.userData.startTime && moment(now).isAfter(moment(req.session.userData.startTime).add(3, 'h'))) return next(new Error('หมดเวลาทำข้อสอบชุดนี้แล้ว'));
+  let query = datastore
+    .createQuery(exam.kind)
+    .filter('part', '=', req.body.part)
+    .order('num', {
+      ascending: true
+    });
+  datastore
+    .runQuery(query)
+    .then(result => {
+      renderData.exam = result[0];
+      return bucket.getFiles({prefix: 'public/question/' + req.body.part});
+    })
+    .then(pic => {
+      if(!req.session.userData.startTime) {
+        console.log('user: ' + req.session.userData.email + ' start at: ' + moment(now).format());
+        req.session.userData.startTime = moment(now).valueOf();
+      }
+      res.render('exam/timelimit.ejs', {
+        endTime: moment(req.session.userData.startTime).add(3, 'hours').valueOf(),
+        part: 3,
+        exam: renderData.exam,
+        files: pic[0]
+      });
+      // console.log(req.session.userData.key);
+      return datastore.save({
+        key: req.session.userKey,
+        excludeFromIndexes: [
+          'password',
+        ],
+        data: req.session.userData
+      });
     })
     .catch(next);
 });
 
 app.post('/exam', multer.any(), (req, res, next) => {
-  if (!req.session.email) {
-    return next(new Error('Session error, no login data'));
+  if (!req.session.userData.email) return next(new Error('Session error, no login data #2'));
+  if(req.session.userData.done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
+  if(!req.body.part) {
+    console.log('no \'part\' data, use -1');
+    req.body.part = '-1';
   }
   req.body.part = parseInt(req.body.part);
   req.files.forEach(e => {
     let ext = e.originalname.split('.').slice(-1)[0];
-    const gcspath = 'answers/' + e.fieldname + '/' + req.session.email + '-' + Date.now() + '.' + ext;
+    const gcspath = 'answers/' + req.body.part + '/' + e.fieldname + '/' + req.session.userData.email + '-' + Date.now() + '.' + ext;
     req.body[e.fieldname] = gcspath;
     const file = bucket.file(gcspath);
 
@@ -285,46 +360,87 @@ app.post('/exam', multer.any(), (req, res, next) => {
 
     stream.end(e.buffer);
   });
-  for(let num in req.body) {
-    if(num == 'part') continue;
-    let query = datastore
-      .createQuery(answers.kind)
-      .filter('email', '=', req.session.email)
-      .filter('num', '=', num);
-    datastore
-      .runQuery(query)
-      .then(result => {
-        if(result[0].length > 1) throw new Error('duplicate answer in Datastore');
-        if(result[0].length == 0) return ;
-        // console.log(result[0][0][datastore.KEY]);
-        return new Promise(res => {res(result[0][0][datastore.KEY])});
-      })
-      .then(key => {
-        /* console.log({
-          num: num,
-          ans: req.body[num],
-          email: req.session.email,
-          part: req.body.part,
-        }); */
-        return datastore.save({
-          key: key || datastore.key(answers.kind),
-          excludeFromIndexes: [
-            'ans',
-          ],
-          data: {
-            num: num,
-            ans: req.body[num],
-            email: req.session.email,
-            part: req.body.part,
-          }
-        });
-      })
-      .catch(err => {
-        console.log('error when saving answer:');
-        console.error(err.message);
-      });
+  if(req.body.part == 3) {
+    req.session.userData.endTime = moment().valueOf();
+    datastore.save({
+      key: req.session.userKey,
+      excludeFromIndexes: [
+        'password',
+      ],
+      data: req.session.userData
+    });
   }
-  res.redirect('/exam?part=' + encodeURI(req.body.part + 1));
+  let query = datastore
+    .createQuery(exam.kind)
+    .filter('part', '=', req.body.part);
+  datastore
+    .runQuery(query)
+    .then(examData => {
+      examData = examData[0];
+      let ansType = {};
+      examData.forEach(e => {
+        ansType[e.num] = e.answerType;
+      });
+      for(let num in req.body) {
+        if(num == 'part' || num == 'will-go') continue;
+        num = parseInt(num);
+        let query = datastore
+          .createQuery(answers.kind)
+          .filter('email', '=', req.session.userData.email)
+          .filter('num', '=', num)
+          .filter('part', '=', req.body.part);
+        datastore
+          .runQuery(query)
+          .then(result => {
+            if(result[0].length > 1) throw new Error('duplicate answer in Datastore');
+            if(result[0].length == 0) return ;
+            // console.log(result[0][0][datastore.KEY]);
+            return new Promise(res => {res(result[0][0][datastore.KEY])});
+          })
+          .then(key => {
+            /* console.log({
+              num: num,
+              ans: req.body[num],
+              email: req.session.userData.email,
+              part: req.body.part,
+            }); */
+            return datastore.save({
+              key: key || datastore.key(answers.kind),
+              excludeFromIndexes: [
+                'ans',
+              ],
+              data: {
+                num: num,
+                ans: req.body[num],
+                email: req.session.userData.email,
+                part: req.body.part,
+                answerType: ansType[num],
+              }
+            });
+          })
+          .catch(err => {
+            console.log('error when saving answer:');
+            console.error(err.message);
+          });
+      }
+    if(req.body['will-go']) res.redirect('/exam?part=' + parseInt(req.body['will-go']));
+    else res.redirect('/exam?part=' + encodeURI(req.body.part + 1));
+  });
+});
+
+app.get('/submit', (req, res, next) => {
+  if(!req.session.userData.email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  req.session.userData.done = true;
+  datastore.save({
+    key: req.session.userKey,
+    excludeFromIndexes: [
+      'password',
+    ],
+    data: req.session.userData
+  });
+  req.session.alert = 'ส่งข้อสอบเรียบร้อย';
+  req.session.alertType = 'success';
+  res.redirect('/');
 });
 
 app.get('/favicon.ico', (req, res) => {

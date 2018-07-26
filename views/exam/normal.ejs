@@ -21,92 +21,153 @@ function shuffle(array) {
 %>
 <!DOCTYPE html>
 <html>
-<body>
-  <div class="container">
-    <form method="post" action="/exam" enctype="multipart/form-data">
-      <h3 style="text-align: center;">part <%= part %> exam!</h3>
-      <br>
-      <br>
-      <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
-      <%
-        exam.forEach(e => {
-      %>
-        <div class="card">
-          <div class="card-header">
-            <%= e.num %>. <%= e.question %>
-          </div>
-          <div class="card-body <%= e.answerType %>" id="div_<%= e.part %>_<%= e.num %>">
-            <%
-              let name = part + '_' + e.num;
-              // choice
-              if(e.answerType == 'choice') {
-                let sub = e.subQuestion.split('\n');
-                sub.forEach((choice, i, arr) => {
-                  arr[i] = new String(arr[i]);
-                  arr[i].real = i + 1;
-                });
-                shuffle(sub).forEach(choice => {
-                  let choicename = part + '_' + e.num + '_' + choice.real;
-            %>       
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="<%= name %>" id="<%= choicename %>" value="<%= choice.real %>">
-                <label class="form-check-label" for="<%= choicename %>">
-                  <%= choice %>
-                </label>
-              </div>
-            <%
-                });
-              } 
-              // essay
-              else if(e.answerType == 'essay') {
-            %>
-              <textarea class="form-control" id="<%= name %>" name="<%= name %>" rows="3"></textarea>
-              <!-- <input type="text" class="form-control" name="<%= name %>" id="<%= name %>" placeholder="Answer here"> -->
-            <%
-              }
-              // upload
-              else if(e.answerType == 'upload') {
-            %>
-              <div class="form-group">
-                <label for="<%= name %>">Upload file for No. <%= e.num %></label>
-                <input type="file" class="form-control-file" id="<%= name %>" name="<%= name %>">
-              </div>
-            <%
-              }
-            %>
-            <br>
-          </div>
-        </div>
+  <head>
+    <style>
+      .navbar {
+        opacity: 0.92;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">[Logo]</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      </div>
+    </nav>
+    <div class="container">
+      <form method="post" action="/exam" enctype="multipart/form-data">
+        <h3 style="text-align: center;">ข้อสอบชุดที่ <%= part %></h3>
         <br>
-      <% }); %>
-      <div class="row">
-        <div class="col">
-          <a role="button" class="btn btn-primary" href="/exam?part=<%= part-1 %>">Discard change and go back</a>
-        </div>
-      </div>
+        <br>
+        <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
+        <input type="text" class="form-control" style="display:none;" name="will-go" id="will-go">
+        <%
+          exam.forEach(e => {
+            if(e.part != part) return ;
+        %>
+          <div class="card <%= e.answerType %>" id="div_<%= e.num %>">
+            <div class="card-header">
+              <%= e.num %>. <%= e.question %>
+            </div>
+            <div class="card-body">
+              <%
+                let name = e.num;
+                // choice
+                if(e.answerType == 'choice') {
+                  let sub = e.subQuestion.split('\n');
+                  sub.forEach((choice, i, arr) => {
+                    arr[i] = new String(arr[i]);
+                    arr[i].real = i + 1;
+                  });
+                  shuffle(sub).forEach(choice => {
+                    let choicename = e.num + '_' + choice.real;
+              %>       
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="<%= name %>" id="<%= choicename %>" value="<%= choice.real %>">
+                  <label class="form-check-label" for="<%= choicename %>">
+                    <%- choice %>
+                  </label>
+                </div>
+              <%
+                  });
+                } 
+                // essay
+                else if(e.answerType == 'essay') {
+              %>
+                <textarea class="form-control" id="<%= name %>" name="<%= name %>" rows="3"></textarea>
+                <!-- <input type="text" class="form-control" name="<%= name %>" id="<%= name %>" placeholder="Answer here"> -->
+              <%
+                }
+                // upload
+                else if(e.answerType == 'upload') {
+              %>
+                <div class="form-group">
+                  <label for="<%= name %>">Upload file for No. <%= e.num %></label>
+                  <input type="file" class="form-control-file" id="<%= name %>" name="<%= name %>">
+                </div>
+              <%
+                }
+              %>
+            </div>
+          </div>
+          <br>
+        <% }); %>
+        <button type="submit" class="btn btn-primary">บันทึกคำตอบ (สามารถกลับมาแก้ไขได้)</button>
+      </form>
       <br>
-      <div class="row">
-        <div class="col">
-          <button type="submit" class="btn btn-primary">Save and go next</button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <script src="/js/exam-bundle.js"></script>
-  <script>
-    <%
-      oldAnswer.forEach(e => {
-    %>
-    let $<%= e.num %> = $('#div_<%= e.num %>');
-    if($<%= e.num %>.hasClass('choice')) { // choice
-      $('#<%= e.num %>_<%= e.ans %>').attr('checked', '');
-    }
-    else if($<%= e.num %>.hasClass('essay')) {
-      $('#<%= e.num %>').val('<%= e.ans %>');
-    }
-    <%
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <%
+            if(part != 0) {
+          %>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous" will-go="<%= part-1 %>">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          <%
+            }
+          %>
+          <li class="page-item"><a class="page-link" href="#" will-go="0">0</a></li>
+          <li class="page-item"><a class="page-link" href="#" will-go="1">1</a></li>
+          <li class="page-item"><a class="page-link" href="#" will-go="2">2</a></li>
+          <li class="page-item"><a class="page-link" href="#" will-go="3">3</a></li>
+          <li class="page-item"><a class="page-link" href="#" will-go="4">4</a></li>
+          <li class="page-item"><a class="page-link" href="#" will-go="5">5</a></li>
+          <%
+            if(part != 5) {
+          %>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next" will-go="<%= part+1 %>">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+          <%
+            }
+          %>
+        </ul>
+      </nav>
+    </div>
+    <script src="/js/normal-bundle.js"></script>
+    <script>
+      <%
+        oldAnswer.forEach(e => {
+          if(e.part != part) return ;
+      %>
+      let $<%= e.num %> = $('#div_<%= e.num %>');
+      if($<%= e.num %>.hasClass('choice')) { // choice
+        $('#<%= e.num %>_<%= e.ans %>').attr('checked', '');
+      }
+      else if($<%= e.num %>.hasClass('essay')) { // essay
+        $('#<%= e.num %>').html('<%= e.ans %>');
+      }
+      <%
+        });
+      %>
+      <%
+        files.forEach(file => {
+          if(file.name.slice(-1)[0] != '/') {
+      %>
+            $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img align="middle" src="https://storage.googleapis.com/simc-20.appspot.com/<%= file.name %>">');
+      <%
+          }
+        });
+      %>
+      $('ul.pagination a').each(function(i) {
+        if(parseInt($(this).attr('will-go')) == <%= part %>) {
+          $(this).parent().addClass('active');
+          return ;
+        }
+        $(this).click(event => {
+          $('#will-go').val($(this).attr('will-go'));
+          $('form').trigger('submit');
+        });
       });
-    %>
-  </script>
-</body>
+    </script>
+  </body>
 </html>

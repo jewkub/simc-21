@@ -20,34 +20,34 @@
   <body>
     <div class="container">
       <br>
-      <h2>Register</h2>
+      <h2>สมัครสมาชิก</h2>
       <br>
       <form method="post" action="/register" novalidate>
         <div class="form-group">
-          <label for="emailInput">Email address</label>
-          <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="Enter email" name="email" required>
+          <label for="emailInput">อีเมล</label>
+          <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="ใส่อีเมล" name="email" required>
           <div class="valid-feedback">
-            Looks good!
+            อีเมลนี้ใช้ได้
           </div>
           <div class="invalid-feedback" id="emailInvalid">
           </div>
         </div>
         <div class="form-group">
-          <label for="passwordInput">Password</label>
-          <input type="password" class="form-control" id="passwordInput" placeholder="Password" name="password" required>
+          <label for="passwordInput">รหัสผ่าน</label>
+          <input type="password" class="form-control" id="passwordInput" placeholder="รหัสผ่าน" name="password" required>
           <div class="invalid-feedback">
-            Password should be at least 4 characters.
+            รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร
           </div>
         </div>
         <div class="form-group">
-          <label for="passwordConfirmInput">Confirm Password</label>
-          <input type="password" class="form-control" id="passwordConfirmInput" placeholder="Confirm Password" name="passwordConfirm" required>
+          <label for="passwordConfirmInput">ยืนยันรหัสผ่าน</label>
+          <input type="password" class="form-control" id="passwordConfirmInput" placeholder="ยืนยันรหัสผ่าน" name="passwordConfirm" required>
           <div class="invalid-feedback">
-            Password not match.
+            รหัสผ่านไม่ตรงกัน
           </div>
         </div>
         <input name="token" id="token" class="is-valid" style="display:none;">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">สมัครสมาชิก</button>
       </form>
     </div>
     <script src="/js/register-bundle.js"></script>
