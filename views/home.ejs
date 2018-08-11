@@ -1,95 +1,138 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <link rel="stylesheet" href="/home-bundle.css">
+    <%- include('css.ejs') %>
     <style>
-      body {
-        background-image: url("images/b.jpg");
+      * {
+        font-size: x-large;
+      }
+      body, html {
+        height: 100%;
+      }
+      .parallax {
+        opacity: 0.6;
+
+        z-index: -1;
+
+        /* Full height */
+        height: 100%;
+        
+        width: 50%;
+
+        /* Create the parallax scrolling effect */
+        background-attachment: fixed;
+        background-position: center;
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: auto 100%;
       }
-      html, body, .container {
-        height: 100%;
-        margin: 0;
-      } /* http://bit.ly/2NvWtqh */
-      iframe {
-        height: 100%;
+      #p1 {
+        margin-left: 50%;
+        background-image: url("images/1.jpg");
+        --ratio: 1;
+        background-position: calc(75% + ( 960px * var(--ratio) ) / 4) center;
+      }
+      #p2 {
+        --ratio: 1;
+        background-image: url("images/2.jpg");
+        background-position: calc(25% - 1 / 4 * 960px * var(--ratio)) center;
+      }
+      #p3 {
+        margin-left: 50%;
+        background-image: url("images/3.jpg");
+        --ratio: 1;
+        background-position: calc(75% + ( 960px * var(--ratio) ) / 4) center; 
+      }
+      #p4 {
+        --ratio: 1;
+        background-image: url("images/4.jpg");
+        background-position: calc(25% - 1 / 4 * 960px * var(--ratio)) center;
+      }
+      @media only screen and (max-device-width: 1366px) {
+        .parallax {
+          background-attachment: scroll;
+          height: 435px;
+        }
+        #p1 {
+          background-position: 50% center;
+        }
+        #p3 {
+          background-position: 50% center;
+        }
+        #p2, #p4 {
+          background-position: center;
+        }
+        * {
+          font-size: medium;
+        }
+        .footer > .container > span {
+          font-size: inherit;
+        }
+      }
+      .footer {
+        position: static;
+        margin-top: 0;
+      }
+      .caption {
+        z-index: 0;
+        position: absolute;
+        height: 400px;
+        width: 50%;
+        background-color: white;
+      }
+      .caption > span {
+        display: inline-block;
+        vertical-align: middle;
+        margin: auto;
         width: 100%;
-        left: 0;
-        top: 0;
-        /* border: 3px solid red; */
-      }
-      #frame {
-        width: 100%;
-        height: 80%;
-        /* border: 3px solid blue; */ /* http://bit.ly/2muq8ES */
-      }
-      .navbar {
-        opacity: 0.92;
       }
     </style>
   </head>
   <body>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">[Logo]</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      </div>
-    </nav>
     <% if (alertType != 'none') { %>
       <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
     <% } %>
-    <div class="container">
-      <br>
-      <div class="row">
-        <div class="col">
-          <h4 style="text-align:center;">ยินดีต้อนรับสู่ค่ายเส้นทางสู่หมอศิริราช ครั้งที่ 20 ! <%= name %></h4>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <p
-            <% if (name) { %>
-              style="display:none;"
-            <% } %>
-          >
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginModalButton">
-              เข้าสู่ระบบ
-            </button>
-            หรือ สมัครสมาชิก <a href="/register">ที่นี่!</a>
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <p
-            <% if (!name) { %>
-              style="display:none;"
-            <% } else { %>
-              style="text-align: center;"
-            <% } %>
-          >
-            มาทำ<a href="/exam">ข้อสอบ</a>กันเถอะ!
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <a href="/logout" class="btn btn-primary"
-            <% if (!name) { %>
-              style="display:none;"
-            <% } %>
-          >
-            ออกจากระบบ
-          </a>
-        </div>
-      </div>
-      <br>
-      <div id="frame">
-        <iframe frameborder="0" src="https://drive.google.com/file/d/19xZOGsDt0v8NTFOojQhZTrVIVeYo7XEw/preview" width="640" height="480"></iframe>
+    <img src="images/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
+    <div class="caption container" style="padding-top: 10%;">
+      <span style="text-align: center; font-size: larger;">- 01 -<br>ร ะ เ บี ย บ ก า ร</span>
+      <span>- ค่าย 2 วัน 1 คืน ตั้งแต่วันเสาร์ที่ 19 มกราคม 2562 เวลา 7.00 น. ถึงวันอาทิตย์ที่ 20 มกราคม 2562 เวลา 19.00 น.<br>- สถานที่จัดกิจกรรม : คณะแพทยศาสตร์ศิริราชพยาบาล<br>- ที่พัก : ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช อ.นครชัยศรี จ.นครปฐม<br>- คุณสมบัติผู้สมัคร : นักเรียนที่กำลังศึกษาอยู่ชั้นมัธยมศึกษาตอนปลาย (ม.4-6)<br>- จำนวนที่รับสมัครทั้งหมด : 250 คน</span>
+    </div>
+    <div class="parallax" id="p1"></div>
+    <div class="caption container" style="right: 0;">
+      <span style="text-align: center; font-size: larger;">- 02 -<br>ก า ร รั บ ส มั ค ร</span>
+      <span>- เปิดรับสมัครตั้งแต่ วันที่ 18 สิงหาคม เวลา 0.00 น. – 6 ตุลาคม 2561 เวลา 23.59 น.<br>- กรอกใบสมัครและทําข้อสอบคัดเลือกออนไลน์ได้ที่ www.simc20.com<br>- เอกสารประกอบการสมัคร ส่งใบระเบียนแสดงผลการเรียน (ปพ.1) เป็นไฟล์ .jpg ทางเว็บไซต์<br>- ประกาศผลวันอาทิตย์ที่ 28 ตุลาคม 2561 ผ่านทางเว็บไซต์ www.simc20.com และเพจค่ายเส้นทางสู่หมอศิริราช (www.facebook.com/simedicalcamp20th)<br>- ผู้ที่ได้รับการคัดเลือกจะต้องได้รับการอนุญาตจากผู้ปกครองโดยส่งเอกสารยืนยันการเข้าร่วมกิจกรรมพร้อมค่าสมัคร 800 บาท</span>
+    </div>
+    <div class="parallax" id="p2"></div>
+    <div class="caption container" style="">
+      <span style="text-align: center; font-size: larger;">- 03 -<br>โ ป ร ด อ่ า น</span>
+      <span>- หากส่งเอกสารหรือตอบคําถามในการสมัครไม่ครบตามข้อกําหนด จะไม่ได้รับพิจารณาคัดเลือก<br>- การตัดสินของคณะกรรมการค่ายเส้นทางสู่หมอศิริราช ถือเป็นที่สิ้นสุด<br>- หากมีการเปลี่ยนแปลงใดๆ จะแจ้งให้ทราบผ่านทางเว็บไซต์ www.facebook.com/simedicalcamp20th ผู้สมัครจึงควรติดตามข่าวสารอย่างสม่ําเสมอ<br>- ทางคณะกรรมการค่ายเส้นทางสู่หมอศิริราชขอนําข้อมูลส่วนตัวมาใช้เพื่อติดต่อผู้สมัครที่ได้รับการคัดเลือกเกี่ยวกับการศึกษาต่อในคณะแพทยศาสตร์ศิริราชพยาบาลในอนาคตเพื่อประโยชน์ในการปรับปรุงและพัฒนาค่ายเส้นทางสู่หมอศิริราชต่อไป โดยไม่มีการนําข้อมูลไปเผยแพร่ และใช้ในวัตถุประสงค์อื่นโดยไม่ได้รับอนุญาต<br>- กรณีผู้ผ่านการคัดเลือกตัดสินใจจะไม่เข้าร่วมค่าย จะต้องแจ้งแก่คณะกรรมการเพื่อพิจารณาก่อนวันที่ 18 พฤศจิกายน 2561 จึงจะได้รับเงินคืนเต็มจํานวน หากแจ้งภายหลังวันดังกล่าวทางคณะกรรมการจะพิจารณาตามความเหมาะสม<br>- หากมีข้อสงสัย ติดต่อได้ทางเว็บไซต์ facebook.com/simedicalcamp20th</span>
+    </div>
+    <div class="parallax" id="p3"></div>
+    <div class="caption container" style="right: 0;">
+      <span style="text-align: center; font-size: larger;">- 04 -<br>ส มั ค ร เ ข้ า ค่ า ย</span>
+      <div style="text-align: center;">
+        <br>
+        <% if(!userData.email) { %>
+          <a href="/register" class="btn btn-primary">Sign Up</a>
+          <br>
+          <br>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginModalButton">
+            Login
+          </button>
+        <% } 
+        else { %>
+          <% if(!userData.done) { %>
+          <a href="/exam" class="btn btn-primary">ทำข้อสอบ</a>
+          <% } else { %>
+          <a href="/score" class="btn btn-primary">ดูคะแนน</a>
+          <% } %>
+          <br><br>
+          <a href="/logout" class="btn btn-primary">Log Out</a>
+        <% } %>
       </div>
     </div>
+    <div class="parallax" id="p4"></div>
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -97,7 +140,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="loginModalLabel">เข้าสู่ระบบ</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">X</span>
             </button>
           </div>
           <form id="loginForm" method="post" action="/login">
@@ -106,7 +149,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="emailInput">อีเมล</label>
-                    <input type="email" class="form-control" id="emailInput" name="email" aria-describedby="emailHelp" placeholder="อีเมล" required>
+                    <input type="email" class="form-control" id="emailInput" name="email" aria-describedby="emailHelp" placeholder="อีเมล" required autofocus>
                   </div>
                 </div>
               </div>
@@ -126,6 +169,13 @@
         </div>
       </div>
     </div>
-    <script src="/js/home-bundle.js"></script>
+    <%- include('footer.ejs'); %>
+    <script src="/home-bundle.js"></script>
+    <script>
+      // Every time a modal is shown, if it has an autofocus element, focus on it.
+      $('.modal').on('shown.bs.modal', function() {
+        $(this).find('[autofocus]').focus();
+      });
+    </script>
   </body>
 </html>

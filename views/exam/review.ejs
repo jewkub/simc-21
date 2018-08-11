@@ -1,13 +1,13 @@
 <%
   let ex = [], cnt = 0;
   exam.forEach(e => {
-    if(e.part == 3) return ;
+    if(e.part == 3 || e.part == 1) return ;
     if(!ex[e.part]) ex[e.part] = [];
     ex[e.part][e.num] = true;
     cnt++;
   });
   oldAnswer.forEach(e => {
-    if(e.part == 3) return ;
+    if(e.part == 3 || e.part == 1) return ;
     if(e.ans) {
       delete ex[e.part][e.num];
       cnt--;
@@ -21,39 +21,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      body {
-        background-image: url("images/b.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-      html, body, .container {
-        height: 100%;
-        margin: 0;
-      } /* http://bit.ly/2NvWtqh */
-      iframe {
-        height: 100%;
-        width: 100%;
-        left: 0;
-        top: 0;
-        /* border: 3px solid red; */
-      }
-      #frame {
-        width: 100%;
-        height: 80%;
-        /* border: 3px solid blue; */ /* http://bit.ly/2muq8ES */
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ทบทวนก่อนส่ง - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <link rel="stylesheet" href="/normal-bundle.css">
+    <%- include('../css.ejs') %>
   </head>
   <body>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">[Logo]</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      </div>
-    </nav>
+    <img src="images/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
     <div class="container">
       <%
         if(cnt) {
@@ -132,7 +106,6 @@
       %>
       <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-          <li class="page-item"><a class="page-link" href="/exam?part=0">0</a></li>
           <li class="page-item"><a class="page-link" href="/exam?part=1">1</a></li>
           <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
           <li class="page-item"><a class="page-link" href="/exam?part=3">3</a></li>
@@ -141,6 +114,7 @@
         </ul>
       </nav>
     </div>
-    <script src="/js/home-bundle.js"></script>
+    <%- include('../footer.ejs'); %>
+    <script src="/normal-bundle.js"></script>
   </body>
 </html>

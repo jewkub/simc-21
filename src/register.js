@@ -2,6 +2,7 @@ import $ from 'jquery';
 window.$ = $;
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap/dist/css/bootstrap.css';
+import '@fortawesome/fontawesome-free/js/all.js';
 const $emailInput = $('#emailInput');
 const $form = $('form');
 // const $formSubmit = $('#formSubmit');
@@ -25,7 +26,7 @@ $emailInput.on('focusout', event => {
       }
       else if(data.alreadyUsed) {
         $emailInput.addClass('is-invalid');
-        $emailInvalid.html('Email already used');
+        $emailInvalid.html('อีเมลนี้ถูกใช้ไปแล้ว');
       }
       else {
         $emailInput.addClass('is-valid');
@@ -34,7 +35,7 @@ $emailInput.on('focusout', event => {
   }
   else {
     $emailInput.addClass('is-invalid');
-    $emailInvalid.html('Invalid email!');
+    $emailInvalid.html('อีเมลไม่ถูกต้อง');
   }
 });
 $passwordInput.on('focus', event => {

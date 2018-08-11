@@ -2,10 +2,14 @@ import $ from 'jquery';
 window.$ = $;
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap/dist/css/bootstrap.css';
-import swal from 'sweetalert';
-window.swal = swal;
+import Swal from 'sweetalert2';
+import '@fortawesome/fontawesome-free/js/all.js';
+window.Swal = Swal;
 
+$('.parallax').each(function(i) {
+  $(this).css('--ratio', window.devicePixelRatio + '');
+});
 let $alert = $('#alert');
 if($alert.length) {
-  swal($alert.attr('alert-type'), $alert.text(), $alert.attr('alert-type'));
+  Swal($alert.attr('alert-type'), $alert.text(), $alert.attr('alert-type'));
 }

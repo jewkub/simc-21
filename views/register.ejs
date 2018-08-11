@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <link rel="stylesheet" href="/home-bundle.css">
+    <%- include('css.ejs') %>
     <script src='https://www.google.com/recaptcha/api.js?render=6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu'></script>
     <script>
       let recaptcha = null;
@@ -50,6 +52,7 @@
         <button type="submit" class="btn btn-primary">สมัครสมาชิก</button>
       </form>
     </div>
-    <script src="/js/register-bundle.js"></script>
+    <%- include('footer.ejs'); %>
+    <script src="/register-bundle.js"></script>
   </body>
 </html>

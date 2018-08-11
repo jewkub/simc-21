@@ -1,17 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
   entry: {
     home: './src/home.js',
     register: './src/register.js',
     normal: './src/normal.js',
     timelimit: './src/timelimit.js',
+    profile: './src/profile.js',
   },
   output: {
     filename: '[name]-bundle.js',
-    path: path.resolve(__dirname, 'dist/js'),
-    publicPath: 'js/',
+    path: path.resolve(__dirname, 'dist'),
   },
   module: {
     rules: [{
@@ -25,12 +27,22 @@ module.exports = {
       }
     }, {
       test: /\.css$/,
-      use: ['style-loader', 'css-loader']
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader'
+      ]
     }, {
-      test: /\.(png|jpg|gif|svg|ttf|woff|eot)$/,
+      test: /\.(png|jpg|gif|svg|ttf|woff|eot|woff2)$/,
       use: ['url-loader']
     }]
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "[name]-bundle.css"
+    })
+  ],
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
@@ -40,7 +52,8 @@ module.exports = {
           compress: true,
         }
       }),
+      new OptimizeCSSAssetsPlugin({})
     ],
   },
-  mode: 'none'
+  mode: 'production'
 }

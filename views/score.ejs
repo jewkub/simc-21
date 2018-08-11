@@ -1,0 +1,65 @@
+<%
+  let sol = [];
+  let rule = [, , [1], [1], [1, 0.5, 0.2]];
+  let sum = [0, 0, 0, 0, 0, 0];
+  solution.forEach(e => {
+    e.sol.forEach((el, i) => {
+      sol[e.part] = sol[e.part] || [];
+      sol[e.part][e.num] = sol[e.part][e.num] || [];
+      sol[e.part][e.num][el] = i;
+    });
+  });
+  answers.forEach(e => {
+    if(sol[e.part] === undefined) return ;
+    if(sol[e.part][e.num] === undefined) return ;
+    if(sol[e.part][e.num][e.ans] !== undefined) {
+      sum[e.part] += rule[e.part][sol[e.part][e.num][e.ans]];
+    }
+  });
+%>
+<!--
+<%= sum %>
+ -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ดูคะแนน - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <link rel="stylesheet" href="/home-bundle.css">
+    <%- include('css.ejs') %>
+  </head>
+  <body>
+    <img src="images/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <div class="container">
+      <br>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">ส่วนที่</th>
+            <th scope="col">ได้คะแนน</th>
+            <th scope="col">จาก</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">2</th>
+            <td><%= sum[2] %></td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td><%= sum[3] %></td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <th scope="row">4 (เฉพาะส่วนช้อยส์)</th>
+            <td><%= sum[4] %></td>
+            <td>?</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <%- include('footer.ejs'); %>
+    <script src="/normal-bundle.js"></script>
+  </body>
+</html>
