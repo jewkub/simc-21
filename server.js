@@ -1,11 +1,12 @@
 // const url = require('url');
+const cookieSession = require('cookie-session');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const request = require('request');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const session = require('express-session');
+// const session = require('express-session');
 const moment = require('moment');
 const secret = require(__dirname + '/secret.json');
 const Multer = require('multer');
@@ -31,6 +32,8 @@ app.engine('html', require('ejs').renderFile);
 
 const port = process.env.PORT || 8080, ip = process.env.IP || '0.0.0.0';
 
+let userData = {undefined: {email: ''}};
+
 // routes
 
 app.use(require(__dirname + '/https-redirect.js')({httpsPort: app.get('https-port')}));
@@ -43,11 +46,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //use sessions for tracking logins
-app.use(session({
+app.use(cookieSession({
+  name: 'session',
   secret: secret.session,
-  resave: true,
-  saveUninitialized: false,
-  cookie: {maxAge: new Date(2147483647000)} // Tue, 19 Jan 2038 03:14:07 GMT
+  maxAge: new Date(2147483647000) // Tue, 19 Jan 2038 03:14:07 GMT
 }));
 
 // set no cache
@@ -56,15 +58,36 @@ app.use(function(req, res, next) {
   next();
 });
 
+let users = {kind: 'Users'};
 
 // initialize session
 app.all('*', (req, res, next) => {
   // console.log(req.session);
   req.session.alert = req.session.alert || '';
   req.session.alertType = req.session.alertType || 'none';
-  req.session.userData = req.session.userData || {};
-  req.session.userData.email = req.session.userData.email || '';
-  next();
+  // if(userData[req.session.userKey] === undefined) {
+  if(req.session.userKey !== undefined) {
+    let data = {};
+    let query = datastore
+      .createQuery(users.kind)
+      .filter('__key__', '=', datastore.key([users.kind, +req.session.userKey]));
+    datastore
+      .runQuery(query)
+      .then(result => {
+        if(result[0].length == 0) {
+          req.session = null;
+          res.redirect('/');
+          return ;
+        }
+        data = result[0][0];
+        // req.session.userKey = data[datastore.KEY].id;
+        userData[req.session.userKey] = data;
+        userData[req.session.userKey].key = data[datastore.KEY];
+        next();
+      })
+      .catch(next);
+  }
+  else next();
 });
 
 //error test
@@ -79,18 +102,17 @@ app.get('/session', (req, res, next) => {
 });
 
 app.get('/', (req, res, next) => {
-  // console.log(req.session);
-  if(req.hostname == 'simc20.com' || req.hostname == 'www.simc20.com') {
+  // console.log(req.session.userKey);
+  /* if((req.hostname == 'simc20.com' || req.hostname == 'www.simc20.com' || req.hostname == 'localhost') && moment().isBefore(1534597200000)) {
     res.render('soon.ejs');
     return ;
-  }
+  } */
   let alert = {alert: req.session.alert, alertType: req.session.alertType};
   req.session.alert = '';
   req.session.alertType = 'none';
-  res.render('home.ejs', {userData: req.session.userData, alert: alert.alert, alertType: alert.alertType});
+  res.render('home.ejs', {userData: userData[req.session.userKey], alert: alert.alert, alertType: alert.alertType});
 });
 
-let users = {kind: 'Users'};
 app.get('/register', (req, res, next) => {
   res.render('register.ejs');
 });
@@ -142,12 +164,12 @@ app.post('/register', (req, res, next) => {
         response: req.body.token
       }
     }, (err, httpResponse, body) => {
-      if(err) return next(err);
+      // if(err) return next(err);
       body = JSON.parse(body);
-      console.log('with recaptcha score: ' + body.score);
-      if(!body.success) {
+      // console.log('with recaptcha score: ' + body.score);
+      /* if(!body.success) {
         return next(new Error('failed recaptcha -> ' + JSON.stringify(body)));
-      }
+      } */
       let query = datastore
         .createQuery(users.kind)
         .filter('email', '=', req.body.email);
@@ -191,7 +213,7 @@ app.post('/register', (req, res, next) => {
 
 app.post('/login', (req, res, next) => {
   if(!req.body || !req.body.email || !req.body.password) return next(new Error('missing email or password -> ' + JSON.stringify(req.body)));
-  let userData;
+  let data;
   let query = datastore
     .createQuery(users.kind)
     .filter('email', '=', req.body.email);
@@ -200,44 +222,45 @@ app.post('/login', (req, res, next) => {
     .then(result => {
       if(result[0].length == 0) throw new Error('ไม่พบอีเมลนี้ -> ' + req.body.email);
       if(result[0].length > 1) throw new Error('duplicate email in Datastore -> ' + req.body.email); // http://bit.ly/2JBEGMf
-      userData = result[0][0];
-      // console.log(result[0][0]);
-      // console.log(userData);
+      data = result[0][0];
       return bcrypt.compare(req.body.password, result[0][0].password);
     })
     .then(result => {
       if(!result) throw new Error('รหัสผ่านผิดในการเข้าสู่ระบบด้วยอีเมลนี้ -> ' + req.body.email);
-      else {
-        req.session.userData = userData;
-        req.session.userKey = userData[datastore.KEY];
-        console.log(req.session.userData.email + ' just logged in');
-        req.session.alert = 'เข้าสู่ระบบสำเร็จ';
-        req.session.alertType = 'success';
-        res.redirect('/'); // http://bit.ly/2L75DwK
-      }
+      req.session.userKey = data[datastore.KEY].id; // http://bit.ly/2vFb2l6
+      userData[req.session.userKey] = data;
+      userData[req.session.userKey].key = data[datastore.KEY];
+      console.log(userData[req.session.userKey].email + ' just logged in');
+      req.session.alert = 'เข้าสู่ระบบสำเร็จ';
+      req.session.alertType = 'success';
+      res.redirect('/'); // http://bit.ly/2L75DwK
     })
     .catch(next);
 });
 
 app.get('/logout', (req, res, next) => {
-  req.session.regenerate(function(err) {
+  // console.log(req.session);
+  req.session = null;
+  res.redirect('/');
+  /* req.session.regenerate(function(err) {
     if(err) return next(err);
     delete req.tempdata;
     req.session.alert = 'ออกจากระบบสำเร็จ';
     req.session.alertType = 'success';
-    res.redirect('/'); // http://bit.ly/2L75DwK
-  });
+    res.redirect('/');
+  }); */
 });
 
 let exam = {kind: 'Exam'};
 let answers = {kind: 'Answers'};
 let solution = {kind: 'Solution'};
+let evaluation = {kind: 'Evaluation'};
 
 app.get('/exam', (req, res, next) => {
-  if(!req.session.userData.email) return next(new Error('กรุณาเข้าสู่ระบบ'));
-  if(req.session.userData.done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
+  if(!userData[req.session.userKey].email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  if(userData[req.session.userKey].done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
   req.query.part = +req.query.part || 1;
-  if(!req.session.userData.agree) {
+  if(!userData[req.session.userKey].agree) {
     req.query.part = 0;
   }
   let renderData = {};
@@ -253,7 +276,7 @@ app.get('/exam', (req, res, next) => {
       renderData.exam = result[0];
       let query = datastore
         .createQuery(answers.kind)
-        .filter('email', '=', req.session.userData.email)
+        .filter('email', '=', userData[req.session.userKey].email)
         .order('part')
         .order('num');
       return datastore.runQuery(query)
@@ -265,6 +288,9 @@ app.get('/exam', (req, res, next) => {
       return bucket.getFiles({prefix: 'public/question/' + req.query.part});
     })
     .then(pic => {
+      let alert = {alert: req.session.alert, alertType: req.session.alertType};
+      req.session.alert = '';
+      req.session.alertType = 'none';
       if(req.query.part == 0) {
         res.render('exam/agree.ejs');
       }
@@ -272,7 +298,7 @@ app.get('/exam', (req, res, next) => {
         res.render('exam/profile.ejs', {oldAnswer: renderData.oldAnswer, part: req.query.part});
       }
       else if(req.query.part == 3) {
-        res.render('exam/prepare.ejs', {part: req.query.part});
+        res.render('exam/prepare.ejs', {part: req.query.part, alert: alert.alert, alertType: alert.alertType});
       }
       else if(req.query.part == 6) {
         // console.log(renderData.oldAnswer);
@@ -280,7 +306,9 @@ app.get('/exam', (req, res, next) => {
         res.render('exam/review.ejs', {
           oldAnswer: renderData.oldAnswer,
           exam: renderData.exam,
-          user: req.session.userData,
+          user: userData[req.session.userKey],
+          alert: alert.alert,
+          alertType: alert.alertType
         });
       }
       else if(req.query.part > 6 || req.query.part < 0) {
@@ -297,7 +325,9 @@ app.get('/exam', (req, res, next) => {
         }, 
         exam: renderData.exam,
         oldAnswer: renderData.oldAnswer,
-        files: pic[0]
+        files: pic[0],
+        alert: alert.alert,
+        alertType: alert.alertType
       });
     })
     .catch(next);
@@ -307,17 +337,21 @@ app.post('/exam/start', (req, res, next) => {
   let now = moment().valueOf();
   let renderData = {};
   req.body.part = parseInt(req.body.part || '-1');
-  if(!req.session.userData.email) return next(new Error('Session error, no login data #1'));
-  if(req.session.userData.done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
-  if(req.session.userData.endTime) return next(new Error('ข้อสอบชุดนี้ถูกเก็บแล้ว'));
-  if(req.session.userData.startTime && moment().isAfter(moment(req.session.userData.startTime).add(3, 'h'))) {
-    req.session.userData.endTime = moment(req.session.userData.startTime).add(3, 'h').valueOf();
+  if(!userData[req.session.userKey].email) return next(new Error('Session error, no login data #1'));
+  if(userData[req.session.userKey].done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
+  if(userData[req.session.userKey].endTime) return next(new Error('ข้อสอบชุดนี้ถูกเก็บแล้ว'));
+  if(!userData[req.session.userKey].agree) {
+    res.redirect('/exam');
+    return ;
+  }
+  if(userData[req.session.userKey].startTime && moment().isAfter(moment(userData[req.session.userKey].startTime).add(3, 'h'))) {
+    userData[req.session.userKey].endTime = moment(userData[req.session.userKey].startTime).add(3, 'h').valueOf();
     datastore.save({
-      key: req.session.userKey,
+      key: userData[req.session.userKey].key,
       excludeFromIndexes: [
         'password',
       ],
-      data: req.session.userData
+      data: userData[req.session.userKey]
     });
     return next(new Error('หมดเวลาทำข้อสอบชุดนี้แล้ว'));
   }
@@ -331,23 +365,23 @@ app.post('/exam/start', (req, res, next) => {
       return bucket.getFiles({prefix: 'public/question/' + req.body.part});
     })
     .then(pic => {
-      if(!req.session.userData.startTime) {
-        console.log('user: ' + req.session.userData.email + ' start at: ' + moment(now).format());
-        req.session.userData.startTime = moment(now).valueOf();
+      if(!userData[req.session.userKey].startTime) {
+        console.log('user: ' + userData[req.session.userKey].email + ' start at: ' + moment(now).format());
+        userData[req.session.userKey].startTime = moment(now).valueOf();
       }
       res.render('exam/timelimit.ejs', {
-        endTime: moment(req.session.userData.startTime).add(3, 'h').valueOf(),
+        endTime: moment(userData[req.session.userKey].startTime).add(3, 'h').valueOf(),
         part: 3,
         exam: renderData.exam,
         files: pic[0]
       });
-      // console.log(req.session.userData.key);
+      // console.log(userData[req.session.userKey]);
       return datastore.save({
-        key: req.session.userKey,
+        key: userData[req.session.userKey].key,
         excludeFromIndexes: [
           'password',
         ],
-        data: req.session.userData
+        data: userData[req.session.userKey]
       });
     })
     .catch(next);
@@ -355,26 +389,26 @@ app.post('/exam/start', (req, res, next) => {
 
 app.post('/exam', multer.any(), (req, res, next) => {
   // console.log(req.body);
-  if (!req.session.userData.email) return next(new Error('Session error, no login data #2'));
-  if(req.session.userData.done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
+  if(!userData[req.session.userKey].email) return next(new Error('Session error, no login data #2'));
+  if(userData[req.session.userKey].done) return next(new Error('ข้อสอบถูกเก็บแล้ว'));
   if(!req.body.part) {
     console.log('no \'part\' data, use -1');
     req.body.part = '-1';
   }
   req.body.part = parseInt(req.body.part);
   if(req.body.part == 0) {
-    req.session.userData.agree = true;
+    userData[req.session.userKey].agree = true;
     datastore.save({
-      key: req.session.userKey,
+      key: userData[req.session.userKey].key,
       excludeFromIndexes: [
         'password',
       ],
-      data: req.session.userData
+      data: userData[req.session.userKey]
     });
   }
   req.files.forEach(e => {
     let ext = e.originalname.split('.').slice(-1)[0];
-    const gcspath = 'answers/' + req.body.part + '/' + e.fieldname + '/' + req.session.userData.email + '-' + Date.now() + '.' + ext;
+    const gcspath = 'answers/' + req.body.part + '/' + e.fieldname + '/' + userData[req.session.userKey].email + '-' + Date.now() + '.' + ext;
     req.body[e.fieldname] = gcspath;
     const file = bucket.file(gcspath);
 
@@ -392,6 +426,7 @@ app.post('/exam', multer.any(), (req, res, next) => {
 
     stream.on('finish', () => {
       e.cloudStorageObject = gcspath;
+      file.makePublic();
     });
 
     stream.end(e.buffer);
@@ -402,13 +437,13 @@ app.post('/exam', multer.any(), (req, res, next) => {
     }
   }
   if(req.body.part == 3) {
-    req.session.userData.endTime = moment().valueOf();
+    userData[req.session.userKey].endTime = moment().valueOf();
     datastore.save({
-      key: req.session.userKey,
+      key: userData[req.session.userKey].key,
       excludeFromIndexes: [
         'password',
       ],
-      data: req.session.userData
+      data: userData[req.session.userKey]
     });
   }
   let query = datastore
@@ -422,13 +457,17 @@ app.post('/exam', multer.any(), (req, res, next) => {
       examData.forEach(e => {
         ansType[e.num] = e.answerType;
       });
+      if(req.body.part == 1) {
+        ansType[61] = 'upload';
+        ansType[62] = 'upload';
+      }
       for(let num in req.body) {
-        // if(num == 'part' || num == 'will-go' || num == 'check') continue;
         num = parseInt(num);
         if(isNaN(num)) continue;
+        if(!req.body[num]) continue;
         let query = datastore
           .createQuery(answers.kind)
-          .filter('email', '=', req.session.userData.email)
+          .filter('email', '=', userData[req.session.userKey].email)
           .filter('num', '=', num)
           .filter('part', '=', req.body.part);
         datastore
@@ -440,12 +479,6 @@ app.post('/exam', multer.any(), (req, res, next) => {
             return new Promise(res => {res(result[0][0][datastore.KEY])});
           })
           .then(key => {
-            /* console.log({
-              num: num,
-              ans: req.body[num],
-              email: req.session.userData.email,
-              part: req.body.part,
-            }); */
             return datastore.save({
               key: key || datastore.key(answers.kind),
               excludeFromIndexes: [
@@ -454,7 +487,7 @@ app.post('/exam', multer.any(), (req, res, next) => {
               data: {
                 num: num,
                 ans: req.body[num],
-                email: req.session.userData.email,
+                email: userData[req.session.userKey].email,
                 part: req.body.part,
                 answerType: ansType[num],
               }
@@ -465,32 +498,93 @@ app.post('/exam', multer.any(), (req, res, next) => {
             console.error(err.message);
           });
       }
-    if(req.body['will-go']) res.redirect('/exam?part=' + parseInt(req.body['will-go']));
-    else res.redirect('/exam?part=' + encodeURI(req.body.part + 1));
+    if(req.body.part == 1) req.session.alert = 'บันทึกข้อมูลเรียบร้อย';
+    else if(req.body.part == 3) req.session.alert = 'ส่งข้อสอบเรียบร้อย';
+    else req.session.alert = 'บันทึกคำตอบเรียบร้อย';
+    req.session.alertType = 'success';
+    res.redirect('/exam?part=' + encodeURI(req.body.part + 1));
   });
 });
 
-app.get('/submit', (req, res, next) => {
-  if(!req.session.userData.email) return next(new Error('กรุณาเข้าสู่ระบบ'));
-  req.session.userData.done = true;
+app.post('/submit', (req, res, next) => {
+  if(!userData[req.session.userKey].email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  userData[req.session.userKey].done = true;
   datastore.save({
-    key: req.session.userKey,
+    key: userData[req.session.userKey].key,
     excludeFromIndexes: [
       'password',
     ],
-    data: req.session.userData
+    data: userData[req.session.userKey]
   });
   req.session.alert = 'ส่งข้อสอบเรียบร้อย';
+  req.session.alertType = 'success';
+  res.redirect('/evaluation');
+});
+
+app.get('/evaluation', (req, res, next) => {
+  let alert = {alert: req.session.alert, alertType: req.session.alertType};
+  if(!userData[req.session.userKey].email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  if(!userData[req.session.userKey].done) return next(new Error('กรุณาส่งข้อสอบก่อน'));
+  req.session.alert = '';
+  req.session.alertType = 'none';
+  res.render('exam/evaluation.ejs', {alert: alert.alert, alertType: alert.alertType});
+});
+
+app.post('/evaluation', (req, res, next) => {
+  // console.log(req.body);
+  userData[req.session.userKey].eva = true;
+  datastore.save({
+    key: userData[req.session.userKey].key,
+    excludeFromIndexes: [
+      'password',
+    ],
+    data: userData[req.session.userKey]
+  });
+  for(let num in req.body) {
+    num = parseInt(num);
+    if(isNaN(num)) continue;
+    let query = datastore
+      .createQuery(evaluation.kind)
+      .filter('email', '=', userData[req.session.userKey].email)
+      .filter('num', '=', num)
+    datastore
+      .runQuery(query)
+      .then(result => {
+        if(result[0].length > 1) throw new Error('duplicate answer in Datastore');
+        if(result[0].length == 0) return ;
+        // console.log(result[0][0][datastore.KEY]);
+        return new Promise(res => {res(result[0][0][datastore.KEY])});
+      })
+      .then(key => {
+        return datastore.save({
+          key: key || datastore.key(evaluation.kind),
+          excludeFromIndexes: [
+            'ans',
+          ],
+          data: {
+            num: num,
+            ans: req.body[num],
+            email: userData[req.session.userKey].email,
+          }
+        });
+      })
+      .catch(err => {
+        console.log('error when saving answer:');
+        console.error(err.message);
+      });
+  }
+  req.session.alert = 'ส่งแบบประเมินเรียบร้อย';
   req.session.alertType = 'success';
   res.redirect('/');
 });
 
-app.get('/score', (req, res, next) => {
+/* app.get('/score', (req, res, next) => {
   let ans;
-  if(!req.session.userData.email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  if(!userData[req.session.userKey].email) return next(new Error('กรุณาเข้าสู่ระบบ'));
+  // if(!userData[req.session.userKey].done) return next(new Error('ยังไม่สามารถดูคะแนนได้'));
   let query = datastore
     .createQuery(answers.kind)
-    .filter('email', '=', req.session.userData.email);
+    .filter('email', '=', userData[req.session.userKey].email);
   datastore
     .runQuery(query)
     .then(result => {
@@ -503,6 +597,10 @@ app.get('/score', (req, res, next) => {
       sol = sol[0];
       res.render('score.ejs', {solution: sol, answers: ans});
     });
+}); */
+
+app.get('/email', (req, res, next) => {
+  res.send(userData[req.session.userKey].email);
 });
 
 app.get('/favicon.ico', (req, res) => {

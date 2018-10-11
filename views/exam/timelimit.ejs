@@ -27,9 +27,14 @@ shuffle(exam);
     <title>IQ - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/normal-bundle.css">
     <%- include('../css.ejs') %>
+    <style>
+      .footer a {
+        display: none;
+      }
+    </style>
   </head>
   <body>
-    <img src="/images/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
     <div class="container">
       <form method="post" action="/exam" enctype="multipart/form-data">
         <h3 style="text-align: center;">- 03 -<br>IQ</h3>
@@ -72,12 +77,13 @@ shuffle(exam);
           <br>
         <% }); %>
         <br>
-        <button type="submit" class="btn btn-primary">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
+        <button type="submit" class="btn btn-danger">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
       </form>
     </div>
     <%- include('../footer.ejs'); %>
     <script src="/timelimit-bundle.js"></script>
     <script>
+    $(document).ready(() => {
       let endTime = moment(<%= endTime %>);
       (function foo() {
         let timediff = moment.duration(endTime.diff(moment()));
@@ -89,11 +95,12 @@ shuffle(exam);
         files.forEach(file => {
           if(file.name.slice(-1)[0] != '/') {
       %>
-            $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img style="width: 100%;" align="middle" src="https://storage.googleapis.com/simc-20.appspot.com/<%= file.name %>">');
+      $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img alt="(รูปประกอบโจทย์ หากไม่ขึ้นลองกดรีเฟรช)" style="width: 100%;" src="https://storage.googleapis.com/simc-20.appspot.com/<%= file.name %>">');
       <%
           }
         });
       %>
+    });
     </script>
   </body>
 </html>

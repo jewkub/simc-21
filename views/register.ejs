@@ -2,10 +2,10 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สมัครสมาชิก - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <title>สมัครเข้าค่าย - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/home-bundle.css">
     <%- include('css.ejs') %>
-    <script src='https://www.google.com/recaptcha/api.js?render=6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu'></script>
+    <!-- <script src='https://www.google.com/recaptcha/api.js?render=6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu'></script>
     <script>
       let recaptcha = null;
       grecaptcha.ready(function() {
@@ -17,14 +17,14 @@
           });
           window.setTimeout(foo, 1000*60);
         })(); // http://bit.ly/2LhnMal
-      });</script>
+      });</script> -->
   </head>
   <body>
     <div class="container">
       <br>
-      <h2>สมัครสมาชิก</h2>
+      <h2>สมัครเข้าค่าย</h2>
       <br>
-      <form method="post" action="/register" novalidate>
+      <form method="post" action="/register">
         <div class="form-group">
           <label for="emailInput">อีเมล</label>
           <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="ใส่อีเมล" name="email" required>

@@ -1,0 +1,114 @@
+<%
+  let text = [
+    'ระเบียบการค่ายมีความชัดเจนหรือไม่',
+    'ระเบียบการค่ายเข้าใจง่ายหรือไม่',
+    'ข้อสอบส่วนที่ 1 (Profile) มีจำนวนข้อเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 2 (Intro) มีความยากเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 2 (Intro) มีจำนวนข้อเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 3 (IQ) มีความยากเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 3 (IQ) มีจำนวนข้อเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 4 (Ethics) มีความยากเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 4 (Ethics) มีจำนวนข้อเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 5 (Creativity) มีความยากเหมาะสมหรือไม่',
+    'ข้อสอบส่วนที่ 5 (Creativity) มีจำนวนข้อเหมาะสมหรือไม่',
+    'ระบบการรับสมัครใช้งานง่ายหรือไม่',
+    'ระยะเวลาในการเปิดรับสมัครเหมาะสมหรือไม่',
+  ];
+  let label1 = [
+    'ชัดเจน',
+    'เข้าใจง่าย',
+    'น้อยเกินไป',
+    'ง่ายเกินไป',
+    'น้อยเกินไป',
+    'ง่ายเกินไป',
+    'น้อยเกินไป',
+    'ง่ายเกินไป',
+    'น้อยเกินไป',
+    'ง่ายเกินไป',
+    'น้อยเกินไป',
+    'ใช้งานง่าย',
+    'สั้นเกินไป'
+  ];
+  let label2 = [
+    'ไม่ชัดเจน',
+    'เข้าใจยาก',
+    'มากเกินไป',
+    'ยากเกินไป',
+    'มากเกินไป',
+    'ยากเกินไป',
+    'มากเกินไป',
+    'ยากเกินไป',
+    'มากเกินไป',
+    'ยากเกินไป',
+    'มากเกินไป',
+    'ใช้งานยาก',
+    'นานเกินไป'
+  ];
+%>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบประเมิน - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <link rel="stylesheet" href="/normal-bundle.css">
+    <%- include('../css.ejs') %>
+    <style>
+      input[type="radio"] {
+        margin-left: 5px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <% if (alertType != 'none') { %>
+      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
+    <% } %>
+    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <div class="container">
+      <h3 style="text-align: center;">- 06 -<br>Evaluation</h3>
+      <br>
+      <br>
+      <form method="post" action="/evaluation">
+        <%
+          for(let i = 0; i < 13; i++) {
+        %>
+        <div class="form-row form-group">
+          <div class="col-12 col-md">
+            <%= text[i] %>
+          </div>
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <%= label1[i] %>
+            </label>
+          </div>
+          <%
+            for(let j = 5; j >= 1; j--) {
+          %>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="<%= 2*i+1 %>" value="<%= j %>" required> 
+          </div>
+          <%
+            // http://bit.ly/2MfgOnO
+            }
+          %>
+          <div class="form-check form-check-inline">
+            <label class="form-check-label">
+              <%= label2[i] %>
+            </label>
+          </div>
+          <div class="col col-md-2 col-lg-3">
+            <input type="text" class="form-control" placeholder="เหตุผล" name="<%= 2*i+2 %>">
+          </div>
+        </div>
+        <% } %>
+        <div class="form-group">
+          <label for="text" class="col-form-label"><b>ข้อเสนอแนะเพิ่มเติม</b></label>
+          <textarea class="form-control" id="text" rows="3" name="27"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">ส่งแบบประเมิน</button>
+        <br>
+        <br>
+      </form>
+    </div>
+    <%- include('../footer.ejs'); %>
+    <script src="/normal-bundle.js"></script>
+  </body>

@@ -27,7 +27,19 @@
     <%- include('../css.ejs') %>
   </head>
   <body>
-    <img src="images/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <% if (alertType != 'none') { %>
+      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
+    <% } %>
+    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="/exam?part=1">1</a></li>
+        <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
+        <li class="page-item"><a class="page-link" href="/exam?part=3">3</a></li>
+        <li class="page-item"><a class="page-link" href="/exam?part=4">4</a></li>
+        <li class="page-item"><a class="page-link" href="/exam?part=5">5</a></li>
+      </ul>
+    </nav>
     <div class="container">
       <%
         if(cnt) {
@@ -81,38 +93,14 @@
       </div>
       <div class="row">
         <div class="col" style="text-align:center;">
-          <button type="button" class="btn btn-primary" onclick="window.location='/submit';">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
+          <form method="post" action="/submit">
+            <button type="submit" class="btn btn-danger">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
+          </form>
         </div>
       </div>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
       <%
         }
       %>
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item"><a class="page-link" href="/exam?part=1">1</a></li>
-          <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
-          <li class="page-item"><a class="page-link" href="/exam?part=3">3</a></li>
-          <li class="page-item"><a class="page-link" href="/exam?part=4">4</a></li>
-          <li class="page-item"><a class="page-link" href="/exam?part=5">5</a></li>
-        </ul>
-      </nav>
     </div>
     <%- include('../footer.ejs'); %>
     <script src="/normal-bundle.js"></script>

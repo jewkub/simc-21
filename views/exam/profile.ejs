@@ -5,6 +5,7 @@
   let select = new Set([5, 27, ]);
   let date = new Set([10]);
   let textarea = new Set([19]);
+  let upload = new Set([61, 62]);
 %>
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,7 @@
     </style>
   </head>
   <body>
-    <img src="images/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item active"><a class="page-link" href="#">1</a></li>
@@ -42,7 +43,7 @@
         </div>
         <div class="form-row">
           <div class="form-check form-check-inline col-6 col-md-4 col-lg-3">
-            <input class="form-check-input" type="radio" id="radio1" name="1" value="เคย">
+            <input class="form-check-input" type="radio" id="radio1" name="1" value="เคย" required>
             <label class="form-check-label" for="radio1">
               เคย ครั้งที่ 
             </label>
@@ -82,13 +83,13 @@
               <option value="นางสาว">นางสาว</option>
             </select>
             <div class="col">
-              <input type="text" class="form-control" id="in1" name="6">
+              <input type="text" class="form-control" id="in1" name="6" required>
             </div>
           </div>
           <div class="form-group col-12 col-sm-6 form-row">
             <label for="in2" class="col-3 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-form-label">นามสกุล</label>
             <div class="col">
-              <input type="text" class="form-control" id="in2" name="7">
+              <input type="text" class="form-control" id="in2" name="7" required>
             </div>
           </div>
         </div>
@@ -96,13 +97,13 @@
           <div class="form-group col-12 col-sm-4 col-md-3 col-xl-2 form-row">
             <label for="in3" class="col-3 col-sm-5 col-md-4 col-xl-4 col-form-label">ชื่อเล่น</label>
             <div class="col">
-              <input type="text" class="form-control" id="in3" name="8">
+              <input type="text" class="form-control" id="in3" name="8" required>
             </div>
           </div>
           <div class="form-group col form-row">
             <label for="in4" class="col-4 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-form-label">เลขประจำตัวประชาชน</label>
             <div class="col col-md-4 col-lg-3">
-              <input type="text" class="form-control" id="in4" name="9">
+              <input type="text" class="form-control" id="in4" name="9" required>
             </div>
           </div>
         </div>
@@ -110,13 +111,13 @@
           <div class="col-8 col-md-5 col-lg-4 col-xl-3 form-row form-group">
             <label for="in5" class="col-3 col-form-label">วันเกิด</label>
             <div class="col">
-              <input type="date" class="form-control" id="in5" name="10">
+              <input type="date" class="form-control" id="in5" name="10" required>
             </div>
           </div>
           <div class="col col-md-4 col-lg-2 form-row form-group">
             <label for="in6" class="col-4 col-sm-3 col-md-3 col-lg-3 col-form-label">อายุ</label>
             <div class="col">
-              <input type="number" class="form-control" id="in6" min="1" name="11">
+              <input type="number" class="form-control" id="in6" min="1" name="11" required>
             </div>
             <label for="in6" class="col-3 col-md-4 col-lg-3 col-form-label">ปี</label>
           </div>
@@ -124,52 +125,52 @@
         <div class="form-row form-group">
           <label for="in7" class="col-2 col-lg-1 col-form-label">สัญชาติ</label>
           <div class="col col-lg-1">
-            <input type="text" class="form-control" id="in7" name="12">
+            <input type="text" class="form-control" id="in7" name="12" required>
           </div>
           <label for="in8" class="col-2 col-lg-1 col-form-label">เชื้อชาติ</label>
           <div class="col col-lg-1">
-            <input type="text" class="form-control" id="in8" name="13">
+            <input type="text" class="form-control" id="in8" name="13" required>
           </div>
           <label for="in9" class="col-2 col-lg-1 col-form-label">ศาสนา</label>
           <div class="col col-lg-1">
-            <input type="text" class="form-control" id="in9" name="14">
+            <input type="text" class="form-control" id="in9" name="14" required>
           </div>
         </div>
         <div class="form-row form-group">
           <label for="in10" class="col-3 col-xl-2 col-form-label">ปัจจุบันศึกษาอยู่โรงเรียน</label>
           <div class="col-4 col-md-5 col-xl-6">
-            <input type="text" class="form-control" id="in10" name="15">
+            <input type="text" class="form-control" id="in10" name="15" required>
           </div>
           <label for="in11" class="col-2 col-md-1 col-form-label">จังหวัด</label>
           <div class="col">
-            <input type="text" class="form-control" id="in11" name="16">
+            <input type="text" class="form-control" id="in11" name="16" required>
           </div>
         </div>
         <div class="form-row form-group">
           <label for="in12" class="col-4 col-sm-4 col-md-3 col-xl-2 col-form-label">ระดับชั้นมัธยมศึกษาปีที่</label>
           <div class="col-2">
-            <input type="number" class="form-control" id="in12" min="1" max="6" name="17">
+            <input type="number" class="form-control" id="in12" min="1" max="6" name="17" required>
           </div>
           <label for="in13" class="col-4 col-sm-3 col-md-2 col-form-label">เกรดเฉลี่ยสะสม</label>
           <div class="col-2 col-md-2">
-            <input type="text" class="form-control" id="in13" name="18">
+            <input type="text" class="form-control" id="in13" name="18" required>
           </div>
         </div>
         <div class="form-group">
           <label for="in14" class="col-form-label">ที่อยู่ปัจจุบัน (ที่สามารถติดต่อได้)</label>
-          <textarea class="form-control" id="in14" rows="3" name="19"></textarea>
+          <textarea class="form-control" id="in14" rows="3" name="19" required></textarea>
         </div>
         <div class="form-row form-group">
           <div class="form-group col-12 col-sm-6 form-row">
             <label for="in15" class="col-5 col-sm-6 col-md-5 col-lg-4 col-form-label">เบอร์โทรศัพท์บ้าน</label>
             <div class="col">
-              <input type="text" class="form-control" id="in15" name="20">
+              <input type="text" class="form-control" id="in15" name="20" required>
             </div>
           </div>
           <div class="form-group col form-row">
             <label for="in16" class="col-5 col-sm-6 col-md-5 col-lg-4 col-form-label">เบอร์โทรศัพท์มือถือ</label>
             <div class="col">
-              <input type="text" class="form-control" id="in16" name="21">
+              <input type="text" class="form-control" id="in16" name="21" required>
             </div>
           </div>
         </div>
@@ -177,13 +178,13 @@
           <div class="form-group col-12 col-sm-6 form-row">
             <label for="in17" class="col-3 col-sm-4 col-lg-3 col-form-label">Facebook</label>
             <div class="col">
-              <input type="text" class="form-control" id="in17" name="22">
+              <input type="text" class="form-control" id="in17" name="22" required>
             </div>
           </div>
           <div class="form-group col form-row">
             <label for="in18" class="col-3 col-sm-3 col-lg-2 col-form-label">Email</label>
             <div class="col">
-              <input type="email" class="form-control" id="in18" name="23">
+              <input type="email" class="form-control" id="in18" name="23" required>
             </div>
           </div>
         </div>
@@ -191,13 +192,13 @@
           <div class="form-group col-12 col-sm-6 form-row">
             <label for="in19" class="col-4 col-sm-5 col-md-4 col-lg-3 col-form-label">โรคประจำตัว</label>
             <div class="col">
-              <input type="text" class="form-control" id="in19" name="24">
+              <input type="text" class="form-control" id="in19" name="24" required>
             </div>
           </div>
           <div class="form-group col form-row">
             <label for="in20" class="col-4 col-sm-5 col-md-4 col-lg-3 col-form-label">ยาที่ใช้ประจำ</label>
             <div class="col">
-              <input type="text" class="form-control" id="in20" name="25">
+              <input type="text" class="form-control" id="in20" name="25" required>
             </div>
           </div>
         </div>
@@ -205,7 +206,7 @@
           <div class="form-group col form-row">
             <label for="in21" class="col-2 col-md-1 col-form-label">แพ้ยา</label>
             <div class="col">
-              <input type="text" class="form-control" id="in21" name="26">
+              <input type="text" class="form-control" id="in21" name="26" required>
             </div>
           </div>
         </div>
@@ -219,13 +220,13 @@
               <option value="3">นางสาว</option>
             </select>
             <div class="col">
-              <input type="text" class="form-control" id="in22" name="28">
+              <input type="text" class="form-control" id="in22" name="28" required>
             </div>
           </div>
           <div class="form-group col form-row">
             <label for="in23" class="col-4 col-sm-7 col-md-5 col-lg-5 col-form-label">เกี่ยวข้องเป็น</label>
             <div class="col">
-              <input type="text" class="form-control" id="in23" name="29">
+              <input type="text" class="form-control" id="in23" name="29" required>
             </div>
           </div>
         </div>
@@ -233,7 +234,7 @@
           <div class="form-group col-12 col-sm-9 col-md-8 form-row">
             <label for="in24" class="col-5 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-form-label">เบอร์โทรศัพท์ผู้ปกครอง</label>
             <div class="col col-md-6">
-              <input type="text" class="form-control" id="in24" name="30">
+              <input type="text" class="form-control" id="in24" name="30" required>
             </div>
           </div>
         </div>
@@ -242,7 +243,7 @@
         </div>
         <div class="form-row form-group">
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="radio3" name="31" value="S (32 นิ้ว)">
+            <input class="form-check-input" type="radio" id="radio3" name="31" value="S (32 นิ้ว)" required>
             <label class="form-check-label" for="radio3">S (32 นิ้ว)</label>
           </div>
           <div class="form-check form-check-inline">
@@ -444,13 +445,15 @@
             <input type="text" class="form-control" id="in31" name="60">
           </div>
         </div>
-        <div class="form-group row">
-          <label>อัพโหลดไฟล์ใบอนุญาต <a href="https://drive.google.com/open?id=1He6MSobdfhgaj7rN-w23WFVjXzhItXDY">download</a></label>
-          <input type="file" class="form-control-file" name="61">
+        <div class="form-group">
+          <label class="col-form-label">อัพโหลดไฟล์ใบอนุญาต *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB <a style="color: red" href="https://storage.googleapis.com/simc-20.appspot.com/public/web/ใบขออนุญาตผู้ปกครอง.pdf">download ใบขออนุญาติผู้ปกครองได้ที่นี่</a></label>
+          <input type="file" class="form-control-file" name="61" id="61" required>
+          <img style="display: none; max-width: 480px;" id="p61" src="#" alt="รูปประกอบไฟล์ใบอนุญาต" width="100%" />
         </div>
-        <div class="form-group row">
-          <label>อัพโหลดไฟล์ ปพ</label>
-          <input type="file" class="form-control-file" name="62">
+        <div class="form-group">
+          <label class="col-form-label">อัพโหลดไฟล์ ปพ. 1 *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB</label>
+          <input type="file" class="form-control-file" name="62" id="62" required>
+          <img style="display: none; max-width: 480px;" id="p62" src="#" alt="รูปประกอบไฟล์ ปพ.1" width="100%"  />
         </div>
         <button type="submit" class="btn btn-primary">บันทึกข้อมูล (สามารถกลับมาแก้ไขได้)</button>
       </form>
@@ -460,22 +463,30 @@
     <script src="/profile-bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.1.1/he.min.js" integrity="sha256-MK0aAxCgZEEnAT1M6Sb/t2x+LINmw/RJjkgAxMAWOeU=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-      /* function decodeHTML(html) {
-        var txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
-      } */
+      function readURL(input, el) {
+
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            el.attr('src', e.target.result);
+            el.css('display', '');
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      };
       <%
         oldAnswer.forEach(e => {
           if(e.part != part) return ;
           if(text.has(e.num) || date.has(e.num)) { // text and date
       %>
-      $('*[name=<%= e.num %>]').attr('value', he.decode('<%= e.ans %>'));
+      $('*[name=<%= e.num %>]')[0].value = he.decode('<%= e.ans %>');
       <%
           }
           else if(textarea.has(e.num)) { // textarea
       %>
-      $('*[name=<%= e.num %>]').html('<%= e.ans %>');
+      $('*[name=<%= e.num %>]').html('<%= e.ans.replace(/\r\n/g, "\\n") %>');
       <%
           }
           else if(radio.has(e.num)) { // radio
@@ -493,7 +504,20 @@
       $('*[name=<%= e.num %>] option[value="<%= e.ans %>"]').prop('selected', true);
       <%
           }
+          else if(upload.has(e.num) && e.ans != '') { // upload
+      %>
+      $('#p' + <%= e.num %>)
+        .attr('src', 'https://storage.googleapis.com/simc-20.appspot.com/' + '<%= e.ans %>')
+        .css('display', '');
+      <%
+          }
         });
       %>
+      $("#61").change(function() {
+        readURL(this, $('#p61'));
+      });
+      $("#62").change(function() {
+        readURL(this, $('#p62'));
+      });
     </script>
   </body>

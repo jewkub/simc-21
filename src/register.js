@@ -2,7 +2,8 @@ import $ from 'jquery';
 window.$ = $;
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap/dist/css/bootstrap.css';
-import '@fortawesome/fontawesome-free/js/all.js';
+import '@fortawesome/fontawesome-free/js/solid.js';
+import '@fortawesome/fontawesome-free/js/fontawesome.js';
 const $emailInput = $('#emailInput');
 const $form = $('form');
 // const $formSubmit = $('#formSubmit');
@@ -18,7 +19,7 @@ const $passwordConfirmInput = $('#passwordConfirmInput');
 $emailInput.on('focusout', event => {
   if($emailInput[0].checkValidity() === true) {
     $.get('/register/validemail', {email: $emailInput.val()}, data => {
-      console.log(data.alreadyUsed);
+      // console.log(data.alreadyUsed);
       if($emailInput.hasClass('is-valid') || $emailInput.hasClass('is-invalid')) return ;
       if(data.error) {
         $emailInput.addClass('is-invalid');
@@ -56,12 +57,13 @@ $passwordConfirmInput.on('focusout', event => {
   if($passwordInput.val() != $passwordConfirmInput.val()) $passwordConfirmInput.addClass('is-invalid');
   else $passwordConfirmInput.addClass('is-valid');
 });
-$form.on('submit', event => {
-  if (recaptcha === null || $('form input:not(.is-valid)').length > 0) {
+$form.on('submit', function(event) {
+  if ($('form input:not(.is-valid)').length > 0) {
+    event.preventDefault();
+    event.stopPropagation();
     $('form input:not(.is-valid)').each(function(i) {
       $(this).trigger('focusout');
     });
-    event.preventDefault();
-    event.stopPropagation();
   }
+  else $('input[type=submit]', this).attr('disabled', 'disabled');
 });

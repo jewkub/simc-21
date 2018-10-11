@@ -2,10 +2,15 @@
   @font-face {
     font-family: superspace;
     src: url("/font/SUPERSPACE BOLD VER 1.00.OTF");
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: superspace;
+    src: url("/font/Superspace Regular ver 1.00.ttf");
   }
   * {
     font-family: superspace;
-    font-size: medium;
+    font-size: large;
   }
   html {
     position: relative;
@@ -29,8 +34,11 @@
     padding-top: 20px;
   }
   @media only screen and (max-device-width: 1366px) {
-    .footer > .container > span {
+    .footer > .container {
       font-size: xx-small;
+    }
+    .footer > .container > span {
+      font-size: 95%;
     }
   }
 </style>

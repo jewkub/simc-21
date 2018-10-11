@@ -5,14 +5,18 @@
     <link rel="stylesheet" href="/home-bundle.css">
     <%- include('css.ejs') %>
     <style>
-      * {
-        font-size: x-large;
+      *, .btn {
+        font-size: inherit;
       }
-      body, html {
+      html {
+        font-size: 140%;
+        height: 100%;
+      }
+      body {
         height: 100%;
       }
       .parallax {
-        opacity: 0.6;
+        opacity: 0.8;
 
         z-index: -1;
 
@@ -29,27 +33,31 @@
       }
       #p1 {
         margin-left: 50%;
-        background-image: url("images/1.jpg");
+        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/1.jpg");
         --ratio: 1;
-        background-position: calc(75% + ( 960px * var(--ratio) ) / 4) center;
+        --expect: 1.066;
+        background-position: calc(50% + 25% * var(--expect) + ( 960px * var(--ratio) * 50 * var(--expect) ) / 200) center;
       }
       #p2 {
         --ratio: 1;
-        background-image: url("images/2.jpg");
-        background-position: calc(25% - 1 / 4 * 960px * var(--ratio)) center;
+        --expect: 0.934;
+        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/2.jpg");
+        background-position: calc(25% * var(--expect) - 1 / 4 * 960px * var(--ratio) * (2 - var(--expect) ) ) center;
       }
       #p3 {
         margin-left: 50%;
-        background-image: url("images/3.jpg");
+        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/3.jpg");
         --ratio: 1;
-        background-position: calc(75% + ( 960px * var(--ratio) ) / 4) center; 
+        --expect: 1.066;
+        background-position: calc(50% + 25% * var(--expect) + ( 960px * var(--ratio) * 50 * var(--expect) ) / 200) center;
       }
       #p4 {
         --ratio: 1;
-        background-image: url("images/4.jpg");
-        background-position: calc(25% - 1 / 4 * 960px * var(--ratio)) center;
+        --expect: 1.11;
+        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/4.jpg");
+        background-position: calc(25% * var(--expect) - 1 / 4 * 960px * var(--ratio) * (2 - var(--expect) ) ) center;
       }
-      @media only screen and (max-device-width: 1366px) {
+      @media only screen and (max-device-width: 1024px) {
         .parallax {
           background-attachment: scroll;
           height: 435px;
@@ -68,6 +76,9 @@
         }
         .footer > .container > span {
           font-size: inherit;
+        }
+        .modal label {
+          font-size: x-large;
         }
       }
       .footer {
@@ -93,20 +104,20 @@
     <% if (alertType != 'none') { %>
       <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
     <% } %>
-    <img src="images/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
     <div class="caption container" style="padding-top: 10%;">
       <span style="text-align: center; font-size: larger;">- 01 -<br>ร ะ เ บี ย บ ก า ร</span>
-      <span>- ค่าย 2 วัน 1 คืน ตั้งแต่วันเสาร์ที่ 19 มกราคม 2562 เวลา 7.00 น. ถึงวันอาทิตย์ที่ 20 มกราคม 2562 เวลา 19.00 น.<br>- สถานที่จัดกิจกรรม : คณะแพทยศาสตร์ศิริราชพยาบาล<br>- ที่พัก : ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช อ.นครชัยศรี จ.นครปฐม<br>- คุณสมบัติผู้สมัคร : นักเรียนที่กำลังศึกษาอยู่ชั้นมัธยมศึกษาตอนปลาย (ม.4-6)<br>- จำนวนที่รับสมัครทั้งหมด : 250 คน</span>
+      <span>- กําหนดการเข้าค่าย 2 วัน 1 คืน ตั้งแต่วันเสาร์ที่ 19 มกราคม 2562 เวลา 7:00 น. ถึงวันอาทิตย์ที่ 20 มกราคม 2562 เวลา 19:00 น. โดยค้างคืนที่ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช<br>- สถานที่จัดกิจกรรม : คณะแพทยศาสตร์ศิริราชพยาบาล จ.กรุงเทพมหานคร<br>- ที่พัก : ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช อ.นครชัยศรี จ.นครปฐม<br>- คุณสมบัติผู้สมัคร : นักเรียนที่กำลังศึกษาอยู่ชั้นมัธยมศึกษาตอนปลาย (ม.4-6)<br>- จำนวนที่รับสมัครทั้งหมด : 250 คน</span>
     </div>
     <div class="parallax" id="p1"></div>
     <div class="caption container" style="right: 0;">
       <span style="text-align: center; font-size: larger;">- 02 -<br>ก า ร รั บ ส มั ค ร</span>
-      <span>- เปิดรับสมัครตั้งแต่ วันที่ 18 สิงหาคม เวลา 0.00 น. – 6 ตุลาคม 2561 เวลา 23.59 น.<br>- กรอกใบสมัครและทําข้อสอบคัดเลือกออนไลน์ได้ที่ www.simc20.com<br>- เอกสารประกอบการสมัคร ส่งใบระเบียนแสดงผลการเรียน (ปพ.1) เป็นไฟล์ .jpg ทางเว็บไซต์<br>- ประกาศผลวันอาทิตย์ที่ 28 ตุลาคม 2561 ผ่านทางเว็บไซต์ www.simc20.com และเพจค่ายเส้นทางสู่หมอศิริราช (www.facebook.com/simedicalcamp20th)<br>- ผู้ที่ได้รับการคัดเลือกจะต้องได้รับการอนุญาตจากผู้ปกครองโดยส่งเอกสารยืนยันการเข้าร่วมกิจกรรมพร้อมค่าสมัคร 800 บาท</span>
+      <span>- เปิดรับสมัครตั้งแต่ วันที่ 18 สิงหาคม เวลา 0.00 น. – 13 ตุลาคม 2561 เวลา 23.59 น.<br>- กรอกใบสมัครและทําข้อสอบคัดเลือกออนไลน์ได้ที่ www.simc20.com<br>- เอกสารประกอบการสมัคร ส่งเป็นไฟล์ .jpg ทางเว็บไซต์<br>1) ใบระเบียนแสดงผลการเรียน (ปพ.1)<br>2) หนังสือขออนุญาตจากผู้ปกครอง<br>- ประกาศผลวันอาทิตย์ที่ 28 ตุลาคม 2561 ผ่านทางเว็บไซต์ www.simc20.com และเพจค่ายเส้นทางสู่หมอศิริราช (www.facebook.com/simedicalcamp20th)<br>- โดยผู้ที่ได้รับการคัดเลือกจะมีค่าใช้จ่ายในการเข้าร่วมกิจกรรม 800 บาท</span>
     </div>
     <div class="parallax" id="p2"></div>
     <div class="caption container" style="">
       <span style="text-align: center; font-size: larger;">- 03 -<br>โ ป ร ด อ่ า น</span>
-      <span>- หากส่งเอกสารหรือตอบคําถามในการสมัครไม่ครบตามข้อกําหนด จะไม่ได้รับพิจารณาคัดเลือก<br>- การตัดสินของคณะกรรมการค่ายเส้นทางสู่หมอศิริราช ถือเป็นที่สิ้นสุด<br>- หากมีการเปลี่ยนแปลงใดๆ จะแจ้งให้ทราบผ่านทางเว็บไซต์ www.facebook.com/simedicalcamp20th ผู้สมัครจึงควรติดตามข่าวสารอย่างสม่ําเสมอ<br>- ทางคณะกรรมการค่ายเส้นทางสู่หมอศิริราชขอนําข้อมูลส่วนตัวมาใช้เพื่อติดต่อผู้สมัครที่ได้รับการคัดเลือกเกี่ยวกับการศึกษาต่อในคณะแพทยศาสตร์ศิริราชพยาบาลในอนาคตเพื่อประโยชน์ในการปรับปรุงและพัฒนาค่ายเส้นทางสู่หมอศิริราชต่อไป โดยไม่มีการนําข้อมูลไปเผยแพร่ และใช้ในวัตถุประสงค์อื่นโดยไม่ได้รับอนุญาต<br>- กรณีผู้ผ่านการคัดเลือกตัดสินใจจะไม่เข้าร่วมค่าย จะต้องแจ้งแก่คณะกรรมการเพื่อพิจารณาก่อนวันที่ 18 พฤศจิกายน 2561 จึงจะได้รับเงินคืนเต็มจํานวน หากแจ้งภายหลังวันดังกล่าวทางคณะกรรมการจะพิจารณาตามความเหมาะสม<br>- หากมีข้อสงสัย ติดต่อได้ทางเว็บไซต์ facebook.com/simedicalcamp20th</span>
+      <span>- หากส่งเอกสารหรือตอบคําถามในการสมัครไม่ครบตามข้อกําหนด จะไม่ได้รับพิจารณาคัดเลือก<br>- การตัดสินของคณะกรรมการค่ายเส้นทางสู่หมอศิริราช ถือเป็นที่สิ้นสุด<br>- หากมีการเปลี่ยนแปลงใดๆ จะแจ้งให้ทราบผ่านทางเพจ www.facebook.com/simedicalcamp20th ผู้สมัครจึงควรติดตามข่าวสารอย่างสม่ำเสมอ<br>- ทางคณะกรรมการค่ายเส้นทางสู่หมอศิริราชขอนําข้อมูลส่วนตัวมาใช้เพื่อติดต่อผู้สมัครที่ได้รับการคัดเลือกเกี่ยวกับการศึกษาต่อในคณะแพทยศาสตร์ศิริราชพยาบาลในอนาคตเพื่อประโยชน์ในการปรับปรุงและพัฒนาค่ายเส้นทางสู่หมอศิริราชต่อไป โดยไม่มีการนําข้อมูลไปเผยแพร่ และใช้ในวัตถุประสงค์อื่นโดยไม่ได้รับอนุญาต<br>- กรณีผู้ผ่านการคัดเลือกตัดสินใจจะไม่เข้าร่วมค่าย จะต้องแจ้งแก่คณะกรรมการเพื่อพิจารณาภายในวันที่ 17 พฤศจิกายน 2561 จึงจะได้รับเงินคืนเต็มจํานวน หากแจ้งภายหลังวันดังกล่าวทางคณะกรรมการจะพิจารณาตามความเหมาะสม<br>- หากมีข้อสงสัย ติดต่อได้ทางเว็บไซต์ facebook.com/simedicalcamp20th</span>
     </div>
     <div class="parallax" id="p3"></div>
     <div class="caption container" style="right: 0;">
@@ -122,14 +133,23 @@
           </button>
         <% } 
         else { %>
+          <p><%= userData.email %></p>
           <% if(!userData.done) { %>
-          <a href="/exam" class="btn btn-primary">ทำข้อสอบ</a>
-          <% } else { %>
-          <a href="/score" class="btn btn-primary">ดูคะแนน</a>
-          <% } %>
-          <br><br>
-          <a href="/logout" class="btn btn-primary">Log Out</a>
-        <% } %>
+          <a href="/exam" class="btn btn-primary">ทำข้อสอบ</a><br><br>
+          <%
+            }
+            else if(!userData.eva) {
+          %>
+          <a href="/evaluation" class="btn btn-primary">ทำแบบประเมิน</a><br><br>
+        <% } else { %>
+          <p>เสร็จเรียบร้อยแล้วจ้า รอฟังประกาศผลได้เลยย</p>
+        <%
+            }
+        %>
+        <a href="/logout" class="btn btn-primary">Log Out</a>
+        <%
+          }
+        %>
       </div>
     </div>
     <div class="parallax" id="p4"></div>
@@ -140,7 +160,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="loginModalLabel">เข้าสู่ระบบ</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">X</span>
+              <span aria-hidden="true"><i class="fas fa-times"></i></span>
             </button>
           </div>
           <form id="loginForm" method="post" action="/login">
@@ -170,12 +190,6 @@
       </div>
     </div>
     <%- include('footer.ejs'); %>
-    <script src="/home-bundle.js"></script>
-    <script>
-      // Every time a modal is shown, if it has an autofocus element, focus on it.
-      $('.modal').on('shown.bs.modal', function() {
-        $(this).find('[autofocus]').focus();
-      });
-    </script>
+    <script src="/home-bundle.js" defer></script>
   </body>
 </html>
