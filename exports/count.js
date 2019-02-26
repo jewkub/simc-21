@@ -10,10 +10,22 @@ const storage = new Storage({
 const bucket = storage.bucket('simc-20.appspot.com'); */
 
 let query = datastore
-    .createQuery('Users');
-    // .filter('agree', '=', true);
-  datastore
-    .runQuery(query)
-    .then(res => {
-      console.log(res[0].length);
+  .createQuery('Users')
+  .filter('agree', '=', true);
+datastore
+  .runQuery(query)
+  .then(res => {
+    console.log(res[0].length);
+    res[0].forEach(e => {
+      let query = datastore
+        .createQuery('Answers')
+        .filter('email', '=', e.email)
+        .filter('part', '=', 1)
+        .filter('num', '=', 7);
+      datastore
+        .runQuery(query)
+        .then(res => {
+          if(res[0][0] == 'เขจรไลย์') console.log(e.email);
+        });
     });
+  });

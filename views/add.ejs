@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scoreboard - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <link rel="stylesheet" href="/home-bundle.css">
+  </head>
+  <body>
+    <!-- <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative"> -->
+    <br><br><br>
+    <div class="container">
+      <h1 style="text-align: center;">เพิ่มคะแนน</h1>
+      <br>
+      <form action="add" method="post">
+        <div class="form-group row">
+          <label for="nameinput" class="col-form-label">ชื่อ</label>
+          <div class="col">
+            <input type="text" class="form-control" id="nameinput" name="nameinput" placeholder="ใส่ชื่อ" required>
+          </div>
+        </div>
+        <%
+          let name = [
+            "KungFu Panda",
+            "Ben10",
+            "Luffy",
+            "I\'m Groot",
+            "Finn&Jake",
+            "Wrack It Ralph",
+            "Blackjack",
+            "Spiderman",
+            "Sailor Moon",
+            "Venom",
+            "Superman",
+            "Thor",
+            "Majin Buu",
+            "Sully&Mike",
+            "Deku",
+            "Green Lantern",
+            "Anpanman",
+            "JackJack",
+            "The Hulk",
+            "Baymax"
+          ];
+          for(let i = 1; i <= 20; i++) {
+        %>
+        <div class="form-group row">
+          <label for="nameinput" class="col-form-label">กลุ่ม #<%= i %> "<%= name[i-1] %>"</label>
+          <div class="col">
+            <input type="text" class="form-control" id="score<%= i %>" name="score<%= i %>" placeholder="คะแนน">
+          </div>
+        </div>
+        <%
+          }
+        %>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+    <script src="/home-bundle.js" defer></script>
+  </body>
+</html>

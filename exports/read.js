@@ -22,62 +22,36 @@ async function main(auth) {
   await store.init();
   const sheets = google.sheets({version: 'v4', auth});
 
-  let cnt = 0;
-  let query = datastore
-    .createQuery('Users')
-    .filter('done', '=', true);
-  datastore
-    .runQuery(query)
-    .then(result => {
-      result[0].forEach(async function(user) {
-        let query = datastore
-          .createQuery('Answers')
-          .filter('part', '=', 4) // edit part
-          .filter('num', '=', 6) // edit num
-          .filter('email', '=', user.email);
-        let res = await store.getItem(user.email + '-4-6'); // edit part and num
-        if(res) {
-          console.log('email ' + user.email + ' is duplicated');
-          return ;
-        }
-        let ans = await datastore.runQuery(query);
-        ans = ans[0][0];
-        let desc = ans;
-        /*query = datastore
-          .createQuery('Answers')
-          .filter('part', '=', 5) // *edit part
-          .filter('num', '=', 6) // *edit num
-          .filter('email', '=', user.email);
-        ans = await datastore.runQuery(query);
-        ans = ans[0][0]; */
-        setTimeout(() => {
-          let range = '4-6!A4:C4'; // edit part and cell
-          sheets.spreadsheets.values.append({
-            spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',
-            range: range,
-            valueInputOption: 'RAW',
-            insertDataOption: 'OVERWRITE',
-            resource: {
-              range: range,
-              majorDimension: 'ROWS',
-              values: [
-                [user.email, desc.ans]
-              ]
-            },
-            auth: auth,
-          }, function(err, response) {
-            if (err) {
-              console.error(err);
-              return;
-            }
-            store.setItem(user.email + '-4-6', true); // edit part and num
-          });
-        }, 1.15 * 1000 * (cnt++));
+  sheets.spreadsheets.values.get({
+    spreadsheetId: '1SnewRSj1KnZYt9xio___8reHg4EUMENeiajMWJMV5o0',
+    range: 'ชื่อน้องติดค่าย!!A:C',
+  }, async function(err, res) {
+    if (err) return console.log('The API returned an error: ' + err);
+    console.log(res.data.values.length);
+    res.data.values.forEach(async function(data) {
+      if(!data[0]) return;
+      let query = datastore
+        .createQuery('Users')
+        .filter('email', '=', data[0]);
+      let user = await datastore.runQuery(query);
+      user = user[0][0];
+      user.pass = true;
+      datastore.save(user).catch(err => {
+        console.error(err);
       });
-    })
-    .catch(err => {
-      console.log(err);
-    })
+      /* if(isNaN(+data[2])) return console.log(data[0]);
+      let query = datastore.createQuery('Score')
+        .filter('email', '=', data[0]);
+      let user = await datastore.runQuery(query);
+      user = user[0][0];
+      if(user == undefined) return console.log(data[0]);
+      user['5-8'] = +data[2];
+      // delete user['4-6'];
+      datastore.save(user).catch(err => {
+        console.error(err);
+      }); */
+    });
+  });
 
   /* var request = {
     // The ID of the spreadsheet to update.

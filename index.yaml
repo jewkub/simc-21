@@ -10,7 +10,6 @@ indexes:
 - kind: Answers
   properties:
   - name: email
-    direction: asc
   - name: part
     direction: asc
   - name: num

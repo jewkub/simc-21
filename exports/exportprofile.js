@@ -1,6 +1,5 @@
 const fs = require('fs');
 const readline = require('readline');
-const store = require('node-persist');
 const {google} = require('googleapis');
 
 const Datastore = require('@google-cloud/datastore');
@@ -19,41 +18,40 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
 
 async function main(auth) {
-  await store.init();
   const sheets = google.sheets({version: 'v4', auth});
 
-  let cnt = 0;
+  let cnt = 0, all = [];
   let query = datastore
     .createQuery('Users')
     .filter('done', '=', true);
   datastore
     .runQuery(query)
     .then(result => {
-      result[0].forEach(async function(user) {
+      console.log(result[0].length);
+      result[0].forEach(async function(user, i) {
+        // if(i > 20) return ;
         let query = datastore
-          .createQuery('Answers')
-          .filter('part', '=', 4) // edit part
-          .filter('num', '=', 6) // edit num
+          .createQuery('Evaluation')
           .filter('email', '=', user.email);
-        let res = await store.getItem(user.email + '-4-6'); // edit part and num
-        if(res) {
-          console.log('email ' + user.email + ' is duplicated');
-          return ;
-        }
         let ans = await datastore.runQuery(query);
-        ans = ans[0][0];
-        let desc = ans;
-        /*query = datastore
-          .createQuery('Answers')
-          .filter('part', '=', 5) // *edit part
-          .filter('num', '=', 6) // *edit num
-          .filter('email', '=', user.email);
-        ans = await datastore.runQuery(query);
-        ans = ans[0][0]; */
-        setTimeout(() => {
-          let range = '4-6!A4:C4'; // edit part and cell
+        ans = ans[0];
+        let order = [];
+        all[i] = order;
+        // order[0] = ans.ans;
+        if(!order[0]) order[0] = '[blank]';
+        ans.forEach((e, i) => {
+          order[e.num] = e.ans;
+          if(e.answerType == 'upload') order[e.num] = 'http://storage.googleapis.com/simc-20.appspot.com/' +  order[e.num];
+        });
+        order[0] = user.email;
+        for(let i = 0; i <= 27; i++) {
+          if(order[i] == undefined || order[i] == '') order[i] = '[blank]';
+        }
+        // console.log(order);
+        /* setTimeout(() => {
+          let range = 'ข้อมูลน้อง!A4:BK4';
           sheets.spreadsheets.values.append({
-            spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',
+            spreadsheetId: '1SnewRSj1KnZYt9xio___8reHg4EUMENeiajMWJMV5o0',
             range: range,
             valueInputOption: 'RAW',
             insertDataOption: 'OVERWRITE',
@@ -61,7 +59,7 @@ async function main(auth) {
               range: range,
               majorDimension: 'ROWS',
               values: [
-                [user.email, desc.ans]
+                order
               ]
             },
             auth: auth,
@@ -70,77 +68,33 @@ async function main(auth) {
               console.error(err);
               return;
             }
-            store.setItem(user.email + '-4-6', true); // edit part and num
           });
-        }, 1.15 * 1000 * (cnt++));
+        }, 1.15 * 1000 * (cnt++)); */
       });
+      setTimeout(() => {
+        let range = 'ประเมินทุกคน!A4:AB4';
+        sheets.spreadsheets.values.append({
+          spreadsheetId: '1SnewRSj1KnZYt9xio___8reHg4EUMENeiajMWJMV5o0',
+          range: range,
+          valueInputOption: 'RAW',
+          insertDataOption: 'OVERWRITE',
+          resource: {
+            range: range,
+            majorDimension: 'ROWS',
+            values: all
+          },
+          auth: auth,
+        }, function(err, response) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+        });
+      }, 30 * 1000);
     })
     .catch(err => {
       console.log(err);
-    })
-
-  /* var request = {
-    // The ID of the spreadsheet to update.
-    spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',  // TODO: Update placeholder value.
-
-    // The A1 notation of a range to search for a logical table of data.
-    // Values will be appended after the last row of the table.
-    range: 'part2!A4:B4',  // TODO: Update placeholder value.
-
-    // How the input data should be interpreted.
-    valueInputOption: 'RAW',  // TODO: Update placeholder value.
-
-    // How the input data should be inserted.
-    insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
-
-    resource: {
-      range: 'part2!A4:B4',
-      majorDimension: 'ROWS',
-      values: [
-        ['aaas', '222']
-      ]
-    },
-
-    auth: auth,
-  };
-
-  sheets.spreadsheets.values.append(request, function(err, response) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-  
-    // console.log(response);
-  }); */
-
-  /* sheets.spreadsheets.values.get({
-    spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',
-    range: 'Sheet2!:A',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    console.log(res.data.values);
-  }); */
-
-  /*sheets.spreadsheets.batchUpdate({
-    spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',
-    resource: {
-      requests: [{
-        addSheet: {
-          properties: {
-            title: 'part3'
-          }
-        }
-      }]
-    }
-  }, function(err, response) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
-    // TODO: Change code below to process the `response` object:
-    console.log(response);
-  }); */
+    });
 }
 
 // ------------------------

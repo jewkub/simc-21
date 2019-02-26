@@ -85,6 +85,10 @@
         position: static;
         margin-top: 0;
       }
+      .footer > .container > span {
+        font-size: inherit;
+        font-size: 1.8vw;
+      }
       .caption {
         z-index: 0;
         position: absolute;
@@ -121,37 +125,32 @@
     </div>
     <div class="parallax" id="p3"></div>
     <div class="caption container" style="right: 0;">
-      <span style="text-align: center; font-size: larger;">- 04 -<br>ส มั ค ร เ ข้ า ค่ า ย</span>
+      <span style="text-align: center; font-size: larger;">- 04 -<br><b style="font-size: inherit;">🤩 ป ร ะ ก า ศ ผ ล 🤩</b></span>
       <div style="text-align: center;">
         <br>
         <% if(!userData.email) { %>
-          <a href="/register" class="btn btn-primary">Sign Up</a>
-          <br>
-          <br>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginModalButton">
-            Login
+            เข้าสู่ระบบเพื่อตรวจสอบผล
           </button>
         <% } 
         else { %>
           <p><%= userData.email %></p>
-          <% if(!userData.done) { %>
-          <a href="/exam" class="btn btn-primary">ทำข้อสอบ</a><br><br>
-          <%
-            }
+        <% if(!userData.done) { %>
+          <a href="/exam" class="btn btn-primary">แก้ไขข้อมูลส่วนตัว</a><br><br>
+        <%
+          }
             else if(!userData.eva) {
-          %>
+        %>
           <a href="/evaluation" class="btn btn-primary">ทำแบบประเมิน</a><br><br>
         <% } else { %>
-          <p>เสร็จเรียบร้อยแล้วจ้า รอฟังประกาศผลได้เลยย</p>
+          <p>ติดตามผลการคัดเลือกได้แล้ว <a href="result">ที่นี่</a></p>
         <%
-            }
+          }
         %>
         <a href="/logout" class="btn btn-primary">Log Out</a>
         <%
           }
         %>
-        <br><br>
-        <span><br>- ประกาศผลวันอาทิตย์ที่ 28 ตุลาคม 2561 ผ่านทาง<a href="https://www.simc20.com">เว็บไซต์</a> และ<a href="https://www.facebook.com/simedicalcamp20th/">เพจค่ายเส้นทางสู่หมอศิริราช</a> โดยผู้ที่ได้รับการคัดเลือกจะมีค่าใช้จ่ายในการเข้าร่วมกิจกรรม 800 บาท</span>
       </div>
     </div>
     <div class="parallax" id="p4"></div>
@@ -185,7 +184,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>  
+              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
             </div>
           </form>
         </div>
