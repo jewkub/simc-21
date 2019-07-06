@@ -13,27 +13,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/profile-bundle.css">
-    <%- include('../css.ejs') %>
+    <%- include('../includes/css.ejs') %>
     <style>
     </style>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
-    <!-- <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=3">3</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=4">4</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=5">5</a></li>
-        <li class="page-item">
-          <a class="page-link" href="/exam?part=2" aria-label="Next">
-            <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-      </ul>
-    </nav> -->
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <%- include('../includes/pagenav.ejs'); %>
     <br>
     <br>
     <div class="container">
@@ -448,7 +434,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-form-label">อัพโหลดไฟล์ใบอนุญาต *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB <a style="color: red" href="https://storage.googleapis.com/simc-20.appspot.com/public/web/ใบขออนุญาตผู้ปกครอง.pdf">download ใบขออนุญาติผู้ปกครองได้ที่นี่</a></label>
+          <label class="col-form-label">อัพโหลดไฟล์ใบอนุญาต *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB <u style="color: blue"><a href="https://storage.googleapis.com/simc-web.appspot.com/public/web/ใบขออนุญาตผู้ปกครอง.pdf">download ใบขออนุญาติผู้ปกครองได้ที่นี่</a></u></label>
           <input type="file" class="form-control-file" name="61" id="61">
           <img style="display: none; max-width: 480px;" id="p61" src="#" alt="รูปประกอบไฟล์ใบอนุญาต" width="100%"/>
         </div>
@@ -461,7 +447,7 @@
       </form>
       <br>
     </div>
-    <%- include('../footer.ejs'); %>
+    <%- include('../includes/footer.ejs'); %>
     <script src="/profile-bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.1.1/he.min.js" integrity="sha256-MK0aAxCgZEEnAT1M6Sb/t2x+LINmw/RJjkgAxMAWOeU=" crossorigin="anonymous"></script>
     <script type="text/javascript">
@@ -480,6 +466,9 @@
       };
       <%
         oldAnswer.forEach(e => {
+          e.num = e.get('num');
+          e.ans = e.get('ans');
+          e.part = e.get('part');
           if(e.part != part) return ;
           if(text.has(e.num) || date.has(e.num)) { // text and date
       %>
@@ -509,7 +498,7 @@
           else if(upload.has(e.num) && e.ans != '') { // upload
       %>
       $('#p' + <%= e.num %>)
-        .attr('src', 'https://storage.googleapis.com/simc-20.appspot.com/' + '<%= e.ans %>')
+        .attr('src', 'https://storage.googleapis.com/simc-web.appspot.com/' + '<%= e.ans %>')
         .css('display', '');
       <%
           }

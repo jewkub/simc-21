@@ -1,70 +1,14 @@
-<%
-function shuffle(array) {
-  let counter = array.l || array.length;
-
-  // While there are elements in the array
-  while (counter > 0) {
-    // Pick a random index
-    let index = (Math.random() * counter) | 0; // http://bit.ly/2LhrEt2
-
-    // Decrease counter by 1
-    counter--;
-
-    // And swap the last element with it
-    let temp = array[counter];
-    array[counter] = array[index];
-    array[index] = temp;
-  }
-
-  return array;
-} // http://bit.ly/2uGCIFr
-%>
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= partDesc[part] %> - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/normal-bundle.css">
-    <%- include('../css.ejs') %>
+    <%- include('../includes/css.ejs') %>
   </head>
   <body>
-    <% if (alertType != 'none') { %>
-      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
-    <% } %>
-    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        <%
-          if(part != 1) {
-        %>
-        <li class="page-item">
-          <a class="page-link" href="/exam?part=<%= part-1 %>" aria-label="Previous">
-            <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-        <%
-          }
-        %>
-        <li class="page-item <%= part == 1 ? 'active' : ''%>"><a class="page-link" href="<%= part == 1 ? '#' : '/exam?part=1'%>">1</a></li>
-        <li class="page-item <%= part == 2 ? 'active' : ''%>"><a class="page-link" href="<%= part == 2 ? '#' : '/exam?part=2'%>">2</a></li>
-        <li class="page-item <%= part == 3 ? 'active' : ''%>"><a class="page-link" href="<%= part == 3 ? '#' : '/exam?part=3'%>">3</a></li>
-        <li class="page-item <%= part == 4 ? 'active' : ''%>"><a class="page-link" href="<%= part == 4 ? '#' : '/exam?part=4'%>">4</a></li>
-        <li class="page-item <%= part == 5 ? 'active' : ''%>"><a class="page-link" href="<%= part == 5 ? '#' : '/exam?part=5'%>">5</a></li>
-        <%
-          if(part != 5) {
-        %>
-        <li class="page-item">
-          <a class="page-link" href="/exam?part=<%= part+1 %>" aria-label="Next">
-            <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-        <%
-          }
-        %>
-      </ul>
-    </nav>
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <%- include('../includes/pagenav.ejs') %>
     <div class="container">
       <form method="post" action="/exam" enctype="multipart/form-data">
         <h3 style="text-align: center;">- 0<%= part %> -<br><%= partDesc[part] %></h3>
@@ -73,11 +17,15 @@ function shuffle(array) {
         <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
         <%
           let noshuf = [[], [], [], [], [], []];
-          noshuf[2][6] = true;
-          noshuf[2][3] = true;
-          noshuf[2][12] = true;
+          noshuf[2][6] = 1;
+          noshuf[2][3] = 1;
+          noshuf[2][12] = 1;
           exam.forEach(e => {
-            if(e.part != part) return ;
+            e.num = e.get('num');
+            e.question = e.get('question');
+            e.answerType = e.get('answerType');
+            e.subQuestion = e.get('subQuestion');
+            if (e.get('part') != part) return ;
         %>
           <div class="card <%= e.answerType %>" id="div_<%= e.num %>">
             <div class="card-header">
@@ -86,14 +34,14 @@ function shuffle(array) {
             <div class="card-body">
               <%
                 // choice
-                if(e.answerType == 'choice') {
+                if (e.answerType == 'radio') {
                   let sub = e.subQuestion.split('\n');
                   sub.forEach((choice, i, arr) => {
                     arr[i] = new String(arr[i]);
                     arr[i].real = i + 1;
                   });
-                  if(noshuf[part][e.num]) sub.l = sub.length-1;
-                  shuffle(sub).forEach(choice => {
+                  if (noshuf[part][e.num]) sub.l = sub.length - noshuf[part][e.num];
+                  shuffle(sub, sub.length - !!noshuf[part][e.num]).forEach(choice => {
                     let choicename = e.num + '_' + choice.real;
               %>       
                 <div class="form-check">
@@ -106,14 +54,14 @@ function shuffle(array) {
                   });
                 } 
                 // essay
-                else if(e.answerType == 'essay') {
+                else if (e.answerType == 'textarea') {
               %>
                 <textarea class="form-control" id="<%= e.num %>" name="<%= e.num %>" rows="<%= e.subQuestion || 3 %>"></textarea>
                 <!-- <input type="text" class="form-control" name="<%= e.num %>" id="<%= e.num %>" placeholder="เขียนคำตอบที่นี่"> -->
               <%
                 }
                 // upload
-                else if(e.answerType == 'upload') {
+                else if (e.answerType == 'upload') {
               %>
                 <div class="form-group">
                   <label for="<%= e.num %>">Upload file for No. <%= e.num %></label>
@@ -131,7 +79,7 @@ function shuffle(array) {
       </form>
       <br>
     </div>
-    <%- include('../footer.ejs'); %>
+    <%- include('../includes/footer.ejs'); %>
     <script src="/normal-bundle.js"></script>
     <script>
       function readURL(input, el) {
@@ -157,13 +105,17 @@ function shuffle(array) {
       <%
         });
         oldAnswer.forEach(e => {
+          e.part = e.get('part');
+          e.answerType = e.get('answerType');
+          e.num = e.get('num');
+          e.ans = e.get('ans');
           if(e.part != part) return ;
-          if(e.answerType == 'choice') { // choice
+          if(e.answerType == 'radio') { // choice
       %>
       $('#<%= e.num %>_<%= e.ans %>').attr('checked', '');
       <%
           }
-          else if(e.answerType == 'essay') { // essay
+          else if(e.answerType == 'textarea') { // essay
       %>
           $('#<%= e.num %>').html('<%= e.ans.replace(/\r\n/g, "\\n") %>');
       <%
@@ -171,7 +123,7 @@ function shuffle(array) {
           else if(e.answerType == 'upload') {
       %>
       $('#p' + <%= e.num %>)
-        .attr('src', 'https://storage.googleapis.com/simc-20.appspot.com/' + '<%= e.ans %>')
+        .attr('src', 'https://storage.googleapis.com/simc-web.appspot.com/' + '<%= e.ans %>')
         .css('display', '');
       <%
           }
@@ -181,11 +133,25 @@ function shuffle(array) {
         files.forEach(file => {
           if(file.name.slice(-1)[0] != '/') {
       %>
-            $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img style="width: 100%;" align="middle" src="https://storage.googleapis.com/simc-20.appspot.com/<%= file.name %>">');
+            $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img style="width: 100%;" align="middle" src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>">');
       <%
           }
         });
       %>
+    </script>
+    <script type="text/javascript" defer>
+      window.onload = function() {
+        Swal.mixin({
+          confirmButtonText: 'OK',
+        }).queue([
+        <% if (alert.error) alert.error.forEach((e) => { %>
+          {type: 'error', title: '<%= e %>'},
+        <% }); 
+        if (alert.success) alert.success.forEach((e) => { %>
+          {type: 'success', title: '<%= e %>'},
+        <% }); %>
+        ]);
+      }; // https://stackoverflow.com/a/807895/4468834
     </script>
   </body>
 </html>

@@ -14,26 +14,26 @@ function loadTeam(){
 		let value = data.sort(function (mn, mx) { return mx.score - mn.score; });
 		let medalpic = ['gold-medal.svg', 'silver-medal.svg', 'bronze-medal.svg'];
 		let teampic = [
-			'https://storage.googleapis.com/simc-20.appspot.com/team/1.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/2.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/3.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/4.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/5.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/6.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/7.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/8.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/9.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/10.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/11.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/12.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/13.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/14.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/15.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/16.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/17.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/18.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/19.png',
-			'https://storage.googleapis.com/simc-20.appspot.com/team/20.png'
+			'https://storage.googleapis.com/simc-web.appspot.com/team/1.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/2.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/3.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/4.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/5.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/6.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/7.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/8.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/9.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/10.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/11.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/12.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/13.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/14.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/15.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/16.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/17.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/18.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/19.png',
+			'https://storage.googleapis.com/simc-web.appspot.com/team/20.png'
 		];
 		$.each(value, function(key, val){
 			if(key < 3){

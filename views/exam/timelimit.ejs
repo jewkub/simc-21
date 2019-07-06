@@ -1,32 +1,11 @@
-<%
-function shuffle(array) {
-    let counter = array.length;
-
-    // While there are elements in the array
-    while (counter > 0) {
-        // Pick a random index
-        let index = (Math.random() * counter) | 0; // http://bit.ly/2LhrEt2
-
-        // Decrease counter by 1
-        counter--;
-
-        // And swap the last element with it
-        let temp = array[counter];
-        array[counter] = array[index];
-        array[index] = temp;
-    }
-
-    return array;
-} // http://bit.ly/2uGCIFr
-shuffle(exam);
-%>
+<%- include('../includes/shuffle.ejs') %>
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IQ - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/normal-bundle.css">
-    <%- include('../css.ejs') %>
+    <%- include('../includes/css.ejs') %>
     <style>
       .footer a {
         display: none;
@@ -34,7 +13,7 @@ shuffle(exam);
     </style>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
     <div class="container">
       <form method="post" action="/exam" enctype="multipart/form-data">
         <h3 style="text-align: center;">- 03 -<br>IQ</h3>
@@ -43,6 +22,10 @@ shuffle(exam);
         <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
         <%
           exam.forEach((e, i) => {
+            e.num = e.get('num');
+            e.question = e.get('question');
+            e.answerType = e.get('answerType');
+            e.subQuestion = e.get('subQuestion');
         %>
           <div class="card <%= e.answerType %>" id="div_<%= e.num %>">
             <div class="card-header">
@@ -52,7 +35,7 @@ shuffle(exam);
               <%
                 let name = e.num;
                 // choice
-                if(e.answerType == 'choice') {
+                if(e.answerType == 'radio') {
                   let sub = e.subQuestion.split('\n');
                   sub.forEach((choice, i, arr) => {
                     arr[i] = new String(arr[i]);
@@ -80,14 +63,14 @@ shuffle(exam);
         <button type="submit" class="btn btn-danger">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
       </form>
     </div>
-    <%- include('../footer.ejs'); %>
+    <%- include('../includes/footer.ejs'); %>
     <script src="/timelimit-bundle.js"></script>
     <script>
     $(document).ready(() => {
-      let endTime = moment(<%= endTime %>);
+      let endTime = moment(<%- endTime %>);
       (function foo() {
         let timediff = moment.duration(endTime.diff(moment()));
-        if(timediff.asMilliseconds() <= 0) $('form').trigger('submit');
+        if (timediff.asMilliseconds() <= 0) $('form').trigger('submit');
         $('#timeleft').text('ขณะนี้เหลือเวลาอีก ' + timediff.hours().toString().padStart(2, '0') + ' : ' + timediff.minutes().toString().padStart(2, '0') + ' : ' + timediff.seconds().toString().padStart(2, '0'));
         window.setTimeout(foo, 1000);
       })(); // http://bit.ly/2LhnMal
@@ -95,7 +78,7 @@ shuffle(exam);
         files.forEach(file => {
           if(file.name.slice(-1)[0] != '/') {
       %>
-      $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img alt="(รูปประกอบโจทย์ หากไม่ขึ้นลองกดรีเฟรช)" style="width: 100%;" src="https://storage.googleapis.com/simc-20.appspot.com/<%= file.name %>">');
+      $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img alt="(รูปประกอบโจทย์ หากไม่ขึ้นลองกดรีเฟรช)" style="width: 100%;" src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>">');
       <%
           }
         });

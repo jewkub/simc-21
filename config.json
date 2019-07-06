@@ -1,4 +1,4 @@
 {
-  "GCLOUD_PROJECT": "simc-20",
+  "GCLOUD_PROJECT": "simc-web",
   "DATA_BACKEND": "datastore"
 }

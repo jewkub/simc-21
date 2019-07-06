@@ -1,9 +1,9 @@
 const fs = require('fs');
 const readline = require('readline');
-const {google} = require('googleapis');
+const { google } = require('googleapis');
+const { name: projectId } = require('../package.json');
 
 const Datastore = require('@google-cloud/datastore');
-const projectId = 'simc-20';
 const datastore = new Datastore({
   projectId: projectId,
 });
@@ -11,7 +11,7 @@ const Storage = require('@google-cloud/storage');
 const storage = new Storage({
   projectId: projectId,
 });
-const bucket = storage.bucket('simc-20.appspot.com');
+const bucket = storage.bucket('simc-web.appspot.com');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -41,7 +41,7 @@ async function main(auth) {
         if(!order[0]) order[0] = '[blank]';
         ans.forEach((e, i) => {
           order[e.num] = e.ans;
-          if(e.answerType == 'upload') order[e.num] = 'http://storage.googleapis.com/simc-20.appspot.com/' +  order[e.num];
+          if(e.answerType == 'upload') order[e.num] = 'http://storage.googleapis.com/simc-web.appspot.com/' +  order[e.num];
         });
         order[0] = user.email;
         for(let i = 0; i <= 27; i++) {

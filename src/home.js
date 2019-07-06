@@ -10,7 +10,7 @@ window.Swal = Swal;
 $('.parallax').each(function(i) {
   $(this).css('--ratio', window.devicePixelRatio + '');
 });
-window.onload = () => {
+$(() => {
   // Every time a modal is shown, if it has an autofocus element, focus on it.
   $('.modal').on('shown.bs.modal', function() {
     $(this).find('[autofocus]').focus();
@@ -18,6 +18,6 @@ window.onload = () => {
 
   let $alert = $('#alert');
   if($alert.length) {
-    Swal($alert.attr('alert-type'), $alert.text(), $alert.attr('alert-type'));
+    // Swal($alert.attr('alert-type'), $alert.text(), $alert.attr('alert-type'));
   }
-};
+});

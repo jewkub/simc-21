@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -23,7 +23,7 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
-          presets: ['babel-preset-env']
+          presets: ['@babel/preset-env']
         }
       }
     }, {
@@ -34,10 +34,21 @@ module.exports = {
       ]
     }, {
       test: /\.(png|jpg|gif|svg|ttf|woff|eot|woff2)$/,
-      use: ['url-loader']
+      use: [{
+        loader: 'url-loader',
+        options: {
+          limit: 8192 // in bytes
+        }
+      }]
     }]
   },
   plugins: [
+    /* new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/
+    }), */
+    new CompressionPlugin(),
+    new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
@@ -46,13 +57,6 @@ module.exports = {
   ],
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        // test: /\.min\.js$/i,
-        parallel: true,
-        uglifyOptions: {
-          compress: true,
-        }
-      }),
       new OptimizeCSSAssetsPlugin({})
     ],
   },

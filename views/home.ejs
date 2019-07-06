@@ -3,7 +3,7 @@
   <head>
     <title>ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/home-bundle.css">
-    <%- include('css.ejs') %>
+    <%- include('includes/css.ejs') %>
     <style>
       *, .btn {
         font-size: inherit;
@@ -101,9 +101,6 @@
     </style>
   </head>
   <body>
-    <% if (alertType != 'none') { %>
-      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
-    <% } %>
     <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
     <div class="caption container" style="padding-top: 10%;">
       <span style="text-align: center; font-size: larger;">- 01 -<br>ร ะ เ บี ย บ ก า ร</span>
@@ -124,7 +121,7 @@
       <span style="text-align: center; font-size: larger;">- 04 -<br>ส มั ค ร เ ข้ า ค่ า ย</span>
       <div style="text-align: center;">
         <br>
-        <% if(!userData.email) { %>
+        <% if(!userData || !userData.get('email')) { %>
           <a href="/register" class="btn btn-primary">Sign Up</a>
           <br>
           <br>
@@ -133,23 +130,19 @@
           </button>
         <% } 
         else { %>
-          <p><%= userData.email %></p>
-          <% if(!userData.done) { %>
-          <a href="/exam" class="btn btn-primary">ทำข้อสอบ</a><br><br>
+          <p><%= userData.get('email') %></p>
+          <% if(!userData.get('done')) { %>
+            <a href="/exam" class="btn btn-primary">ทำข้อสอบ</a><br><br>
           <%
-            }
-            else if(!userData.eva) {
-          %>
-          <a href="/evaluation" class="btn btn-primary">ทำแบบประเมิน</a><br><br>
-        <% } else { %>
-          <p>เสร็จเรียบร้อยแล้วจ้า รอฟังประกาศผลได้เลยย</p>
-        <%
-            }
-        %>
-        <a href="/logout" class="btn btn-primary">Log Out</a>
-        <%
           }
-        %>
+          else if(!userData.get('eva')) {
+          %>
+            <a href="/evaluation" class="btn btn-primary">ทำแบบประเมิน</a><br><br>
+          <% } else { %>
+            <p>เสร็จเรียบร้อยแล้วจ้า รอฟังประกาศผลได้เลยย</p>
+          <% } %>
+        <a href="/logout" class="btn btn-primary">Log Out</a>
+        <% } %>
         <br><br>
         <span><br>- ประกาศผลวันอาทิตย์ที่ 28 ตุลาคม 2561 ผ่านทาง<a href="https://www.simc20.com">เว็บไซต์</a> และ<a href="https://www.facebook.com/simedicalcamp20th/">เพจค่ายเส้นทางสู่หมอศิริราช</a> โดยผู้ที่ได้รับการคัดเลือกจะมีค่าใช้จ่ายในการเข้าร่วมกิจกรรม 800 บาท</span>
       </div>
@@ -185,13 +178,27 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>  
+              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
             </div>
           </form>
         </div>
       </div>
     </div>
-    <%- include('footer.ejs'); %>
-    <script src="/home-bundle.js" defer></script>
+    <%- include('includes/footer.ejs'); %>
+    <script type="text/javascript" src="/home-bundle.js"></script>
+    <script type="text/javascript" defer>
+      window.onload = function() {
+        Swal.mixin({
+          confirmButtonText: 'OK',
+        }).queue([
+        <% if (alert.error) alert.error.forEach((e) => { %>
+          {type: 'error', title: '<%= e %>'},
+        <% }); 
+        if (alert.success) alert.success.forEach((e) => { %>
+          {type: 'success', title: '<%= e %>'},
+        <% }); %>
+        ]);
+      }; // https://stackoverflow.com/a/807895/4468834
+    </script>
   </body>
 </html>

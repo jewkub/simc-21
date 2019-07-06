@@ -1,19 +1,24 @@
 <%
   let ex = [], cnt = 0;
   exam.forEach(e => {
-    if(e.part == 3 || e.part == 1) return ;
-    if(!ex[e.part]) ex[e.part] = [];
+    e.part = e.get('part');
+    e.num = e.get('num');
+    if (e.part == 3 || e.part == 1) return ;
+    if (!ex[e.part]) ex[e.part] = [];
     ex[e.part][e.num] = true;
     cnt++;
   });
   oldAnswer.forEach(e => {
-    if(e.part == 3 || e.part == 1) return ;
-    if(e.ans) {
+    e.part = e.get('part');
+    e.num = e.get('num');
+    e.ans = e.get('ans');
+    if (e.part == 3 || e.part == 1) return ;
+    if (e.ans) {
       delete ex[e.part][e.num];
       cnt--;
     }
   });
-  if(!user.endTime) {
+  if (!user.get('endTime')) {
     ex[3] = ['(ยังไม่ได้ทำข้อสอบชุดนี้)'];
     cnt++;
   }
@@ -24,22 +29,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ทบทวนก่อนส่ง - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/normal-bundle.css">
-    <%- include('../css.ejs') %>
+    <%- include('../includes/css.ejs') %>
   </head>
   <body>
-    <% if (alertType != 'none') { %>
-      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
-    <% } %>
-    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="/exam?part=1">1</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=2">2</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=3">3</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=4">4</a></li>
-        <li class="page-item"><a class="page-link" href="/exam?part=5">5</a></li>
-      </ul>
-    </nav>
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <%- include('../includes/pagenav.ejs') %>
     <div class="container">
       <%
         if(cnt) {
@@ -102,7 +96,21 @@
         }
       %>
     </div>
-    <%- include('../footer.ejs'); %>
+    <%- include('../includes/footer.ejs'); %>
     <script src="/normal-bundle.js"></script>
+    <script type="text/javascript" defer>
+      window.onload = function() {
+        Swal.mixin({
+          confirmButtonText: 'OK',
+        }).queue([
+        <% if (alert.error) alert.error.forEach((e) => { %>
+          {type: 'error', title: '<%= e %>'},
+        <% }); 
+        if (alert.success) alert.success.forEach((e) => { %>
+          {type: 'success', title: '<%= e %>'},
+        <% }); %>
+        ]);
+      }; // https://stackoverflow.com/a/807895/4468834
+    </script>
   </body>
 </html>

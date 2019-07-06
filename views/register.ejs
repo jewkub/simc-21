@@ -4,20 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สมัครเข้าค่าย - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/home-bundle.css">
-    <%- include('css.ejs') %>
-    <!-- <script src='https://www.google.com/recaptcha/api.js?render=6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu'></script>
-    <script>
-      let recaptcha = null;
-      grecaptcha.ready(function() {
-        (function foo() {
-          grecaptcha.execute('6LeG2WQUAAAAAE7cbrkNpQnGQQBGi7ly8UzXnIfu', {action: 'login'})
-            .then(function(token) {
-              recaptcha = token;
-              $('#token').val(token);
-          });
-          window.setTimeout(foo, 1000*60);
-        })(); // http://bit.ly/2LhnMal
-      });</script> -->
+    <%- include('includes/css.ejs') %>
   </head>
   <body>
     <div class="container">
@@ -52,8 +39,7 @@
         <button type="submit" class="btn btn-primary">สมัครสมาชิก</button>
       </form>
     </div>
-    <%- include('footer.ejs'); %>
+    <%- include('includes/footer.ejs'); %>
     <script src="/register-bundle.js"></script>
   </body>
 </html>
-<!-- แก้ให้ใส่รหัสเป็นภาษาไทยไม่ได้ -->

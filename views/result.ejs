@@ -3,7 +3,7 @@
   <head>
     <title>ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/home-bundle.css">
-    <%- include('css.ejs') %>
+    <%- include('includes/css.ejs') %>
     <style>
       *, .btn {
         font-size: inherit;
@@ -33,7 +33,7 @@
       }
       #p1 {
         margin-left: 50%;
-        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/1.jpg");
+        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/1.jpg");
         --ratio: 1;
         --expect: 1.066;
         background-position: calc(50% + 25% * var(--expect) + ( 960px * var(--ratio) * 50 * var(--expect) ) / 200) center;
@@ -41,12 +41,12 @@
       #p2 {
         --ratio: 1;
         --expect: 0.934;
-        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/2.jpg");
+        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/2.jpg");
         background-position: calc(25% * var(--expect) - 1 / 4 * 960px * var(--ratio) * (2 - var(--expect) ) ) center;
       }
       #p3 {
         margin-left: 50%;
-        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/3.jpg");
+        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/3.jpg");
         --ratio: 1;
         --expect: 1.066;
         background-position: calc(50% + 25% * var(--expect) + ( 960px * var(--ratio) * 50 * var(--expect) ) / 200) center;
@@ -54,7 +54,7 @@
       #p4 {
         --ratio: 1;
         --expect: 1.11;
-        background-image: url("https://storage.googleapis.com/simc-20.appspot.com/public/web/4.jpg");
+        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/4.jpg");
         background-position: calc(25% * var(--expect) - 1 / 4 * 960px * var(--ratio) * (2 - var(--expect) ) ) center;
       }
       @media only screen and (max-device-width: 1024px) {
@@ -108,7 +108,7 @@
     <% if (alertType != 'none') { %>
       <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
     <% } %>
-    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
     <div class="caption container" style="padding-top: 10%;">
       <span style="text-align: center; font-size: larger;">- 01 -<br>ร ะ เ บี ย บ ก า ร</span>
       <span>- กําหนดการเข้าค่าย 2 วัน 1 คืน ตั้งแต่วันเสาร์ที่ 19 มกราคม 2562 เวลา 7:00 น. ถึงวันอาทิตย์ที่ 20 มกราคม 2562 เวลา 19:00 น. โดยค้างคืนที่ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช<br>- สถานที่จัดกิจกรรม : คณะแพทยศาสตร์ศิริราชพยาบาล จ.กรุงเทพมหานคร<br>- ที่พัก : ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช อ.นครชัยศรี จ.นครปฐม<br>- คุณสมบัติผู้สมัคร : นักเรียนที่กำลังศึกษาอยู่ชั้นมัธยมศึกษาตอนปลาย (ม.4-6)<br>- จำนวนที่รับสมัครทั้งหมด : 250 คน</span>
@@ -190,7 +190,7 @@
         </div>
       </div>
     </div>
-    <%- include('footer.ejs'); %>
+    <%- include('includes/footer.ejs'); %>
     <script src="/home-bundle.js" defer></script>
   </body>
 </html>

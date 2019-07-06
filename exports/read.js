@@ -1,10 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
 const store = require('node-persist');
-const {google} = require('googleapis');
+const { google } = require('googleapis');
+const { name: projectId } = require('../package.json');
 
 const Datastore = require('@google-cloud/datastore');
-const projectId = 'simc-20';
 const datastore = new Datastore({
   projectId: projectId,
 });
@@ -12,7 +12,7 @@ const Storage = require('@google-cloud/storage');
 const storage = new Storage({
   projectId: projectId,
 });
-const bucket = storage.bucket('simc-20.appspot.com');
+const bucket = storage.bucket('simc-web.appspot.com');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];

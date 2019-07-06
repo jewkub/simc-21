@@ -1,6 +1,6 @@
 /node_modules/
 npm-debug.log
-secret.json
+/secret/
 /exports/credentials.json
 /exports/token.json
 /exports/.node-persist/

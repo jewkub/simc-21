@@ -1,5 +1,5 @@
 const Datastore = require('@google-cloud/datastore');
-const projectId = 'simc-20';
+const { name: projectId } = require('../package.json');
 const datastore = new Datastore({
   projectId: projectId,
 });
@@ -7,7 +7,7 @@ const datastore = new Datastore({
 const storage = new Storage({
   projectId: projectId,
 });
-const bucket = storage.bucket('simc-20.appspot.com'); */
+const bucket = storage.bucket('simc-web.appspot.com'); */
 
 let query = datastore
   .createQuery('Users')

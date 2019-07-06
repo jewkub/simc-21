@@ -51,7 +51,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แบบประเมิน - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
     <link rel="stylesheet" href="/normal-bundle.css">
-    <%- include('../css.ejs') %>
+    <%- include('../includes/css.ejs') %>
     <style>
       input[type="radio"] {
         margin-left: 5px !important;
@@ -59,10 +59,7 @@
     </style>
   </head>
   <body>
-    <% if (alertType != 'none') { %>
-      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
-    <% } %>
-    <img src="https://storage.googleapis.com/simc-20.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
     <div class="container">
       <h3 style="text-align: center;">- 06 -<br>Evaluation</h3>
       <br>
@@ -109,6 +106,20 @@
         <br>
       </form>
     </div>
-    <%- include('../footer.ejs'); %>
+    <%- include('../includes/footer.ejs'); %>
     <script src="/normal-bundle.js"></script>
+    <script type="text/javascript" defer>
+      window.onload = function() {
+        Swal.mixin({
+          confirmButtonText: 'OK',
+        }).queue([
+        <% if(alert.error) alert.error.forEach((e) => { %>
+          {type: 'error', title: '<%= e %>'},
+        <% }); 
+        if(alert.success) alert.success.forEach((e) => { %>
+          {type: 'success', title: '<%= e %>'},
+        <% }); %>
+        ])
+      };
+    </script>
   </body>
