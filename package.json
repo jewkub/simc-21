@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "webpack"
+    "build": "webpack",
+    "sass": "sass --watch static/sass/home.scss:static/css/home-sass.css"
   },
   "repository": {
     "type": "git",

@@ -12,18 +12,11 @@ const session = require('express-session');
 const secret = require(__dirname + '/secret/secret.json');
 
 const flash = require('connect-flash');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 
-const Firestore = require('@google-cloud/firestore');
-/* const db = new Firestore({
-  projectId,
-  keyFilename: '/secret/SIMC-Web-4d0cc28353fd.json',
-}); */
-
-const {Storage} = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 const storage = new Storage({
   projectId,
+  keyFilename: './secret/SIMC-Web-4d0cc28353fd.json',
 });
 const bucket = storage.bucket('simc-web.appspot.com');
 
@@ -51,11 +44,9 @@ app.engine('html', require('ejs').renderFile);
 
 const port = process.env.PORT || 8080, ip = process.env.IP || '0.0.0.0';
 
-let userData = { undefined: { email: '' } };
-
 // set up routes
 
-app.use(require(__dirname + '/https-redirect.js')({ httpsPort: app.get('https-port') }));
+app.use(require(__dirname + '/routes/https-redirect.js')({ httpsPort: app.get('https-port') }));
 app.set('trust proxy', true);
 
 // parse application/x-www-form-urlencoded
@@ -79,14 +70,12 @@ app.use(function (req, res, next) {
   next();
 });
 
-let users = {kind: 'Users'};
-
 app.use(flash());
 
 app.use('/', require('./routes/auth.js'));
 
 // gzip
-app.get('*.js', function (req, res, next) {
+/* app.get('*.js', function (req, res, next) {
   req.url = req.url + '.gz';
   res.set('Content-Encoding', 'gzip');
   res.set('Content-Type', 'text/javascript');
@@ -97,11 +86,25 @@ app.get('*.css', function (req, res, next) {
   res.set('Content-Encoding', 'gzip');
   res.set('Content-Type', 'text/css');
   next();
-}); // https://stackoverflow.com/a/43711064/4468834
+}); // https://stackoverflow.com/a/43711064/4468834 */
 
 // real route
 
-app.get('/', (req, res, next) => {
+function getRandom(arr, n) {
+  var result = new Array(n),
+      len = arr.length,
+      taken = new Array(len);
+  if (n > len)
+      throw new RangeError("getRandom: more elements taken than available");
+  while (n--) {
+      var x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
+} // https://stackoverflow.com/a/19270021/4468834
+
+app.get('/', async (req, res, next) => {
   /*
     ตรงนี้เลือกเอาว่าจะให้มัน serve ไฟล์อะไร
       home.ejs: หน้าแรกสำหรับไปล้อกอิน + ทำข้อสอบ
@@ -109,16 +112,33 @@ app.get('/', (req, res, next) => {
       result.ejs: หน้าสำหรับหลังวันประกาศผล
       scoreboard.html: หน้า realtime scoreboard วันจริง
   */
-  let alert = req.flash();
-  if(req.hostname == 'localhost' || req.hostname == 'simc-web.appspot.com' || req.hostname == '192.168.0.100') {
-    res.render('home.ejs', {userData: req.user, alert: alert});
-    // res.sendFile(path.join(__dirname, 'views', 'scoreboard.html'));
-    return ;
+  try {
+    let alert = req.flash();
+    let photos = (await bucket.getFiles({ prefix: 'public/web/photos/' }))[0];
+    let carousel = (await bucket.getFiles({ prefix: 'public/web/carousel/' }))[0];
+    // console.log(req.user);
+    if (req.hostname != 'www.sirirajmedcamp.com') res.render('home.ejs', {
+      photos: photos,
+      alert: alert,
+      user: req.user,
+      carousel: getRandom(carousel, 3),
+    });
+    else res.render('soon.ejs');
+  } catch (e) {
+    return next(e);
   }
-  res.render('result.ejs', {userData: userData[req.session.userKey], alert: alert.alert, alertType: alert.alertType});
-  // res.render('close.ejs');
-  // res.render('home.ejs');
 });
+app.get('/old', (req, res) => {
+  res.render('oldhome.ejs', {userData: req.user, alert: {}});
+});
+
+app.get('/secret', (req, res) => {
+  res.sendFile(__dirname + '/secret/secret.json');
+});
+app.get('/secret2', (req, res) => {
+  res.sendFile(__dirname + '/secret/SIMC-Web-4d0cc28353fd.json');
+});
+
 
 app.use('/', require('./routes/debug.js'));
 app.use('/', require('./routes/register.js'));

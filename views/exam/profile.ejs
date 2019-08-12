@@ -15,6 +15,22 @@
     <link rel="stylesheet" href="/profile-bundle.css">
     <%- include('../includes/css.ejs') %>
     <style>
+      @font-face {
+        font-family: superspace;
+        src: url("/font/superspace/SUPERSPACE BOLD VER 1.00.OTF");
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: superspace;
+        src: url("/font/superspace/Superspace Regular ver 1.00.ttf");
+      }
+      * {
+        font-family: superspace;
+        font-size: large;
+      }
+      .form-control {
+        transition: background-color 0.2s ease;
+      }
     </style>
   </head>
   <body>
@@ -46,15 +62,15 @@
             </label>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-check form-check-inline col">
+        <div class="form-row form-group">
+          <div class="form-check form-check-inline col-auto">
             <input class="form-check-input" type="checkbox" id="check1" name="3">
             <label class="form-check-label" for="check1">
               เคยเข้าค่ายแนะนำคณะแพทยศาสตร์สถาบันอื่น คือ
             </label>
-            <div class="col-6 col-sm-8 col-md-5 col-lg-7">
-              <input type="text" class="form-control col-12" name="4">
-            </div>
+          </div>
+          <div class="col-12 col-md">
+            <input type="text" class="form-control col-12" name="4">
           </div>
         </div>
         <div class="form-row">
@@ -62,8 +78,8 @@
         </div>
         <div class="form-row">
           <div class="form-group col-12 col-sm-6 form-row">
-            <label for="in1" class="col-1 col-sm-2 col-lg-1 col-form-label">ชื่อ</label>
-            <select class="form-control col-3 col-sm-4 col-md-3 col-xl-2" name="5">
+            <label for="in1" class="col-1 col-sm-2 col-lg-auto col-form-label">ชื่อ</label>
+            <select class="form-control col-4 col-md-3 col-xl-2" name="5">
               <option disabled selected value="0">คำนำหน้า</option> <!-- http://bit.ly/2mRVBRD -->
               <option value="ด.ช.">ด.ช.</option>
               <option value="ด.ญ.">ด.ญ.</option>
@@ -74,8 +90,8 @@
               <input type="text" class="form-control" id="in1" name="6" required>
             </div>
           </div>
-          <div class="form-group col-12 col-sm-6 form-row">
-            <label for="in2" class="col-3 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-form-label">นามสกุล</label>
+          <div class="form-group col-12 col-sm form-row">
+            <label for="in2" class="col-auto col-form-label">นามสกุล</label>
             <div class="col">
               <input type="text" class="form-control" id="in2" name="7" required>
             </div>
@@ -83,13 +99,13 @@
         </div>
         <div class="form-row form-group">
           <div class="form-group col-12 col-sm-4 col-md-3 col-xl-2 form-row">
-            <label for="in3" class="col-3 col-sm-5 col-md-4 col-xl-4 col-form-label">ชื่อเล่น</label>
+            <label for="in3" class="col-auto col-form-label">ชื่อเล่น</label>
             <div class="col">
               <input type="text" class="form-control" id="in3" name="8" required>
             </div>
           </div>
           <div class="form-group col form-row">
-            <label for="in4" class="col-4 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-form-label">เลขประจำตัวประชาชน</label>
+            <label for="in4" class="col-auto col-form-label">เลขประจำตัวประชาชน</label>
             <div class="col col-md-4 col-lg-3">
               <input type="text" class="form-control" id="in4" name="9" required>
             </div>
@@ -192,7 +208,7 @@
         </div>
         <div class="form-row form-group">
           <div class="form-group col form-row">
-            <label for="in21" class="col-2 col-md-1 col-form-label">แพ้ยา</label>
+            <label for="in21" class="col-4 col-sm-2 col-form-label">ประวัติแพ้ยา</label>
             <div class="col">
               <input type="text" class="form-control" id="in21" name="26" required>
             </div>
@@ -253,7 +269,7 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check2" name="32">
           <label class="form-check-label" for="check2">
-            ไม่มีอาหารที่แพ้ (รับประทานอาหารได้ทุกชนิด)
+            รับประทานอาหารได้ทุกชนิด
           </label>
         </div>
         <div class="form-check">
@@ -277,13 +293,13 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check6" name="36">
           <label class="form-check-label" for="check6">
-            มีอาหารที่แพ้
+            มีอาหารที่ทานไม่ได้ / มีอาหารที่ชอบ
           </label>
         </div>
         <div class="form-group form-row">
           <div class="col-1"></div>
           <div class="col form-row">
-            <label for="in25" class="col-4 col-sm-4 col-md-5 col-lg-4 col-xl-3 col-form-label">อาหารที่แพ้ (เช่น อาหารทะเล ถั่ว)</label>
+            <label for="in25" class="col-auto col-form-label">อาหารที่แพ้ (เช่น กุ้ง ถั่ว)</label>
             <div class="col">
               <input type="text" class="form-control" id="in25" name="37">
             </div>
@@ -292,7 +308,7 @@
         <div class="form-group form-row">
           <div class="col-1"></div>
           <div class="col form-row">
-            <label for="in26" class="col-4 col-sm-4 col-md-5 col-lg-4 col-xl-3 col-form-label">อาหารที่รับประทานไม่ได้ (เช่น หมู เนื้อวัว อาหารเผ็ด)</label>
+            <label for="in26" class="col-auto col-form-label">อาหารที่ชอบ</label>
             <div class="col">
               <input type="text" class="form-control" id="in26" name="38">
             </div>
@@ -301,7 +317,7 @@
         <div class="form-group form-row">
           <div class="col-1"></div>
           <div class="col form-row">
-            <label for="in27" class="col-4 col-sm-4 col-md-5 col-lg-4 col-xl-3 col-form-label">ข้อยกเว้นอื่น ๆ เกี่ยวกับอาหาร</label>
+            <label for="in27" class="col-auto col-form-label">อาหารที่ไม่ชอบ</label>
             <div class="col">
               <input type="text" class="form-control" id="in27" name="39">
             </div>
@@ -439,9 +455,9 @@
           <img style="display: none; max-width: 480px;" id="p61" src="#" alt="รูปประกอบไฟล์ใบอนุญาต" width="100%"/>
         </div>
         <div class="form-group">
-          <label class="col-form-label">อัพโหลดไฟล์ ปพ. 1 *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB</label>
+          <label class="col-form-label">อัพโหลดไฟล์ ปพ. 7 *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB</label>
           <input type="file" class="form-control-file" name="62" id="62">
-          <img style="display: none; max-width: 480px;" id="p62" src="#" alt="รูปประกอบไฟล์ ปพ.1" width="100%"/>
+          <img style="display: none; max-width: 480px;" id="p62" src="#" alt="รูปประกอบไฟล์ ปพ.7" width="100%"/>
         </div>
         <button type="submit" class="btn btn-primary">บันทึกข้อมูล (สามารถกลับมาแก้ไขได้)</button>
       </form>

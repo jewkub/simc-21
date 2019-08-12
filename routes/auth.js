@@ -60,7 +60,7 @@ router.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/',
-    successFlash: 'ล็อกอินสำเร็จ',
+    successFlash: 'เข้าสู่ระบบสำเร็จ',
     failureFlash: true
   })
 );

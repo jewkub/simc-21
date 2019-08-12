@@ -7,11 +7,16 @@ router.get('/register', (req, res, next) => {
 });
 
 router.get('/register/validemail', async function (req, res, next) {
-  res.set({
-    'Cache-Control': 'no-store, must-revalidate'
-  });
-  let valid = await User.checkValidEmail(req.query.email);
-  res.json({alreadyUsed: !valid});
+  try {
+    res.set({
+      'Cache-Control': 'no-store, must-revalidate'
+    });
+    let valid = await User.checkValidEmail(req.query.email);
+    res.json({alreadyUsed: !valid});
+  } catch (e) {
+    console.log('check valid email error: ');
+    console.log(e);
+  }
 });
 
 router.post('/register', async function (req, res, next) {
