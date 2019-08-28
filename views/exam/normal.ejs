@@ -2,12 +2,25 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= partDesc[part] %> - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <title><%= partDesc[part] %> - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
     <link rel="stylesheet" href="/normal-bundle.css">
     <%- include('../includes/css.ejs') %>
+    <style>
+      <%
+        for (let i = 1; i <= exam.length; i++) {
+      %>
+        form .card:nth-of-type(<%= i %>) .card-header::before {
+          content: '<%= i %>. ';
+          vertical-align: top;
+          position: relative;
+          left: -8px;
+          margin-right: -5px;
+        }
+      <% } %>
+    </style>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/cover.png" width="100%" style="margin-bottom: 20px;">
     <%- include('../includes/pagenav.ejs') %>
     <div class="container">
       <form method="post" action="/exam" enctype="multipart/form-data">
@@ -16,10 +29,16 @@
         <br>
         <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
         <%
-          let noshuf = [[], [], [], [], [], []];
-          noshuf[2][6] = 1;
-          noshuf[2][3] = 1;
-          noshuf[2][12] = 1;
+          if (part == 3) {
+        %>
+            <p>ข้อ 1-5 เติมคำตอบอย่างสั้น ไม่ต้องอธิบายละเอียด</p>
+        <% } %>
+        <%
+          let noshuf = [[], [], [], [], [], [], []];
+          // noshuf[2][6] = 1;
+          // noshuf[2][3] = 1;
+          // noshuf[2][12] = 1;
+          
           exam.forEach(e => {
             e.num = e.get('num');
             e.question = e.get('question');
@@ -28,9 +47,7 @@
             if (e.get('part') != part) return ;
         %>
           <div class="card <%= e.answerType %>" id="div_<%= e.num %>">
-            <div class="card-header">
-              <%= e.num %>. <%- e.question %>
-            </div>
+            <div class="card-header" style="white-space: nowrap;"><span style="display: inline-block;"><div style="white-space: normal;"><%- e.question %></div></span></div>
             <div class="card-body">
               <%
                 // choice
@@ -40,15 +57,13 @@
                     arr[i] = new String(arr[i]);
                     arr[i].real = i + 1;
                   });
-                  if (noshuf[part][e.num]) sub.l = sub.length - noshuf[part][e.num];
-                  shuffle(sub, sub.length - !!noshuf[part][e.num]).forEach(choice => {
+
+                  shuffle(sub, sub.length - noshuf[part][e.num]).forEach(choice => {
                     let choicename = e.num + '_' + choice.real;
               %>       
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="<%= e.num %>" id="<%= choicename %>" value="<%= choice.real %>">
-                  <label class="form-check-label" for="<%= choicename %>" style="width: 100%;">
-                    <%- choice %>
-                  </label>
+                  <label class="form-check-label" for="<%= choicename %>" style="width: 100%;"><%- choice %></label>
                 </div>
               <%
                   });
@@ -57,7 +72,6 @@
                 else if (e.answerType == 'textarea') {
               %>
                 <textarea class="form-control" id="<%= e.num %>" name="<%= e.num %>" rows="<%= e.subQuestion || 3 %>"></textarea>
-                <!-- <input type="text" class="form-control" name="<%= e.num %>" id="<%= e.num %>" placeholder="เขียนคำตอบที่นี่"> -->
               <%
                 }
                 // upload
@@ -133,7 +147,7 @@
         files.forEach(file => {
           if(file.name.slice(-1)[0] != '/') {
       %>
-            $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img style="width: 100%;" align="middle" src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>">');
+            $('#div_<%= file.name.split(".")[0].split("/").slice(-1)[0] %> .card-header').append('<br><img style="max-width: 100%;" align="middle" src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>">');
       <%
           }
         });

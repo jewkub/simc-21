@@ -115,10 +115,10 @@ app.get('/', async (req, res, next) => {
   try {
     let alert = req.flash();
     let photos = (await bucket.getFiles({ prefix: 'public/web/photos/' }))[0];
-    let carousel = (await bucket.getFiles({ prefix: 'public/web/carousel/' }))[0];
+    let carousel = (await bucket.getFiles({ prefix: 'public/web/carousel2/' }))[0];
     // console.log(req.user);
-    if (req.hostname != 'www.sirirajmedcamp.com') res.render('home.ejs', {
-      photos: photos,
+    if ((new Date()).getTime() > 1566478800000 || req.hostname != 'www.sirirajmedcamp.com') res.render('home.ejs', {
+      photos: getRandom(photos, 6),
       alert: alert,
       user: req.user,
       carousel: getRandom(carousel, 3),

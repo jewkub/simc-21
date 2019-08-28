@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Siriraj Med Camp 21 - The Secret Agent 🕵️">
+    <meta name="description" content="ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21 - แล้วมาล้วงความลับของนักศึกษาแพทย์ไปด้วยกัน 🌟">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="fb:app_id" content="424671731062002">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sirirajmedcamp.com">
+    <meta property="og:title" content="Siriraj Med Camp 21 - The Secret Agent 🕵️">
+    <meta property="og:description" content="ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21 - มาล้วงความลับของนักศึกษาแพทย์ไปด้วยกัน 🌟">
+    <meta property="og:image" content="https://storage.googleapis.com/simc-web.appspot.com/public/web/ogcover.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.sirirajmedcamp.com">
+    <meta property="twitter:title" content="Siriraj Med Camp 21 - The Secret Agent 🕵️">
+    <meta property="twitter:description" content="ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21 - มาล้วงความลับของนักศึกษาแพทย์ไปด้วยกัน 🌟">
+    <meta property="twitter:image" content="https://storage.googleapis.com/simc-web.appspot.com/public/web/ogcover.png">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146431996-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-146431996-2');
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,7 +90,7 @@
         border-radius: 20px;
         padding: 20px;
         color: white;
-        max-width: 250px;
+        
         
         display: flex;
         flex-flow: column nowrap;
@@ -73,13 +102,10 @@
       }
       .carousel-item img {
         height: calc(100vh - var(--banner-height));
-        position: absolute;
-        top: -9999px;
-        bottom: -9999px;
-        left: -9999px;
-        right: -9999px;
-        margin: auto;
-      } /* https://stackoverflow.com/a/19414020/4468834 */
+        width: 100vw;
+        object-fit: cover;
+      }
+
       .carousel-control-next {
         left: 15%;
         right: auto;
@@ -95,17 +121,23 @@
       }
       #navbar.transparent {
         /* visibility: hidden; */
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.33);
         
       }
       .navbar-brand {
         height: calc(var(--nav-height) - 8px - 8px);
       }
       .navbar-expand-lg .navbar-nav .nav-link {
-        padding-left: 1.1em;
-        padding-right: 1.1em;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
         color: var(--white);
-        transition: background-color 0.2s ease;
+        transition: background-color 0.2s ease, color 0.15s ease;
+      }
+      .navbar-expand-lg .navbar-nav [class="nav-link"]:hover {
+        color: green;
+      }
+      .dropdown:not(.show) .nav-link:hover {
+        color: green;
       }
       .transparent.navbar-expand-lg .navbar-nav .nav-link {
         color: var(--white);
@@ -115,17 +147,17 @@
         background-color: transparent;
       }
 
+      #banner-header {
+        --left: -190px;
+        position: relative;
+        left: var(--left);
+        overflow-x: hidden;
+        width: calc(100% - var(--left));
+      }
+
       .circle-crop {
         overflow: hidden;
         border-radius: 50%;
-      }
-
-      .middle img{
-        position: absolute;
-        top: 0;
-        left: -9999px;
-        right: -9999px;
-        margin: auto;
       }
 
       i {
@@ -176,14 +208,18 @@
         top: calc(0px - var(--nav-height));
         visibility: hidden;
         /* height: 0; */
-      } /* https://stackoverflow.com/a/13184714/4468834
+      } /* https://stackoverflow.com/a/13184714/4468834 */
 
-      .swal2-container {
-        overflow-y: scroll !important;
-        height: 101vh !Important;
-      } */
+      .z-index-2 {
+        z-index: 2;
+      }
 
       @media only screen and (min-width: 768px) {
+        #banner-header {
+          position: static;
+          width: initial;
+        }
+
         i.flaticon-arrow {
           display: initial;
         }
@@ -192,6 +228,31 @@
         }
         #right {
           display: initial;
+        }
+
+        #gallery > div:nth-child(1) > div {
+          margin: 0.6rem;
+        }
+        #gallery > div:nth-child(2) > div {
+          margin-top: 6rem;
+        }
+        #gallery > div:nth-child(3) > div {
+          margin: 0.4rem;
+        }
+        #gallery > div:nth-child(4) > div {
+          margin-top: -5rem;
+        }
+        #gallery > div:nth-child(5) > div {
+          margin-top: 2rem;
+        }
+        #gallery > div:nth-child(6) > div {
+          margin-top: -5rem;
+        }
+
+        .swal2-container a {
+          background-color: transparent;
+          border-width: 2px;
+          border-color: white;
         }
       }
 
@@ -212,6 +273,24 @@
           visibility: initial;
         }
         
+        #gallery > div:nth-child(1) > div {
+          margin: 1rem;
+        }
+        #gallery > div:nth-child(2) > div {
+          margin-top: 10rem;
+        }
+        #gallery > div:nth-child(3) > div {
+          margin: 1rem;
+        }
+        #gallery > div:nth-child(4) > div {
+          margin-top: -5rem;
+        }
+        #gallery > div:nth-child(5) > div {
+          margin-top: 4rem;
+        }
+        #gallery > div:nth-child(6) > div {
+          margin-top: -5rem;
+        }
       }
 
       @media only screen and (min-width: 1200px) {
@@ -226,11 +305,16 @@
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&autoLogAppEvents=1&version=v3.3&appId=424671731062002"></script>
 
+    <!-- loading div -->
+    <div id="loading" style="width: 100%; height: 100%; position: fixed; display: flex; background-color: var(--gray); z-index: 10000; align-items: center; justify-content: center;">
+      <img id="loading-image" src="https://storage.googleapis.com/simc-web.appspot.com/public/web/loader.svg" alt="Loading..." style="z-index: 100;"/>
+    </div>
+      
     <nav id="navbar" class="transparent navbar fixed-top navbar-expand-lg navbar-light">
       <a class="nav-link" href="#shownav" style="display: none;"></a>
       <a class="nav-link" href="#top" style="display: none;"></a>
       <div class="transparent bar"></div>
-      <a class="ml-4 mr-4 navbar-brand" href="#top">
+      <a class="mx-1 navbar-brand" href="#top">
         <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/textLogo.png" alt="Logo" style="width: 160px;"/>
         <div class="debug" style="width: 0; position: relative; top: -1000px;"></div>
       </a>
@@ -287,6 +371,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="logout">
               <h6 class="dropdown-header"><%= user.get('email') %></h6>
+              <% if (!user.get('done')) { %><a class="dropdown-item" href="/exam">ทำข้อสอบ</a><% } %>
               <a class="dropdown-item" href="/logout">ออกจากระบบ</a>
             </div>
           </li>
@@ -302,6 +387,7 @@
         <li data-target="#carousel" data-slide-to="0" class="active"></li>
         <li data-target="#carousel" data-slide-to="1"></li>
         <li data-target="#carousel" data-slide-to="2"></li>
+        <li data-target="#carousel" data-slide-to="3"></li>
       </ol>
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -315,6 +401,9 @@
         <div class="carousel-item">
           <img src="https://storage.googleapis.com/simc-web.appspot.com/<%= carousel[2].name %>" class="d-block" alt="pic3">
           <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+        <div class="carousel-item">
+          <iframe src="https://www.youtube.com/embed/dk4XM6uuRQE" frameborder="0" allowfullscreen style="position: relative; height: 100%; width: 100%; z-index: 2;"></iframe>
         </div>
       </div>
       <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
@@ -354,7 +443,7 @@
     </div>
     <a class="anchor" id="shownav"></a>
     <div class="banner">
-      <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/banner.png" alt="banner" style="height: calc(var(--banner-height) + 40px);"/>
+      <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/banner.png" alt="banner" style="min-width: 100%; width: 950px;/*height: calc(var(--banner-height) + 40px);*/"/>
     </div>
 
     <a class="anchor" id="about"></a>
@@ -368,39 +457,23 @@
       <br><br>
       <div class="row justify-content-center">
         <div class="col-auto">
-          <p>ค่ายเส้นทางสู่หมอศิริราช เป็น ค่ายที่มีวัตถุประสงค์ในการแนะแนวนักเรียนระดับชั้น มัธยมศึกษาตอนปลาย ที่มีความสนใจในวิชาชีพแพทย์ โดยค่ายนี้จะมีกิจกรรมที่ทำให้น้องๆ มีข้อมูลมากขึ้นว่าการเป็นแพทย์นั้น ต้องเรียนอะไร ต้องผ่านอะไรกันบ้างในโรงเรียนแพทย์ศิริราชแห่งนี้ บลาๆๆ
-          </p>
+          <p style="text-align: center;"><b>ค่ายเส้นทางสู่หมอศิริราช</b> เป็นค่ายที่จัดขึ้นโดยพี่ๆ นักศึกษาแพทย์ศิริราช เพื่อให้น้องๆ ได้สัมผัสกับเส้นทางการเป็นแพทย์ ทั้งในเรื่องของการเรียน กิจกรรมและการดำเนินชีวิตของนักศึกษาแพทย์ศิริราช และการทำงานในฐานะแพทย์หลังจากจบการศึกษาแล้ว<br><br>นอกจากนี้ ค่ายเส้นทางยังเป็นกิจกรรมที่เสริมสร้างความสัมพันธ์ที่อบอุ่น ระหว่างพี่ๆ นักศึกษาแพทย์ศิริราช กับน้องๆ ผู้เข้าร่วมค่ายเส้นทางฯ อีกด้วย<br><br>สำหรับค่ายเส้นทางสู่หมอศิริราช ครั้งที่ 21 นี้ เปิดรับสมัครถึงวันที่ 27 กันยายน 2562 แล้วพบกันที่ศิริราชนะคะ 💖</p>
         </div>
       </div>
-      <br><br><br><br><br><br>
+      <br><br><br>
     </div>
     <a class="anchor" id="photos"></a>
-    <!-- <div style="height: 0; width: 100%; position: relative;" class="middle">
-      <img src="imgs/photos-bg.png" alt="..." style="width: 100%;">
-    </div> -->
+    <div id="banner-header">
+      <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/photos-bg.png" alt="บรรยากาศในค่าย" style="width: 1500px; min-width: 100%;"/>
+    </div>
+    <br><br>
     <div class="container">
       <div class="row" id="gallery">
       <%
-        let styles = [
-          '',
-          'margin-top: 10em;',
-          '',
-          'margin-top: -5em;',
-          'margin-top: 4em;',
-          'margin-top: -5em;',
-        ];
-        let classes = [
-          'm-3',
-          '',
-          'm-3',
-          '',
-          '',
-          '',
-        ];
         photos.forEach((file, i) => {
       %>
-        <div class="col-6 col-md-4 pb-2">
-          <div class="circle-crop <%= classes[i] %>" style="<%= styles[i] %>">
+        <div class="col-6 col-md-4 p-0">
+          <div class="circle-crop">
             <img src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>" alt="<%= file.name %>" style="width: 100%; cursor: pointer;" onclick="pswp(<%= i %>);"/>
           </div>
         </div>
@@ -410,17 +483,20 @@
       </div>
     </div>
     <a class="anchor" id="terms"></a>
+    <div id="banner-header">
+      <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/terms-bg.png" alt="ระเบียบการ" style="width: 1500px; min-width: 100%;"/>
+    </div>
     <div class="container">
       <br>
-      <div class="row" style="">
+      <div class="row">
         <div class="col-12 col-md mb-2">
           <div class="card text-center h-100">
             <div class="card-body">
               <h5 class="card-title">วันและเวลา</h5>
-              <p class="card-text"><span style="color: var(--green);">16 - 17</span> พฤษจิกายน 2562 (2 วัน)</p>
+              <p class="card-text"><span style="color: var(--green);">16 - 17</span> พฤศจิกายน 2562 (2 วัน)</p>
             </div>
             <div class="card-footer text-muted p-1">
-              <span style="font-size: small">*สำหรับปีนี้ไม่มีการค้างคืน ไปกลับค่ายด้วยตนเองทั้งสองวัน</span>
+              <span style="font-size: small">*ไม่มีการค้างคืน ไปกลับค่ายด้วยตนเองทั้งสองวัน</span>
             </div>
           </div>
         </div>
@@ -428,7 +504,7 @@
           <div class="card text-center h-100">
             <div class="card-body">
               <h5 class="card-title">สถานที่</h5>
-              <p class="card-text"><span style="color: var(--green);">คณะแพทยศาสตร์ศิริราชพยาบาล</span> จ.กรุงเทพมหานคร</p>
+              <p class="card-text"><a href="#" id="maps">📍 คณะแพทยศาสตร์ศิริราชพยาบาล 📍</a> กรุงเทพมหานคร</p>
             </div>
           </div>
         </div>
@@ -457,28 +533,28 @@
       <div class="container">
         <div class="row justify-content-center mb-4">
           <div class="col-auto">
-            <h4 style="color: var(--green);">อยากเข้าค่ายเส้นฯ ต้องทำอย่างไร</h4>
+            <h4 style="color: var(--green); text-align: center;">อยากเข้าค่ายเส้นทางฯ ต้องทำอย่างไร</h4>
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-md-3" style="text-align: center;">
+          <div class="col-12 col-md px-0" style="text-align: center;">
             <h5 style="color: var(--green);">1</h5>
             <p><b style="color: var(--green);">คลิก</b>ปุ่มด้านล่างเพื่อลงทะเบียน</p>
             <a class="btn btn-primary" href="/register">ลงทะเบียนเข้าค่าย</a>
           </div>
-          <div class="col-12 col-md align-self-center my-3" style="text-align: center;">
+          <div class="col-12 col-md-1 px-0 align-self-center my-3" style="text-align: center;">
             <i class="flaticon-arrow"></i>
             <i class="flaticon-arrow-down-sign-to-navigate"></i>
           </div>
-          <div class="col-12 col-md-3" style="text-align: center;">
+          <div class="col-12 col-md px-0" style="text-align: center;">
             <h5 style="color: var(--green);">2</h5>
             <p class="mb-0">เข้าระบบเพื่อ<b style="color: var(--green);">ทำข้อสอบ</b>เก็บคะแนนสำหรับประกอบการพิจารณาคัดเลือกเข้าค่าย</p>
           </div>
-          <div class="col-12 col-md align-self-center my-3" style="text-align: center;">
+          <div class="col-12 col-md-1 px-0 align-self-center my-3" style="text-align: center;">
             <i class="flaticon-arrow"></i>
             <i class="flaticon-arrow-down-sign-to-navigate"></i>
           </div>
-          <div class="col-12 col-md-3" style="text-align: center;">
+          <div class="col-12 col-md px-0" style="text-align: center;">
             <h5 style="color: var(--green);">3</h5>
             <p>หาก<b style="color: var(--green);">มีรายชื่อในประกาศ</b>ผู้มีสิทธิ์เข้าค่ายก็สามารถมาเข้าร่วมกิจกรรมของค่ายได้เลย</p>
           </div>
@@ -492,9 +568,9 @@
       <div class="row">
         <div class="col-12 col-md 6">
           <h4 class="mb-4">ติดต่อเรา</h4>
-          <p class="icon call mb-0">08x-xxxxxxx (พี่กไก่)</p>
-          <p class="icon call">09x-xxxxxxx (พี่ขไข่)</p>
-          <p class="icon mail mb-0">simcxxx@gmail.com</p>
+          <!-- <p class="icon call mb-0">08x-xxxxxxx (พี่กไก่)</p>
+          <p class="icon call">09x-xxxxxxx (พี่ขไข่)</p> -->
+          <p class="icon mail mb-0">sirirajmedcamp21@gmail.com</p>
           <p class="icon fb"><a href="https://www.facebook.com/simedicalcamp21st/" target="_blank">ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</a></p>
         </div>
         <div class="col-12 col-md 6">
@@ -513,7 +589,7 @@
             <p>2 ถนนวังหลัง แขวงศิริราช เขตบางกอกน้อย กรุงเทพฯ 10700 โทร. 02-419-7000</p>
           </div>
           <div class="col-12 col-md pr-0 align-self-center" style="text-align: center;">
-            <a class="btn btn-primary" style="background-color: #68796F; border-color: #68796F;" href="https://www.si.mahidol.ac.th/" target="_blank">ข้อมูลเพิ่มเติมเกี่ยวกับคณะ</a>
+            <a class="btn btn-primary" style="background-color: #68796F; border-color: #68796F;" href="https://www.si.mahidol.ac.th/th/" target="_blank">ข้อมูลเพิ่มเติมเกี่ยวกับคณะ</a>
           </div>
         </div>
       </div>
@@ -530,44 +606,6 @@
     
     <div style="display: none;">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a> messages.attribution.is_licensed_by <a href="http://creativecommons.org/licenses/by/3.0/"     title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
     <div style="display: none;">Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a> messages.attribution.is_licensed_by <a href="http://creativecommons.org/licenses/by/3.0/"     title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-    
-
-    <!-- Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel" style="margin-top: 0;">เข้าสู่ระบบ</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true"><i class="fas fa-times"></i></span>
-            </button>
-          </div>
-          <form id="loginForm" method="post" action="/login">
-            <div class="modal-body">
-              <div class="form-row">
-                <div class="col">
-                  <div class="form-group">
-                    <label for="emailInput">อีเมล</label>
-                    <input type="email" class="form-control" id="emailInput" name="email" aria-describedby="emailHelp" placeholder="อีเมล" required autofocus>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col">
-                  <div class="form-group">
-                    <label for="passwordInput">รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="passwordInput" name="password" aria-describedby="passwordHelp" placeholder="รหัสผ่าน" required>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
 
     <!-- pswp -->
     <!-- Root element of PhotoSwipe. Must have class pswp. -->
@@ -623,6 +661,7 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FitText.js/1.2.0/jquery.fittext.min.js" integrity="sha256-HfH85PYPD7XPxN3MmppGXnxsLZUrlu0dN/Kn4H7DA4E=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js" integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin="anonymous"></script>
@@ -632,53 +671,66 @@
       $(() => {
         let cnt = 0;
         let chk = () => {
-          if ($(this).scrollTop() < $('#shownav').offset().top) {
-            $('#navbar').addClass('transparent');
-            $('.bar').addClass('transparent');
+          if ($(window).scrollTop() < $('#shownav').offset().top && !($('#navbar .navbar-toggler').attr('aria-expanded') === 'true')) {
+            $('#navbar, .bar').addClass('transparent');
+ 
+            // debug for re-rendering in iOS
             if (!$('.debug').is(':animated') && cnt < 3) {
-                $('.debug').animate({
+              $('.debug').animate({
                 left: '+=1px',
                 top: '0px',
-              }, 200); // debug for re-rendering in iOS
+              }, 200);
               cnt++;
             }
-            // alert("add");
           }
           else {
             cnt = 0;
-            $('#navbar').removeClass('transparent');
-            $('.bar').removeClass('transparent');
-            // alert("remove");
+            $('#navbar, .bar').removeClass('transparent');
           }
         }
+        window.chk = chk;
         $(window).scroll(chk);
         chk();
-        // setInterval(chk, 100);
 
         // Every time a modal is shown, if it has an autofocus element, focus on it.
         $('.modal').on('shown.bs.modal', function () {
           $(this).find('[autofocus]').focus();
         });
 
-        // Add slideDown animation to Bootstrap dropdown when expanding.
+        // Add slideDown and slideUp animation to Bootstrap dropdown.
         $('.dropdown').on('show.bs.dropdown', function() {
           $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
         });
-
-        // Add slideUp animation to Bootstrap dropdown when collapsing.
         $('.dropdown').on('hide.bs.dropdown', function() {
           $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
         }); // https://stackoverflow.com/a/19339162/4468834
 
+
+        $('#navbar').on('show.bs.collapse', function() {
+          $('#navbar, .bar').removeClass('transparent');
+        });
+        $('#navbar').on('hidden.bs.collapse', function() {
+          chk();
+        }); // https://stackoverflow.com/a/22830975/4468834
+
+
         $('#carousel').carousel({
-          interval: 2000,
+          interval: 4000,
           pause: false,
           ride: 'carousel',
         });
+        $('#carousel').on('slid.bs.carousel', function (e) {
+          if (e.to == 3) {
+            // alert('pause');
+            $('#carousel').carousel('pause');
+          }
+        });
 
-        $('.nav-link, .navbar-brand, .new-button').click(function(e) {
+        $('.nav-link, .navbar-brand').click(function(e) {
           e.preventDefault();
           var sectionTo = $(this).attr('href');
+          if (sectionTo == '#') return ;
+
           $('html, body').animate({
             scrollTop: $(sectionTo).offset().top
           }, 400);
@@ -722,35 +774,61 @@
         gallery.init();
       }
 
-      window.onload = function() {
+      $('#maps').click(function(e) {
+        e.preventDefault();
+        swal.fire('<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d31002.996681432523!2d100.484547!3d13.75627!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x9946a622d6bb1682!2sFaculty+of+Medicine+Siriraj+Hospital%2C+Mahidol+University!5e0!3m2!1sen!2sth!4v1566329933388!5m2!1sen!2sth" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>');
+      });
+
+      window.onload = async function() {
+        await new Promise(res => {
+          setTimeout(() => res(), 200);
+        });
+        $('#loading').fadeOut();
+        await new Promise(res => {
+          setTimeout(() => res(), 400);
+        });
         Swal.mixin({
           confirmButtonText: 'OK',
         }).queue([
         <% if (alert.error) alert.error.forEach((e) => { %>
-          {type: 'error', title: '<%= e %>'},
+          { type: 'error', title: '<%= e.replace(/\n/g, "\\n") %>' },
         <% }); 
+        if (alert.love) { %>
+          { type: 'success', title: '<%- alert.love[0] %>' },
+        <% }
         if (alert.success) alert.success.forEach((e) => { %>
-          {type: 'success', title: '<%= e %>'},
-        <% }); %>
-          /* {
-            title: 'ทพจร!',
-            text: 'Modal with a custom image.',
-            imageUrl: 'https://cdn.shopify.com/s/filesfiles/1/2040/0303/products/Adorable_Cute_Kawaii_Shiba_Inu_Fox_Playmates_Cartoon_-_Tackle_694148798_600x.jpg?v=1499636089',
-            imageWidth: 300,
-            imageHeight: 271,
-            imageAlt: 'Custom image',
-            html: 'I will close in <strong></strong> seconds.',
-            timer: 3000,
+          { type: 'success', title: '<%= e.replace(/\n/g, "\\n") %>' },
+        <% }); 
+        if (!user) { %>
+          {
+            html: '<img src="/registerpopupBackground.png" style="width: 100%;"/>\
+            <a href="https://drive.google.com/file/d/1v2xZgP_s8gqpaXX5sH8d040BsW64Sd0l/view" target="_blank" class="btn btn-secondary" style="position: absolute; right: calc(27.65 / 100 * (100% - 24px) + 0px); bottom: calc(9 / 100 * (100% - 24px) + 0px); width: 16.4%; height: 7.75%; padding: 0.5% 1%;">เอกสารค่าย</a>\
+            <a href="/register" class="btn btn-secondary" style="position: absolute; right: calc(8.26 / 100 * (100% - 24px) + 0px); bottom: calc(9 / 100 * (100% - 24px) + 0px); width: 16.4%; height: 7.75%; padding: 0.5% 1%;">ลงทะเบียน</a>',
+            width: '70%',
+            padding: '0',
+            timer: 10000,
+            focusConfirm: false,
+            heightAuto: false,
+            customClass: {
+              closeButton: 'z-index-2'
+            },
+            showConfirmButton: false,
+            showCloseButton: true,
+            onOpen: () => {
+              $('.swal2-container a').fitText(0.6);
+            },
             onBeforeOpen: () => {
-              timerInterval = setInterval(() => {
+              $('.swal2-container a').fitText(0.6);
+              /* timerInterval = setInterval(() => {
                 Swal.getContent().querySelector('strong')
                   .textContent = parseInt(Swal.getTimerLeft()/1000);
-              }, 100)
+              }, 100) */
             },
             onClose: () => {
               clearInterval(timerInterval);
             },
-          }, */
+          },
+        <% } %>
         ]);
       };
     </script>

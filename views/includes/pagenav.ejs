@@ -11,13 +11,13 @@
     </li>
     <%
       }
-      let sign = [, 1, 2, 3, 4, 5, 'ส่ง'];
-      for (let i = 1; i <= 6; i++) {
+      let sign = [, 1, 2, 3, 4, 5, 6, 'ส่ง'];
+      for (let i = 1; i <= 7; i++) {
     %>
       <li class="page-item <%= part == i ? 'active' : '' %>"><a class="page-link" href="<%= part == i ? '#' : '/exam?part=' + i %>"><%= sign[i] %></a></li>
     <%
       }
-      if (part != 6) {
+      if (part != 7) {
     %>
     <li class="page-item">
       <a class="page-link" href="/exam?part=<%= part+1 %>" aria-label="Next">

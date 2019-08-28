@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user.js');
 
-const session = require('express-session');
+const session = require('cookie-session');
 const flash = require('connect-flash');
 
 const passport = require('passport');
@@ -15,8 +15,8 @@ router.use(session({
   cookie: {
     expires: new Date(2147483647000) // Tue, 19 Jan 2038 03:14:07 GMT
   },
-  saveUninitialized: false,
-  resave: true
+  /* saveUninitialized: false,
+  resave: true */
 }));
 
 router.use(flash());
@@ -60,7 +60,7 @@ router.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/',
-    successFlash: 'เข้าสู่ระบบสำเร็จ',
+    successFlash: 'เข้าสู่ระบบสำเร็จ กดทำข้อสอบที่ปุ่มสีเขียวในกล่องได้เลยครับ',
     failureFlash: true
   })
 );

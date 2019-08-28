@@ -11,7 +11,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <title>Profile - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
     <link rel="stylesheet" href="/profile-bundle.css">
     <%- include('../includes/css.ejs') %>
     <style>
@@ -34,34 +34,16 @@
     </style>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/cover.png" width="100%" style="margin-bottom: 20px;">
     <%- include('../includes/pagenav.ejs'); %>
     <br>
     <br>
     <div class="container">
       <form method="post" action="/exam" enctype="multipart/form-data">
-        <h3 style="text-align: center;">- 01 -<br>Profile</h3>
         <input type="text" class="form-control" style="display:none;" name="part" value="1">
-        <div class="form-row">
-          <label>เคยเข้าร่วมค่ายเส้นทางสู่หมอศิริราชมาก่อนหรือไม่</label>
-        </div>
-        <div class="form-row">
-          <div class="form-check form-check-inline col-6 col-md-4 col-lg-3">
-            <input class="form-check-input" type="radio" id="radio1" name="1" value="เคย" required>
-            <label class="form-check-label" for="radio1">
-              เคย ครั้งที่ 
-            </label>
-            <div class="col">
-              <input type="text" class="form-control" name="2">
-            </div>
-          </div>
-          <div class="form-check form-check-inline col">
-            <input class="form-check-input" type="radio" id="radio2" name="1" value="ไม่เคย">
-            <label class="form-check-label" for="radio2">
-              ไม่เคย
-            </label>
-          </div>
-        </div>
+
+        <h3 style="text-align: center;">- 01 -<br>Profile</h3>
+        
         <div class="form-row form-group">
           <div class="form-check form-check-inline col-auto">
             <input class="form-check-input" type="checkbox" id="check1" name="3">
@@ -73,6 +55,7 @@
             <input type="text" class="form-control col-12" name="4">
           </div>
         </div>
+
         <div class="form-row">
           <label><b><u>ประวัติส่วนตัว</u></b></label>
         </div>
@@ -151,11 +134,11 @@
           </div>
         </div>
         <div class="form-row form-group">
-          <label for="in12" class="col-4 col-sm-4 col-md-3 col-xl-2 col-form-label">ระดับชั้นมัธยมศึกษาปีที่</label>
+          <label for="in12" class="col-6 col-sm-4 col-xl-3 col-form-label">ระดับชั้นมัธยมศึกษาปีที่</label>
           <div class="col-2">
             <input type="number" class="form-control" id="in12" min="1" max="6" name="17" required>
           </div>
-          <label for="in13" class="col-4 col-sm-3 col-md-2 col-form-label">เกรดเฉลี่ยสะสม</label>
+          <label for="in13" class="col-6 col-sm-4 col-form-label">เกรดเฉลี่ยสะสมชั้นมัธยมปลาย</label>
           <div class="col-2 col-md-2">
             <input type="text" class="form-control" id="in13" name="18" required>
           </div>
@@ -196,13 +179,13 @@
           <div class="form-group col-12 col-sm-6 form-row">
             <label for="in19" class="col-4 col-sm-5 col-md-4 col-lg-3 col-form-label">โรคประจำตัว</label>
             <div class="col">
-              <input type="text" class="form-control" id="in19" name="24" required>
+              <input type="text" class="form-control" id="in19" name="24">
             </div>
           </div>
           <div class="form-group col form-row">
             <label for="in20" class="col-4 col-sm-5 col-md-4 col-lg-3 col-form-label">ยาที่ใช้ประจำ</label>
             <div class="col">
-              <input type="text" class="form-control" id="in20" name="25" required>
+              <input type="text" class="form-control" id="in20" name="25">
             </div>
           </div>
         </div>
@@ -210,7 +193,7 @@
           <div class="form-group col form-row">
             <label for="in21" class="col-4 col-sm-2 col-form-label">ประวัติแพ้ยา</label>
             <div class="col">
-              <input type="text" class="form-control" id="in21" name="26" required>
+              <input type="text" class="form-control" id="in21" name="26">
             </div>
           </div>
         </div>
@@ -243,27 +226,6 @@
           </div>
         </div>
         <div class="form-row">
-          <label>Size เสื้อ (รอบอก)</label>
-        </div>
-        <div class="form-row form-group">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="radio3" name="31" value="S (32 นิ้ว)" required>
-            <label class="form-check-label" for="radio3">S (32 นิ้ว)</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="radio4" name="31" value="M (36 นิ้ว)">
-            <label class="form-check-label" for="radio4">M (36 นิ้ว)</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="radio5" name="31" value="L (40 นิ้ว)">
-            <label class="form-check-label" for="radio5">L (40 นิ้ว)</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="radio6" name="31" value="XL (44 นิ้ว)">
-            <label class="form-check-label" for="radio6">XL (44 นิ้ว)</label>
-          </div>
-        </div>
-        <div class="form-row">
           <label><b>ประเภทของอาหารที่รับประทาน</b></label>
         </div>
         <div class="form-check">
@@ -293,13 +255,13 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check6" name="36">
           <label class="form-check-label" for="check6">
-            มีอาหารที่ทานไม่ได้ / มีอาหารที่ชอบ
+            มีอาหารที่แพ้ / ทานไม่ได้
           </label>
         </div>
         <div class="form-group form-row">
           <div class="col-1"></div>
           <div class="col form-row">
-            <label for="in25" class="col-auto col-form-label">อาหารที่แพ้ (เช่น กุ้ง ถั่ว)</label>
+            <label for="in25" class="col-auto col-form-label">อาหารที่แพ้ (เช่น อาหารทะเล ถั่ว)</label>
             <div class="col">
               <input type="text" class="form-control" id="in25" name="37">
             </div>
@@ -308,7 +270,7 @@
         <div class="form-group form-row">
           <div class="col-1"></div>
           <div class="col form-row">
-            <label for="in26" class="col-auto col-form-label">อาหารที่ชอบ</label>
+            <label for="in26" class="col-auto col-form-label">อาหารที่ทานไม่ได้ / ไม่ชอบ</label>
             <div class="col">
               <input type="text" class="form-control" id="in26" name="38">
             </div>
@@ -317,14 +279,14 @@
         <div class="form-group form-row">
           <div class="col-1"></div>
           <div class="col form-row">
-            <label for="in27" class="col-auto col-form-label">อาหารที่ไม่ชอบ</label>
+            <label for="in27" class="col-auto col-form-label">ข้อยกเว้นอื่น ๆ เกี่ยวกับอาหาร</label>
             <div class="col">
               <input type="text" class="form-control" id="in27" name="39">
             </div>
           </div>
         </div>
         <div class="form-row">
-          <label><b>ทราบข่าวโครงการค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20 จากแหล่งใด</b> (ตอบได้มากกว่า 1 ข้อ)</label>
+          <label><b>ทราบข่าวโครงการค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21 จากแหล่งใด</b> (ตอบได้มากกว่า 1 ข้อ)</label>
         </div>
         <div class="form-row">
           <div class="form-check form-check-inline col-12 col-md-6 form-group">
@@ -390,7 +352,7 @@
           <div class="form-check form-check-inline col-12 col-md form-group">
             <input class="form-check-input" type="checkbox" id="check14" name="51">
             <label class="form-check-label" for="check14">
-              Facebook ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20
+              Facebook ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21
             </label>
           </div>
         </div>
@@ -428,7 +390,7 @@
         <div class="form-group row">
           <label for="in28" class="col-1 col-form-label">1. </label>
           <div class="col">
-            <input type="text" class="form-control" id="in28" name="57">
+            <input type="text" class="form-control" id="in28" name="57" required>
           </div>
         </div>
         <div class="form-group row">
@@ -450,7 +412,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-form-label">อัพโหลดไฟล์ใบอนุญาต *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB <u style="color: blue"><a href="https://storage.googleapis.com/simc-web.appspot.com/public/web/ใบขออนุญาตผู้ปกครอง.pdf">download ใบขออนุญาติผู้ปกครองได้ที่นี่</a></u></label>
+          <label class="col-form-label">อัพโหลดไฟล์ใบอนุญาต *เป็นไฟล์รูปภาพขนาดไม่เกิน 5MB <u style="color: blue"><a href="https://drive.google.com/file/d/1o95dp8AqP-5M6Vt3sblwHR7QDvrUzMET/view" target="_blank">download ใบขออนุญาติผู้ปกครองได้ที่นี่</a></u></label>
           <input type="file" class="form-control-file" name="61" id="61">
           <img style="display: none; max-width: 480px;" id="p61" src="#" alt="รูปประกอบไฟล์ใบอนุญาต" width="100%"/>
         </div>

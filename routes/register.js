@@ -25,7 +25,7 @@ router.post('/register', async function (req, res, next) {
   } catch (e) {
     return next(e);
   }
-  req.flash('success', 'สมัครเข้าค่ายสำเร็จ');
+  req.flash('success', 'สมัครเข้าค่ายสำเร็จ กดเข้าสู่ระบบที่มุมบนขวาได้เลยครับ');
   res.redirect('/');
 });
 

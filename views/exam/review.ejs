@@ -3,23 +3,39 @@
   exam.forEach(e => {
     e.part = e.get('part');
     e.num = e.get('num');
-    if (e.part == 3 || e.part == 1) return ;
+    if (e.part == 6 || e.part == 1) return ;
     if (!ex[e.part]) ex[e.part] = [];
-    ex[e.part][e.num] = true;
+    ex[e.part][e.num] = e.num;
     cnt++;
   });
+  ex[1] = ['(ข้อมูลยังไม่เรียบร้อย)', '(ยังไม่มีข้อมูลใบอนุญาต)', '(ยังไม่มีข้อมูลใบปพ. 7)'];
+  cnt += 3;
+
   oldAnswer.forEach(e => {
     e.part = e.get('part');
     e.num = e.get('num');
     e.ans = e.get('ans');
-    if (e.part == 3 || e.part == 1) return ;
+    if (e.part == 1 && e.num == 6 && e.ans) {
+      delete ex[1][0];
+      cnt--;
+    }
+    if (e.part == 1 && e.num == 61 && e.ans) {
+      cnt--;
+      delete ex[1][1];
+    }
+    if (e.part == 1 && e.num == 62 && e.ans) {
+      cnt--;
+      delete ex[1][2];
+    }
+
+    if (e.part == 6 || e.part == 1) return ;
     if (e.ans) {
       delete ex[e.part][e.num];
       cnt--;
     }
   });
   if (!user.get('endTime')) {
-    ex[3] = ['(ยังไม่ได้ทำข้อสอบชุดนี้)'];
+    ex[6] = ['(ยังไม่ได้ทำข้อสอบชุดนี้)'];
     cnt++;
   }
 %>
@@ -27,16 +43,16 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ทบทวนก่อนส่ง - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <title>ทบทวนก่อนส่ง - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
     <link rel="stylesheet" href="/normal-bundle.css">
     <%- include('../includes/css.ejs') %>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/cover.png" width="100%" style="margin-bottom: 20px;">
     <%- include('../includes/pagenav.ejs') %>
     <div class="container">
       <%
-        if(cnt) {
+        if (cnt) {
       %>
       <div class="row">
         <div class="col">
@@ -57,11 +73,10 @@
               <%
                 ex.forEach((i, i1) => {
                   i.forEach((j, j1) => {
-                    if(j1 == 0) j1 = ex[i1][j1];
               %>
               <tr>
                 <td><%= i1 %></td>
-                <td><%= j1 %></td>
+                <td><%= ex[i1][j1] %></td>
               </tr>
               <%
                   });

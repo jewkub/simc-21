@@ -2,34 +2,45 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IQ - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <title>IQ - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
     <link rel="stylesheet" href="/normal-bundle.css">
     <%- include('../includes/css.ejs') %>
     <style>
+      <%
+        for (let i = 1; i <= exam.length; i++) {
+      %>
+        form .card:nth-of-type(<%= i %>) .card-header::before {
+          content: '<%= i %>. ';
+          vertical-align: top;
+        }
+      <% } %>
       .footer a {
         display: none;
       }
     </style>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/cover.png" width="100%" style="margin-bottom: 20px;">
+    <p id="timeleft" style="position: fixed; left: 10px; top: 10px; z-index: 1; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 5px; border-radius: 3px;"></p>
+    
     <div class="container">
       <form method="post" action="/exam" enctype="multipart/form-data">
-        <h3 style="text-align: center;">- 03 -<br>IQ</h3>
-        <p id="timeleft"></p>
+        <h3 style="text-align: center;">- 06 -<br>IQ</h3>
         <br>
         <input type="text" class="form-control" style="display:none;" name="part" value="<%= part %>">
         <%
-          exam.forEach((e, i) => {
+          let noshuf = [[], [], [], [], [], [], []];
+          noshuf[6][5] = 4;
+          noshuf[6][15] = 4;
+
+          shuffle(exam).forEach((e, i) => {
             e.num = e.get('num');
             e.question = e.get('question');
             e.answerType = e.get('answerType');
             e.subQuestion = e.get('subQuestion');
         %>
           <div class="card <%= e.answerType %>" id="div_<%= e.num %>">
-            <div class="card-header">
-              <%= i+1 %>. <%- e.question %>
-            </div>
+            <div class="card-header" style="white-space: nowrap;"><span style="display: inline-block;"><div style="white-space: normal;"><%- e.question %></div></span></div>
             <div class="card-body">
               <%
                 let name = e.num;
@@ -40,14 +51,13 @@
                     arr[i] = new String(arr[i]);
                     arr[i].real = i + 1;
                   });
-                  shuffle(sub).forEach(choice => {
+
+                  shuffle(sub, sub.length - noshuf[part][e.num]).forEach(choice => {
                     let choicename = e.num + '_' + choice.real;
               %>       
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="<%= name %>" id="<%= choicename %>" value="<%= choice.real %>">
-                  <label class="form-check-label col-12" style="padding: 0;" for="<%= choicename %>">
-                    <%- choice %>
-                  </label>
+                  <label class="form-check-label col-12" style="padding: 0;" for="<%= choicename %>"><%- choice %></label>
                 </div>
               <%
                   });
@@ -58,7 +68,6 @@
           </div>
           <br>
         <% }); %>
-        <br>
         <button type="submit" class="btn btn-danger">ส่ง (ไม่สามารถกลับมาแก้ไขได้)</button>
       </form>
     </div>
@@ -66,6 +75,13 @@
     <script src="/timelimit-bundle.js"></script>
     <script>
     $(document).ready(() => {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+
       let endTime = moment(<%- endTime %>);
       (function foo() {
         let timediff = moment.duration(endTime.diff(moment()));
@@ -77,7 +93,7 @@
         files.forEach(file => {
           if(file.name.slice(-1)[0] != '/') {
       %>
-      $('#div_<%= file.name.split("/").slice(-1)[0] %> .card-header').append('<br><img alt="(รูปประกอบโจทย์ หากไม่ขึ้นลองกดรีเฟรช)" style="width: 100%;" src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>">');
+      $('#div_<%= file.name.split(".")[0].split("/").slice(-1)[0] %> .card-header').append('<br><img alt="(รูปประกอบโจทย์ หากไม่ขึ้นลองกดรีเฟรช)" style="max-width: 100%;" src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>">');
       <%
           }
         });

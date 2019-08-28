@@ -2,22 +2,22 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IQ - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 20</title>
+    <title>IQ - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
     <link rel="stylesheet" href="/normal-bundle.css">
     <%- include('../includes/css.ejs') %>
   </head>
   <body>
-    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/cover.png" width="100%" style="margin-bottom: 20px;">
     <%- include('../includes/pagenav.ejs') %>
     <div class="container">
       <% if (done) { %>
         <div class="row justify-content-center">
-          <a class="btn btn-primary" href="/exam?part=4" style="margin: auto;" role="button">หน้าถัดไป</a>
+          <a class="btn btn-primary" href="/exam?part=7" style="margin: auto;" role="button">หน้าถัดไป</a>
         </div>
       <% } else { %>
         <form method="post" action="/exam/start">
-          <h3 style="text-align: center;">- 03 -<br>IQ</h3>
-          <p>ข้อสอบในส่วนนี้มีทั้งหมด 25 ข้อ เป็นปรนัย 5 ตัวเลือก และจะมีการจับเวลาในการทำ<b style="color:red">ภายใน 3 ชั่วโมง</b> โดยเริ่มจับเวลาหลังจากกดปุ่มเริ่มทำข้อสอบ หากเกิดเหตุขัดข้องระหว่างทำข้อสอบ สามารถกลับมาทำได้<b style="color:red">ภายในเวลาที่กำหนด</b> และ<b style="color:red">เมื่อกดส่งคำตอบแล้วจะไม่สามารถกลับมาทำใหม่ได้อีกครั้ง</b></p>
+          <h3 style="text-align: center;">- 06 -<br>IQ</h3>
+          <p>ข้อสอบในส่วนนี้มีทั้งหมด 25 ข้อ เป็นปรนัย 5 ตัวเลือก และจะมีการจับเวลาในการทำ<b style="color: orange;">ภายใน 35 นาที</b> โดยเริ่มจับเวลาหลังจากกดปุ่มเริ่มทำข้อสอบ หากเกิดเหตุขัดข้องระหว่างทำข้อสอบ สามารถกลับมาทำได้<b style="color: orange;">ภายในเวลาที่กำหนด</b> และ<b style="color:red">เมื่อกดส่งคำตอบแล้วจะไม่สามารถกลับมาทำใหม่ได้อีกครั้ง</b></p>
           <input style="display: none;" name="part" value="<%= part %>">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="ready" required>

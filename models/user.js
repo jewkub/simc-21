@@ -21,7 +21,7 @@ User.createUser = async function (email, password) {
   let hash = await bcrypt.hash(password, salt);
 
   let snap = await db.collection('email').doc(email).get();
-  if (snap.exists) return next(new Error('email already used -> ' + email));
+  if (snap.exists) throw new Error('email already used -> ' + email);
 
   console.log('email: "' + email + '" is being registered.');
 

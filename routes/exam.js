@@ -32,25 +32,26 @@ router.get('/exam', async function (req, res, next) {
   try {
     if (!req.user) throw new Error('กรุณาเข้าสู่ระบบ');
     if (req.user.get('done')) throw new Error('ข้อสอบถูกเก็บแล้ว');
-    if (req.query.part > 6 || req.query.part < 0) throw new Error('ไม่มีข้อสอบชุดนี้');
-    let alert = req.flash();
 
     req.query.part = +req.query.part || 1;
+    if (req.query.part > 7 || req.query.part < 0) return res.redirect('/');
+    let alert = req.flash();
+
     if (!req.user.get('agree')) req.query.part = 0;
     if (!exam) exam = (await db.collection('exam').orderBy('num').get()).docs;
     
     let oldAnswer = db
       .collection('answers')
       .where('user', '=', req.user.ref);
-    if (req.query.part != 6) oldAnswer = oldAnswer.where('part', '=', req.query.part);
-    else oldAnswer = oldAnswer.where('part', '>', 1);
+    if (req.query.part != 7) oldAnswer = oldAnswer.where('part', '=', req.query.part);
+    // else oldAnswer = oldAnswer.where('part', '>', 1);
     oldAnswer = (await oldAnswer.get()).docs;
 
     let pic = await bucket.getFiles({ prefix: 'public/question/' + req.query.part });
     if (req.query.part == 0) return res.render('exam/agree.ejs');
     if (req.query.part == 1) return res.render('exam/profile.ejs', { oldAnswer: oldAnswer, part: req.query.part });
-    if (req.query.part == 3) return res.render('exam/prepare.ejs', { part: req.query.part, alert, done: req.user.get('endTime') });
-    if (req.query.part == 6) return res.render('exam/review.ejs', {
+    if (req.query.part == 6) return res.render('exam/prepare.ejs', { part: req.query.part, alert, done: req.user.get('endTime') });
+    if (req.query.part == 7) return res.render('exam/review.ejs', {
       oldAnswer,
       exam,
       user: req.user,
@@ -61,10 +62,11 @@ router.get('/exam', async function (req, res, next) {
       part: req.query.part,
       partDesc: {
         1: 'Profile',
-        2: 'Intro',
-        3: 'IQ',
-        4: 'Ethics',
-        5: 'Creativity'
+        2: 'Ethics',
+        3: 'Basic Medicine',
+        4: 'About SIRIRAJ',
+        5: 'Ambition & Creativity',
+        6: 'IQ'
       }, 
       exam,
       oldAnswer,
@@ -90,15 +92,15 @@ router.post('/exam/start', async (req, res, next) => {
     let startTime = req.user.get('startTime');
     startTime = startTime && startTime.toMillis();
     // console.log(startTime);
-    if (moment().isAfter(moment(startTime).add(3, 'h'))) {
+    if (moment().isAfter(moment(startTime).add(35, 'm'))) {
       await req.user.ref.update({
-        endTime: moment(startTime).add(3, 'h').toDate()
+        endTime: moment(startTime).add(35, 'm').toDate()
       });
       throw new Error('หมดเวลาทำข้อสอบชุดนี้แล้ว');
     }
 
     let exam = (await db.collection('exam')
-      .where('part', '=', 3)
+      .where('part', '=', 6)
       .get()).docs;
     let pic = await bucket.getFiles({prefix: 'public/question/' + req.body.part});
     if (!req.user.get('startTime')) {
@@ -108,7 +110,7 @@ router.post('/exam/start', async (req, res, next) => {
       });
     }
     res.render('exam/timelimit.ejs', {
-      endTime: moment(startTime).add(3, 'h').valueOf(),
+      endTime: moment(startTime).add(35, 'm').valueOf(),
       part: req.body.part,
       exam: exam,
       files: pic[0]
@@ -157,7 +159,7 @@ router.post('/exam', multer.any(), async (req, res, next) => {
       for (let i = 1; i <= 60; i++) req.body[i] = req.body[i] ||  '';
     }
 
-    if (req.body.part == 3) {
+    if (req.body.part == 6) {
       await req.user.ref.update('endTime', new Date());
     }
 
@@ -169,9 +171,9 @@ router.post('/exam', multer.any(), async (req, res, next) => {
         if (!ansType[part]) ansType[part] = [];
         ansType[part][e.get('num')] = e.get('answerType');
       });
-      /* ansType[1] = ansType[1] || [];
+      ansType[1] = ansType[1] || [];
       ansType[1][61] = 'upload';
-      ansType[1][62] = 'upload'; */
+      ansType[1][62] = 'upload'; /* */
     }
 
     for (let num in req.body) {
@@ -208,7 +210,7 @@ router.post('/exam', multer.any(), async (req, res, next) => {
     }
 
     if (req.body.part == 1) req.flash('success', 'บันทึกข้อมูลเรียบร้อย');
-    else if (req.body.part == 3) req.flash('success', 'ส่งข้อสอบเรียบร้อย');
+    else if (req.body.part == 6) req.flash('success', 'ส่งข้อสอบเรียบร้อย');
     else req.flash('success', 'บันทึกคำตอบเรียบร้อย');
     res.redirect('/exam?part=' + encodeURI(req.body.part + 1));
 
