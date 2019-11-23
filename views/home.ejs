@@ -51,6 +51,11 @@
         font-weight: bold;
       }
 
+      ::selection {
+        background: springgreen;
+        color: black;
+      }
+
       :root {
         font-size: 1.2em;
         --nav-height: 95px;
@@ -127,22 +132,32 @@
       .navbar-brand {
         height: calc(var(--nav-height) - 8px - 8px);
       }
+
       .navbar-expand-lg .navbar-nav .nav-link {
         padding-left: 0.9rem;
         padding-right: 0.9rem;
         color: var(--white);
-        transition: background-color 0.2s ease, color 0.15s ease;
+        transition: background-color 0.2s ease, color 0.2s ease;
       }
-      .navbar-expand-lg .navbar-nav [class="nav-link"]:hover {
-        color: green;
+      .navbar-expand-lg .navbar-nav .nav-link:focus {
+        color: white;
       }
+      .navbar-expand-lg .navbar-nav .nav-link:hover {
+        color: springgreen;
+      }
+      .navbar-expand-lg .navbar-nav .nav-link.active:focus {
+        color: black;
+      }
+      .navbar-expand-lg .navbar-nav .nav-link.active:hover {
+        color: springgreen;
+      }
+      .navbar-expand-lg a {
+        outline: 0;
+      }
+      
       .dropdown:not(.show) .nav-link:hover {
-        color: green;
+        color: springgreen;
       }
-      .transparent.navbar-expand-lg .navbar-nav .nav-link {
-        color: var(--white);
-      }
-
       .transparent .nav-pills .show > .nav-link {
         background-color: transparent;
       }
@@ -158,6 +173,15 @@
       .circle-crop {
         overflow: hidden;
         border-radius: 50%;
+      }
+      .circle-crop img {
+         width: 100%;
+         cursor: pointer;
+         transition: filter 0.2s ease;
+      }
+      .circle-crop img:hover {
+        /* opacity: 0.5; */
+        filter: brightness(70%);
       }
 
       i {
@@ -300,7 +324,7 @@
       }
     </style>
   </head>
-  <body data-spy="scroll" data-target="#navbar" data-offset="1">
+  <body data-spy="scroll" data-target="#navbar" data-offset="3">
     <!-- fb initiate code -->
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&autoLogAppEvents=1&version=v3.3&appId=424671731062002"></script>
@@ -371,7 +395,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="logout">
               <h6 class="dropdown-header"><%= user.get('email') %></h6>
-              <% if (!user.get('done')) { %><a class="dropdown-item" href="/exam">ทำข้อสอบ</a><% } %>
+              <% if (false && !user.get('done')) { %><a class="dropdown-item" href="/exam">ทำข้อสอบ</a><% } %>
               <a class="dropdown-item" href="/logout">ออกจากระบบ</a>
             </div>
           </li>
@@ -387,7 +411,7 @@
         <li data-target="#carousel" data-slide-to="0" class="active"></li>
         <li data-target="#carousel" data-slide-to="1"></li>
         <li data-target="#carousel" data-slide-to="2"></li>
-        <li data-target="#carousel" data-slide-to="3"></li>
+        <!-- <li data-target="#carousel" data-slide-to="3"></li> -->
       </ol>
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -402,9 +426,9 @@
           <img src="https://storage.googleapis.com/simc-web.appspot.com/<%= carousel[2].name %>" class="d-block" alt="pic3">
           <div class="carousel-caption d-none d-md-block"></div>
         </div>
-        <div class="carousel-item">
+        <!-- <div class="carousel-item">
           <iframe src="https://www.youtube.com/embed/dk4XM6uuRQE" frameborder="0" allowfullscreen style="position: relative; height: 100%; width: 100%; z-index: 2;"></iframe>
-        </div>
+        </div> -->
       </div>
       <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -423,17 +447,23 @@
         <div class="justify-content-end" style="display: flex; flex-flow: column nowrap; flex-grow: 1">
           <div class="col-auto align-self-center">
             <%
-              if (!user) {
+              if (result && user) {
             %>
-                <a class="btn btn-primary" href="/register">ลงทะเบียนเข้าค่าย</a>
+                <a class="btn btn-primary" href="/result">🤩 ประกาศผล 🤩</a>
+            <%
+              }
+              else if (!user) {
+            %>
+                <!-- <a class="btn btn-primary" href="/register">ลงทะเบียนเข้าค่าย</a> -->
             <%
               } else if (!user.get('done')) {
             %>
-                <a class="btn btn-primary" href="/exam">ทำข้อสอบ 📝</a>
+                <!-- <a class="btn btn-primary" href="/exam">ทำข้อสอบ 📝</a> -->
             <%
               } else {
             %>
-                <p>เสร็จเรียบร้อยแล้วจ้าา รอฟังประกาศผลได้เลย 😃</p>
+                <!-- <p>เสร็จเรียบร้อยแล้วจ้าา<br>รอฟังประกาศผลได้เลย 😃</p> -->
+                <p>ประกาศผลวันนี้เวลา<br>20.00 น้าา 😄</p>
             <%
               }
             %>
@@ -457,7 +487,7 @@
       <br><br>
       <div class="row justify-content-center">
         <div class="col-auto">
-          <p style="text-align: center;"><b>ค่ายเส้นทางสู่หมอศิริราช</b> เป็นค่ายที่จัดขึ้นโดยพี่ๆ นักศึกษาแพทย์ศิริราช เพื่อให้น้องๆ ได้สัมผัสกับเส้นทางการเป็นแพทย์ ทั้งในเรื่องของการเรียน กิจกรรมและการดำเนินชีวิตของนักศึกษาแพทย์ศิริราช และการทำงานในฐานะแพทย์หลังจากจบการศึกษาแล้ว<br><br>นอกจากนี้ ค่ายเส้นทางยังเป็นกิจกรรมที่เสริมสร้างความสัมพันธ์ที่อบอุ่น ระหว่างพี่ๆ นักศึกษาแพทย์ศิริราช กับน้องๆ ผู้เข้าร่วมค่ายเส้นทางฯ อีกด้วย<br><br>สำหรับค่ายเส้นทางสู่หมอศิริราช ครั้งที่ 21 นี้ เปิดรับสมัครถึงวันที่ 27 กันยายน 2562 แล้วพบกันที่ศิริราชนะคะ 💖</p>
+          <p style="text-align: center;"><b>ค่ายเส้นทางสู่หมอศิริราช</b> เป็นค่ายที่จัดขึ้นโดยพี่ๆ นักศึกษาแพทย์ศิริราช เพื่อให้น้องๆ ได้สัมผัสกับเส้นทางการเป็นแพทย์ ทั้งในเรื่องของการเรียน กิจกรรมและการดำเนินชีวิตของนักศึกษาแพทย์ศิริราช และการทำงานในฐานะแพทย์หลังจากจบการศึกษาแล้ว<br><br>นอกจากนี้ ค่ายเส้นทางยังเป็นกิจกรรมที่เสริมสร้างความสัมพันธ์ที่อบอุ่น ระหว่างพี่ๆ นักศึกษาแพทย์ศิริราช กับน้องๆ ผู้เข้าร่วมค่ายเส้นทางฯ อีกด้วย<br><br>สำหรับค่ายเส้นทางสู่หมอศิริราช ครั้งที่ 21 นี้ เปิดรับสมัครถึงวันที่ 4 ตุลาคม 2562 แล้วพบกันที่ศิริราชนะคะ 💖</p>
         </div>
       </div>
       <br><br><br>
@@ -472,9 +502,9 @@
       <%
         photos.forEach((file, i) => {
       %>
-        <div class="col-6 col-md-4 p-0">
+        <div class="col-6 col-md-4 p-1">
           <div class="circle-crop">
-            <img src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>" alt="<%= file.name %>" style="width: 100%; cursor: pointer;" onclick="pswp(<%= i %>);"/>
+            <img src="https://storage.googleapis.com/simc-web.appspot.com/<%= file.name %>" alt="<%= file.name %>" onclick="pswp(<%= i %>);"/>
           </div>
         </div>
       <%
@@ -669,6 +699,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js" integrity="sha256-7OUNnq6tbF4510dkZHCRccvQfRlV3lPpBTJEljINxao=" crossorigin="anonymous"></script>
     <script type="text/javascript" defer>
       $(() => {
+        document.addEventListener("touchstart", function() {}, false);
+
         let cnt = 0;
         let chk = () => {
           if ($(window).scrollTop() < $('#shownav').offset().top && !($('#navbar .navbar-toggler').attr('aria-expanded') === 'true')) {
@@ -800,7 +832,7 @@
           { type: 'success', title: '<%= e.replace(/\n/g, "\\n") %>' },
         <% }); 
         if (!user) { %>
-          {
+          /* {
             html: '<img src="/registerpopupBackground.png" style="width: 100%;"/>\
             <a href="https://drive.google.com/file/d/1v2xZgP_s8gqpaXX5sH8d040BsW64Sd0l/view" target="_blank" class="btn btn-secondary" style="position: absolute; right: calc(27.65 / 100 * (100% - 24px) + 0px); bottom: calc(9 / 100 * (100% - 24px) + 0px); width: 16.4%; height: 7.75%; padding: 0.5% 1%;">เอกสารค่าย</a>\
             <a href="/register" class="btn btn-secondary" style="position: absolute; right: calc(8.26 / 100 * (100% - 24px) + 0px); bottom: calc(9 / 100 * (100% - 24px) + 0px); width: 16.4%; height: 7.75%; padding: 0.5% 1%;">ลงทะเบียน</a>',
@@ -819,16 +851,22 @@
             },
             onBeforeOpen: () => {
               $('.swal2-container a').fitText(0.6);
-              /* timerInterval = setInterval(() => {
-                Swal.getContent().querySelector('strong')
-                  .textContent = parseInt(Swal.getTimerLeft()/1000);
-              }, 100) */
             },
-            onClose: () => {
-              clearInterval(timerInterval);
-            },
-          },
+          }, */
         <% } %>
+          {
+            html: '<img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/spon.png" style="width: 100%;"/>',
+            width: '70%',
+            padding: '0',
+            timer: 10000,
+            focusConfirm: false,
+            heightAuto: false,
+            customClass: {
+              closeButton: 'z-index-2'
+            },
+            showConfirmButton: false,
+            showCloseButton: true,
+          },
         ]);
       };
     </script>

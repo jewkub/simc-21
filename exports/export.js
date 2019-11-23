@@ -4,15 +4,17 @@ const store = require('node-persist');
 const { google } = require('googleapis');
 const { name: projectId } = require('../package.json');
 
-const Datastore = require('@google-cloud/datastore');
-const datastore = new Datastore({
-  projectId: projectId,
-});
-const Storage = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 const storage = new Storage({
-  projectId: projectId,
+  projectId,
+  keyFilename: '../secret/SIMC-Web-4d0cc28353fd.json',
 });
-const bucket = storage.bucket('simc-web.appspot.com');
+
+const Firestore = require('@google-cloud/firestore');
+const db = new Firestore({
+  projectId,
+  keyFilename: '../secret/SIMC-Web-4d0cc28353fd.json',
+});
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -21,9 +23,55 @@ const TOKEN_PATH = 'token.json';
 async function main(auth) {
   await store.init();
   const sheets = google.sheets({version: 'v4', auth});
+  let name = '5-3';
 
   let cnt = 0;
-  let query = datastore
+  let done = (await db.collection('users')
+    .where('done', '=', true)
+    .where('pass', '=', true)
+    .get()).docs;
+  let data = [];
+  console.log(done.length);
+  done.forEach(async user => {
+    let ans = (await db.collection('answers')
+      .where('part', '==', +name.charAt(0)) // edit part
+      .where('num', '=', +name.charAt(2)) // edit num
+      .where('email', '=', user.get('email'))
+      .get()).docs[0];
+    // console.log((cnt++) + ans.get('ans'));
+    let res = await store.getItem(user.get('email') + '-' + name); // edit part and num
+    // if (res) return false; // console.log('email ' + user.get('email') + ' is duplicated' + cnt++);
+
+    data.push([user.get('email'), ans.get('ans')]);
+    // console.log(data.length);
+    
+    store.setItem(user.get('email') + '-' + name, true); // edit part and num
+
+  });
+  setTimeout(() => {
+    let range = name + '!A4:C4'; // edit part and cell
+    sheets.spreadsheets.values.append({
+      spreadsheetId: '1T9EbdvrXItjmRBt0VAjeCaYebqdHSzYM7ooUjPxl4_M',
+      range: range,
+      valueInputOption: 'RAW',
+      insertDataOption: 'OVERWRITE',
+      resource: {
+        range: range,
+        majorDimension: 'ROWS',
+        values: data
+      },
+      auth: auth,
+    }, function(err, response) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
+  }, 15000);
+
+  
+
+  /* let query = datastore
     .createQuery('Users')
     .filter('done', '=', true);
   datastore
@@ -43,13 +91,13 @@ async function main(auth) {
         let ans = await datastore.runQuery(query);
         ans = ans[0][0];
         let desc = ans;
-        /*query = datastore
+        query = datastore
           .createQuery('Answers')
           .filter('part', '=', 5) // *edit part
           .filter('num', '=', 6) // *edit num
           .filter('email', '=', user.email);
         ans = await datastore.runQuery(query);
-        ans = ans[0][0]; */
+        ans = ans[0][0]; 
         setTimeout(() => {
           let range = '4-6!A4:C4'; // edit part and cell
           sheets.spreadsheets.values.append({
@@ -77,7 +125,7 @@ async function main(auth) {
     })
     .catch(err => {
       console.log(err);
-    })
+    }) */
 
   /* var request = {
     // The ID of the spreadsheet to update.
@@ -146,7 +194,7 @@ async function main(auth) {
 // ------------------------
 
 // Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
+fs.readFile('../secret/credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   authorize(JSON.parse(content), main);

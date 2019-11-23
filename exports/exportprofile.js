@@ -3,15 +3,17 @@ const readline = require('readline');
 const { google } = require('googleapis');
 const { name: projectId } = require('../package.json');
 
-const Datastore = require('@google-cloud/datastore');
-const datastore = new Datastore({
-  projectId: projectId,
-});
-const Storage = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 const storage = new Storage({
-  projectId: projectId,
+  projectId,
+  keyFilename: '../secret/SIMC-Web-4d0cc28353fd.json',
 });
-const bucket = storage.bucket('simc-web.appspot.com');
+
+const Firestore = require('@google-cloud/firestore');
+const db = new Firestore({
+  projectId,
+  keyFilename: '../secret/SIMC-Web-4d0cc28353fd.json',
+});
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -20,7 +22,48 @@ const TOKEN_PATH = 'token.json';
 async function main(auth) {
   const sheets = google.sheets({version: 'v4', auth});
 
-  let cnt = 0, all = [];
+  let data = [];
+  let cnt = 0;
+  let done = (await db.collection('users').where('done', '=', true).get()).docs;
+  done.forEach(async user => {
+    let answers = [];
+    let ans = (await db.collection('answers')
+      .where('user', '=', user.ref)
+      .where('part', '=', 1)
+      .get()).docs;
+    ans.forEach(e => {
+      answers[e.get('num')-2] = e.get('ans');
+    });
+    answers[0] = user.get('email');
+    data.push(answers);
+    // console.log(cnt++);
+    // if (cnt == 200) break;
+  });
+
+  setTimeout(() => {
+    // console.log(data);
+    let range = 'update ข้อมูลน้อง!A4:BK4';
+    sheets.spreadsheets.values.append({
+      spreadsheetId: '1m6ctqrTCkIuW7KOFogcmpaM56ekgXxkeBa4SxGlrQGw',
+      range: range,
+      valueInputOption: 'RAW',
+      insertDataOption: 'OVERWRITE',
+      resource: {
+        range: range,
+        majorDimension: 'ROWS',
+        values: data
+      },
+      auth: auth,
+    }, function(err, response) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
+  }, 15 * 1000);
+
+
+  /* let cnt = 0, all = [];
   let query = datastore
     .createQuery('Users')
     .filter('done', '=', true);
@@ -30,11 +73,10 @@ async function main(auth) {
       console.log(result[0].length);
       result[0].forEach(async function(user, i) {
         // if(i > 20) return ;
-        let query = datastore
-          .createQuery('Evaluation')
-          .filter('email', '=', user.email);
-        let ans = await datastore.runQuery(query);
-        ans = ans[0];
+
+        let ans = (await db.collection('answers')
+          .where('part', '=', 1)
+          .get()).docs;
         let order = [];
         all[i] = order;
         // order[0] = ans.ans;
@@ -48,33 +90,11 @@ async function main(auth) {
           if(order[i] == undefined || order[i] == '') order[i] = '[blank]';
         }
         // console.log(order);
-        /* setTimeout(() => {
-          let range = 'ข้อมูลน้อง!A4:BK4';
-          sheets.spreadsheets.values.append({
-            spreadsheetId: '1SnewRSj1KnZYt9xio___8reHg4EUMENeiajMWJMV5o0',
-            range: range,
-            valueInputOption: 'RAW',
-            insertDataOption: 'OVERWRITE',
-            resource: {
-              range: range,
-              majorDimension: 'ROWS',
-              values: [
-                order
-              ]
-            },
-            auth: auth,
-          }, function(err, response) {
-            if (err) {
-              console.error(err);
-              return;
-            }
-          });
-        }, 1.15 * 1000 * (cnt++)); */
       });
       setTimeout(() => {
-        let range = 'ประเมินทุกคน!A4:AB4';
+        let range = 'ข้อมูลน้อง!A4:BK4';
         sheets.spreadsheets.values.append({
-          spreadsheetId: '1SnewRSj1KnZYt9xio___8reHg4EUMENeiajMWJMV5o0',
+          spreadsheetId: '1rl0hBIh5192nxh9zrCv3LweabFaxskk1t_yLdvYf4bY',
           range: range,
           valueInputOption: 'RAW',
           insertDataOption: 'OVERWRITE',
@@ -90,17 +110,18 @@ async function main(auth) {
             return;
           }
         });
-      }, 30 * 1000);
+      }, 20 * 1000);
     })
     .catch(err => {
       console.log(err);
     });
+  */
 }
 
 // ------------------------
 
 // Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
+fs.readFile('../secret/credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   authorize(JSON.parse(content), main);

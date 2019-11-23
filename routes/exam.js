@@ -30,8 +30,10 @@ let exam;
 
 router.get('/exam', async function (req, res, next) {
   try {
+    return res.redirect('/');
     if (!req.user) throw new Error('กรุณาเข้าสู่ระบบ');
     if (req.user.get('done')) throw new Error('ข้อสอบถูกเก็บแล้ว');
+    // if (req.query.part != 1) req.query.part = 7
 
     req.query.part = +req.query.part || 1;
     if (req.query.part > 7 || req.query.part < 0) return res.redirect('/');
@@ -101,6 +103,7 @@ router.post('/exam/start', async (req, res, next) => {
 
     let exam = (await db.collection('exam')
       .where('part', '=', 6)
+      .orderBy('num')
       .get()).docs;
     let pic = await bucket.getFiles({prefix: 'public/question/' + req.body.part});
     if (!req.user.get('startTime')) {
@@ -126,6 +129,7 @@ router.post('/exam', multer.any(), async (req, res, next) => {
   try {
     if (!req.user) throw new Error('No login data');
     if (req.user.get('done')) throw new Error('ข้อสอบถูกเก็บแล้ว');
+    // if (req.body.part != 1) throw new Error('ปิดรับสมัครแล้ว');
     if (req.body.part == 0) await req.user.ref.update({ agree: true });
     req.body.part = +req.body.part || -1;
 
@@ -186,7 +190,7 @@ router.post('/exam', multer.any(), async (req, res, next) => {
         .where('part', '=', req.body.part)
         .where('num', '=', num).get();
       if (ans.empty) {
-        await db.collection('answers').doc().create({
+        /* await */ db.collection('answers').doc().create({
           user: req.user.ref,
           part: req.body.part,
           num: num,
@@ -203,7 +207,7 @@ router.post('/exam', multer.any(), async (req, res, next) => {
             await e.ref.delete();
           });
         }
-        await ans.docs[0].ref.update({
+        /* await */ ans.docs[0].ref.update({
           ans: req.body[num],
         });
       }

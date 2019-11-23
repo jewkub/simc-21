@@ -1,3 +1,5 @@
+// ปีนี้ไม่ได้ใช้ละ
+
 const fs = require('fs');
 const { name: projectId } = require('../package.json');
 

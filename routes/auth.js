@@ -60,7 +60,7 @@ router.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/',
-    successFlash: 'เข้าสู่ระบบสำเร็จ กดทำข้อสอบที่ปุ่มสีเขียวในกล่องได้เลยครับ',
+    successFlash: 'เข้าสู่ระบบสำเร็จ',
     failureFlash: true
   })
 );

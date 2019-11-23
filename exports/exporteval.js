@@ -1,6 +1,5 @@
 const fs = require('fs');
 const readline = require('readline');
-const store = require('node-persist');
 const { google } = require('googleapis');
 const { name: projectId } = require('../package.json');
 
@@ -23,25 +22,38 @@ const TOKEN_PATH = 'token.json';
 async function main(auth) {
   const sheets = google.sheets({version: 'v4', auth});
 
-  let cnt = 0, all = [];
-  let score = (await db.collection('score').get()).docs;
-  console.log(score.length);
-  score.forEach(async function(user, i) {
-    let score = user.get('score');
-    score[1] = user.get('email');
-    all.push(score);
+  let data = [];
+  let cnt = 0;
+  let done = (await db.collection('users')
+    .where('done', '=', true)
+    .where('pass', '=', true).get())
+    .docs;
+  done.forEach(async user => {
+    let answers = [];
+    let ans = (await db.collection('evaluation')
+      .where('user', '=', user.ref)
+      .get()).docs;
+    ans.forEach(e => {
+      answers[e.get('num')] = e.get('ans');
+    });
+    answers[0] = user.get('email');
+    data.push(answers);
+    // console.log(cnt++);
+    // if (cnt == 200) break;
   });
+
   setTimeout(() => {
-    let range = 'choice!A4:K4';
+    // console.log(data);
+    let range = 'ประเมิน!A4:BK4';
     sheets.spreadsheets.values.append({
-      spreadsheetId: '1rl0hBIh5192nxh9zrCv3LweabFaxskk1t_yLdvYf4bY',
+      spreadsheetId: '1T9EbdvrXItjmRBt0VAjeCaYebqdHSzYM7ooUjPxl4_M',
       range: range,
       valueInputOption: 'RAW',
       insertDataOption: 'OVERWRITE',
       resource: {
         range: range,
         majorDimension: 'ROWS',
-        values: all
+        values: data
       },
       auth: auth,
     }, function(err, response) {

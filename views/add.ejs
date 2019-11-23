@@ -10,42 +10,27 @@
     <div class="container">
       <h1 style="text-align: center;">เพิ่มคะแนน</h1>
       <br>
-      <form action="add" method="post">
-        <div class="form-group row">
-          <label for="nameinput" class="col-form-label">ชื่อ</label>
+      <form action="add" method="post" autocomplete="off">
+        <div class="form-group form-row">
+          <label for="nameinput" class="col-form-label">ฐาน</label>
           <div class="col">
-            <input type="text" class="form-control" id="nameinput" name="nameinput" placeholder="ใส่ชื่อ" required>
+            <select class="form-control" id="nameinput" name="nameinput" required>
+              <option disabled selected value="-ไม่ได้เลือกฐาน-">Please select</option>
+              <option value="กรอส">กรอส</option>
+              <option value="ปรสิต">ปรสิต</option>
+              <option value="แลปกริ๊ง">แลปกริ๊ง</option>
+              <option value="Forensic">Forensic</option>
+              <option value="OSCE">OSCE</option>
+            </select> 
           </div>
         </div>
         <%
-          let name = [
-            "KungFu Panda",
-            "Ben10",
-            "Luffy",
-            "I\'m Groot",
-            "Finn&Jake",
-            "Wrack It Ralph",
-            "Blackjack",
-            "Spiderman",
-            "Sailor Moon",
-            "Venom",
-            "Superman",
-            "Thor",
-            "Majin Buu",
-            "Sully&Mike",
-            "Deku",
-            "Green Lantern",
-            "Anpanman",
-            "JackJack",
-            "The Hulk",
-            "Baymax"
-          ];
           for(let i = 1; i <= 20; i++) {
         %>
-        <div class="form-group row">
-          <label for="nameinput" class="col-form-label">กลุ่ม #<%= i %> "<%= name[i-1] %>"</label>
-          <div class="col">
-            <input type="text" class="form-control" id="score<%= i %>" name="score<%= i %>" placeholder="คะแนน">
+        <div class="form-group form-row">
+          <label for="nameinput" class="col-form-label">กลุ่ม #<%= i %> <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/<%= i %>.jpg" alt="groupimage" width="40" height="40"/></label>
+          <div class="col-6 col-sm-4 col-md-2">
+            <input type="text" class="form-control" id="score<%= i %>" name="<%= i %>" placeholder="คะแนน">
           </div>
         </div>
         <%

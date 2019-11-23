@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
+    <link rel="stylesheet" type="text/css" href="css/scoreboard-sass.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" integrity="sha256-2bAj1LMT7CXUYUwuEnqqooPb1W0Sw0uKMsqNH0HwMa4=" crossorigin="anonymous" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" /> -->
+    <style>
+      @font-face {
+        font-family: sukhumvit;
+        src: url('/font/sukhumvit-set/SukhumvitSet-Medium.ttf');
+      }
+      @font-face {
+        font-family: sukhumvit;
+        src: url('/font/sukhumvit-set/SukhumvitSet-Bold.ttf');
+        font-weight: bold;
+      }
+      .screen {
+        display: none;
+      }
+
+      #list-tab img {
+        width: 50px;
+        height: 50px;
+      }
+      #list-tab a {
+        text-align: center;
+      }
+
+      .list-group-item {
+        transition: all .15s ease;
+      }
+      .list-group-item:active {
+        background-color: #BE534D;
+      }
+      .list-group-item.active {
+        margin-top: -10px;
+        border-width: 10px 1px 0px 1px;
+      }
+
+      .progress-bar-vertical {
+        width: 20px;
+        min-height: 100px;
+        display: flex;
+        align-items: flex-end;
+        margin-right: 20px;
+        float: left;
+      }
+      .progress-bar-vertical .progress-bar {
+        width: 100%;
+        height: 0;
+        -webkit-transition: height 0.6s ease;
+        -o-transition: height 0.6s ease;
+        transition: height 0.6s ease;
+      }
+
+      @media only screen and (min-width: 992px) {
+        .mobile, #navbar {
+          display: none;
+        }
+        .screen {
+          display: initial;
+        }
+      }
+      @media only screen and (min-width: 1200px) {
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+    <br>
+      <div class="mobile">
+        <div class="tab-content" id="">
+          <div class="tab-pane fade show active" id="list-score" role="tabpanel" aria-labelledby="list-score-list">
+            <div class="row justify-content-center" style="text-align: center;">
+              <div class="col-auto" id="user-content">
+                
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-mission" role="tabpanel" aria-labelledby="list-mission-list">
+            <div class="row justify-content-center" style="text-align: center;">
+              <div class="col-auto" id="mission-content">
+              </div>
+            </div>
+            <br><br>
+            <div class="row justify-content-center" style="text-align: center;">
+              <div class="col">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Mission</th>
+                      <th scope="col">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mission-table">
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2">Sum</td>
+                      <td id="sum">0</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-board" role="tabpanel" aria-labelledby="list-board-list">
+            <div class="row justify-content-center" style="text-align: center;">
+              <div class="col-auto" id="board-first">
+              </div>
+            </div>
+            <div class="row justify-content-center" id="board-second" style="text-align: center;">
+            </div>
+            <br><br>
+            <div class="row justify-content-center" style="text-align: center;">
+              <div class="col px-0 mx-2" id="board-table" style="overflow-y: scroll; max-height: 30vh; overflow-x: hidden; display: block;">
+                <table class="table table-striped table-bordered">
+                  <thead style="position: sticky; top: 0; left: 0; background-color: #FF7068; color: white;">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Group</th>
+                      <th scope="col">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ranktable" style="">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen"> <!-- https://stackoverflow.com/a/34803778/4468834 -->
+        <br><br>
+        <div class="row pl-5" style="height: 80vh;" id="bar">
+          <%
+          let color = [
+            '#8F5434',
+            '#514D4A',
+            '#B07555',
+            '#F16E50',
+            '#DD6E53',
+            '#E2A674',
+            '#99D07C',
+            '#86BBCD',
+            '#70C0A7',
+            '#B8A8A8',
+            '#C3D1DC',
+            '#606367',
+            '#A18A7C',
+            '#B5345B',
+            '#E7AB63',
+            '#FAE089',
+            '#8FD163',
+            '#A4DDF0',
+            '#C495F1',
+            '#FF7068',
+          ];
+          for (let i = 1; i <= 20; i++) { %>
+            <div class="col px-0" style="">
+              <div class="progress progress-bar-vertical h-100" style="background-color: transparent;">
+                <div class="progress-bar progress-bar-striped" id="progress<%= i %>" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="height: 30%; background-color: <%= color[i-1] %>;">
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+        <div class="row pl-5" style="">
+          <% for (let i = 1; i <= 20; i++) { %>
+            <div class="col px-0" style="">
+              <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/<%= i %>.jpg" alt="groupimage" width="65" height="65" style="margin-left: -20px;"/>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="" style="position: absolute; bottom: 0; width: 100%" id="navbar">
+      <div class="col" style="margin: 0; padding: 0;">
+        <div class="list-group list-group-horizontal" id="list-tab" role="tablist" style="height: 10vh; width: 100%;">
+          <a class="list-group-item list-group-item-action active" id="list-score-list" data-toggle="list" href="#list-score" role="tab"><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/user.png" alt="score"/></a>
+          <a class="list-group-item list-group-item-action" id="list-mission-list" data-toggle="list" href="#list-mission" role="tab"><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/mission.png" alt="mission"/></a>
+          <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-board" role="tab"><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/board.png" alt="board"/></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="bye" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					</div>
+					<div class="modal-body" style="text-align: center; font-size: larger;">
+						โชคดีนะครับน้องๆ ทุกคน ขอให้เจอเส้นทางที่ใช่สำหรับตัวเองนะครับบ แล้วเจอกันครับ บ๊ายบายย ~~<br> 💖💖 จากฝ่าย IT 💖💖
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js" integrity="sha256-xKeoJ50pzbUGkpQxDYHD7o7hxe0LaOGeguUidbq6vis=" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js" integrity="sha256-7OUNnq6tbF4510dkZHCRccvQfRlV3lPpBTJEljINxao=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
+      function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+      let refresh = () => {
+        $.get('/team', function(data){
+          let lastcnt = 0, valmem;
+          let value = JSON.parse(JSON.stringify(data)); // https://stackoverflow.com/a/10869248/4468834
+          data = data.sort(function (mn, mx) { return mx.score - mn.score; });
+          let top = data[0].score;
+          let medalpic = ['gold-medal.svg', 'silver-medal.svg', 'bronze-medal.svg'];
+          let teampic = ['',
+            <% for (let i = 1; i <= 20; i++) { %>
+              'https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/<%= i %>.jpg',
+            <% } %>
+          ];
+          $('#user-content').empty();
+          $("#ranktable").empty();
+          $('#mission-content').empty();
+          $('#mission-table').empty();
+          $('#board-first').empty();
+          $('#board-second').empty();
+
+          $.each(data, function(key, val){
+            if(key < 3){
+              if (valmem!=val.score){
+                lastcnt = key;
+              }
+              if (key == 0) $('#board-first').append('<div><img src="/imgs/gold-medal.svg" height="60" width="60" alt="gold" style="position: absolute; top: 0; right: 0;" /><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/' + val.name + '.jpg" alt="groupimage" width="150" height="150"/><span style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center;"><b>' + val.score.toFixed(2) + '</b></span></div><br>');
+              else if (key == 1) $('#board-second').append('<div class="col-auto px-2"><img src="/imgs/silver-medal.svg" height="60" width="60" alt="silver" style="position: absolute; top: 0; right: 0;" /><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/' + val.name + '.jpg" alt="groupimage" width="150" height="150"/><span style="position: absolute; bottom: -1rem; left: 0; right: 0; text-align: center;"><b>' + val.score.toFixed(2) + '</b></span></div><br>');
+              else $('#board-second').append('<div class="col-auto px-2"><img src="/imgs/bronze-medal.svg" height="60" width="60" alt="bronze" style="position: absolute; top: 0; right: 0;" /><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/' + val.name + '.jpg" alt="groupimage" width="150" height="150"/><span style="position: absolute; bottom: -1rem; left: 0; right: 0; text-align: center;"><b>' + val.score.toFixed(2) + '</b></span></div><br>');
+              // $("#topthree").append('<div><h3 class="topthreebox">อันดับ ' + (lastcnt+1) + ' : <img style="padding-right: 5px; vertical-align: middle;" width="64" height="64" src="' + teampic[val.team-1] + '">'+val.name+'</br><p style="color: yellow;"><img style="width: 64px; height: 64px; vertical-align: middle" src="imgs/' + medalpic[lastcnt] + '" alt="' + medalpic[lastcnt] + '">' + val.score + '<img style="width: 64px; height: 64px; vertical-align: middle" src="imgs/' + medalpic[lastcnt] + '" alt="' + medalpic[lastcnt] + '"></p></h3></div>');
+              if(valmem!=val.score){
+                lastcnt = key;
+              }
+              valmem=val.score;
+            }else{
+              if(valmem!=val.score){
+                lastcnt = key;
+              }
+              $("#ranktable").append('<tr><th scope="row">' + (lastcnt+1) + '</th><td><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/' + val.name + '.jpg" alt="groupimage" width="40" height="40"/> Group ' + val.name + '</td><td>' + val.score.toFixed(2) + '</td><.tr>');
+              valmem = val.score;
+            }
+            let percent = val.score*100/top;
+            $('#progress' + val.name).css('height', percent +'%').attr('aria-valuenow', percent);
+          });
+          
+          $('#user-content').append('<span class="text-muted">21<sup>st</sup> Siriraj Medical Camp</span><br>');
+          $('#user-content').append('<p>GROUP <b>' + getCookie('group') + '</b></p>');
+          $('#user-content').append('<img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/' + getCookie("group") + '.jpg" alt="groupimage" width="240" height="240"/><br><br>');
+          $('#user-content').append('<h3 style="margin-bottom: -10px;">YOUR SCORE</h3><p style="font-size: 6rem;">' + value[getCookie("group")-1].score.toFixed(0) + '</p><br>');
+          
+          $('#mission-content').append('<h2><img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/scoreboard/groups/' + getCookie("group") + '.jpg" alt="groupimage" width="80" height="80"/> GROUP ' + getCookie('group') + '</h2>');
+
+          let sum = 0;
+          let log = value[getCookie("group")-1].log;
+          let merge = {};
+          log.forEach(e => {
+            if (!merge[e.name]) merge[e.name] = 0;
+            merge[e.name] += e.score;
+          });
+          /* log.forEach((e, i) => {
+            $('#mission-table').append('<tr><th scope="row">' + (i+1) + '</th><td>' + e.name + '</td><td>' + e.score.toFixed(2) + '</td></tr>');
+            sum += e.score;
+          }); */
+          let cnt = 1;
+          for (let k in merge) {
+            $('#mission-table').append('<tr><th scope="row">' + cnt++ + '</th><td>' + k + '</td><td>' + merge[k].toFixed(2) + '</td></tr>');
+            sum += merge[k];
+          }
+          $('#sum').text(sum.toFixed(2));
+
+        });
+      }
+      
+      async function checkCookie() {
+        var group = getCookie("group");
+        if (!group) {
+          let result = await Swal.fire({
+            title: 'Your group',
+            input: 'select',
+            inputOptions: {
+              <%
+                for (let i = 1; i <= 20; i++) {
+              %>
+                  <%= i %>: 'Group <%= i %>',
+              <%
+                }
+              %>
+            }
+          });
+          if (!result.value) return location.reload();
+          setCookie("group", result.value, 365);
+        }
+
+        refresh();
+
+        $('#bye').modal('show');
+      }
+      checkCookie();
+      window.setInterval(refresh, 3000);
+    </script>
+  </body>
+</html>

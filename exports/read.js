@@ -4,31 +4,40 @@ const store = require('node-persist');
 const { google } = require('googleapis');
 const { name: projectId } = require('../package.json');
 
-const Datastore = require('@google-cloud/datastore');
-const datastore = new Datastore({
-  projectId: projectId,
-});
-const Storage = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 const storage = new Storage({
-  projectId: projectId,
+  projectId,
+  keyFilename: '../secret/SIMC-Web-4d0cc28353fd.json',
 });
-const bucket = storage.bucket('simc-web.appspot.com');
+
+const Firestore = require('@google-cloud/firestore');
+const db = new Firestore({
+  projectId,
+  keyFilename: '../secret/SIMC-Web-4d0cc28353fd.json',
+});
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
 
 async function main(auth) {
-  await store.init();
   const sheets = google.sheets({version: 'v4', auth});
 
   sheets.spreadsheets.values.get({
-    spreadsheetId: '1SnewRSj1KnZYt9xio___8reHg4EUMENeiajMWJMV5o0',
-    range: 'ชื่อน้องติดค่าย!!A:C',
+    spreadsheetId: '1xJu8crdfvv_NdntpjFy2hrSyhvZQQny3q0IkXQ5xVsg',
+    range: 'sheet!E2:E301',
   }, async function(err, res) {
     if (err) return console.log('The API returned an error: ' + err);
     console.log(res.data.values.length);
-    res.data.values.forEach(async function(data) {
+    res.data.values.forEach(async data => {
+      data = data[0];
+      if (!data) return ; // เด็กเส้นไม่มีเมล
+      let user = (await db.collection('users').where('email', '==', data).get()).docs[0];
+      user.ref.update({
+        pass: true
+      });
+    });
+    /* res.data.values.forEach(async function(data) {
       if(!data[0]) return;
       let query = datastore
         .createQuery('Users')
@@ -39,88 +48,14 @@ async function main(auth) {
       datastore.save(user).catch(err => {
         console.error(err);
       });
-      /* if(isNaN(+data[2])) return console.log(data[0]);
-      let query = datastore.createQuery('Score')
-        .filter('email', '=', data[0]);
-      let user = await datastore.runQuery(query);
-      user = user[0][0];
-      if(user == undefined) return console.log(data[0]);
-      user['5-8'] = +data[2];
-      // delete user['4-6'];
-      datastore.save(user).catch(err => {
-        console.error(err);
-      }); */
-    });
+    }); */
   });
-
-  /* var request = {
-    // The ID of the spreadsheet to update.
-    spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',  // TODO: Update placeholder value.
-
-    // The A1 notation of a range to search for a logical table of data.
-    // Values will be appended after the last row of the table.
-    range: 'part2!A4:B4',  // TODO: Update placeholder value.
-
-    // How the input data should be interpreted.
-    valueInputOption: 'RAW',  // TODO: Update placeholder value.
-
-    // How the input data should be inserted.
-    insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
-
-    resource: {
-      range: 'part2!A4:B4',
-      majorDimension: 'ROWS',
-      values: [
-        ['aaas', '222']
-      ]
-    },
-
-    auth: auth,
-  };
-
-  sheets.spreadsheets.values.append(request, function(err, response) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-  
-    // console.log(response);
-  }); */
-
-  /* sheets.spreadsheets.values.get({
-    spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',
-    range: 'Sheet2!:A',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    console.log(res.data.values);
-  }); */
-
-  /*sheets.spreadsheets.batchUpdate({
-    spreadsheetId: '19GMi6YGRCxeJRgIhl_OO6BTpAKTh6pcVcNeGWe8C878',
-    resource: {
-      requests: [{
-        addSheet: {
-          properties: {
-            title: 'part3'
-          }
-        }
-      }]
-    }
-  }, function(err, response) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
-    // TODO: Change code below to process the `response` object:
-    console.log(response);
-  }); */
 }
 
 // ------------------------
 
 // Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
+fs.readFile('../secret/credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   authorize(JSON.parse(content), main);

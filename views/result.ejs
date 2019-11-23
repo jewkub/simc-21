@@ -1,196 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
-    <link rel="stylesheet" href="/home-bundle.css">
+    <title>ประกาศผล - ค่ายเส้นทางสู่หมอศิริราชครั้งที่ 21</title>
+    <link rel="stylesheet" href="/normal-bundle.css">
     <%- include('includes/css.ejs') %>
-    <style>
-      *, .btn {
-        font-size: inherit;
-      }
-      html {
-        font-size: 140%;
-        height: 100%;
-      }
-      body {
-        height: 100%;
-      }
-      .parallax {
-        opacity: 0.8;
-
-        z-index: -1;
-
-        /* Full height */
-        height: 100%;
-        
-        width: 50%;
-
-        /* Create the parallax scrolling effect */
-        background-attachment: fixed;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: auto 100%;
-      }
-      #p1 {
-        margin-left: 50%;
-        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/1.jpg");
-        --ratio: 1;
-        --expect: 1.066;
-        background-position: calc(50% + 25% * var(--expect) + ( 960px * var(--ratio) * 50 * var(--expect) ) / 200) center;
-      }
-      #p2 {
-        --ratio: 1;
-        --expect: 0.934;
-        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/2.jpg");
-        background-position: calc(25% * var(--expect) - 1 / 4 * 960px * var(--ratio) * (2 - var(--expect) ) ) center;
-      }
-      #p3 {
-        margin-left: 50%;
-        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/3.jpg");
-        --ratio: 1;
-        --expect: 1.066;
-        background-position: calc(50% + 25% * var(--expect) + ( 960px * var(--ratio) * 50 * var(--expect) ) / 200) center;
-      }
-      #p4 {
-        --ratio: 1;
-        --expect: 1.11;
-        background-image: url("https://storage.googleapis.com/simc-web.appspot.com/public/web/4.jpg");
-        background-position: calc(25% * var(--expect) - 1 / 4 * 960px * var(--ratio) * (2 - var(--expect) ) ) center;
-      }
-      @media only screen and (max-device-width: 1024px) {
-        .parallax {
-          background-attachment: scroll;
-          height: 435px;
-        }
-        #p1 {
-          background-position: 50% center;
-        }
-        #p3 {
-          background-position: 50% center;
-        }
-        #p2, #p4 {
-          background-position: center;
-        }
-        * {
-          font-size: medium;
-        }
-        .footer > .container > span {
-          font-size: inherit;
-        }
-        .modal label {
-          font-size: x-large;
-        }
-      }
-      .footer {
-        position: static;
-        margin-top: 0;
-      }
-      .footer > .container > span {
-        font-size: inherit;
-        font-size: 1.8vw;
-      }
-      .caption {
-        z-index: 0;
-        position: absolute;
-        height: 400px;
-        width: 50%;
-        background-color: white;
-      }
-      .caption > span {
-        display: inline-block;
-        vertical-align: middle;
-        margin: auto;
-        width: 100%;
-      }
-    </style>
   </head>
   <body>
-    <% if (alertType != 'none') { %>
-      <div style="display:none;" id="alert" alert-type="<%= alertType %>"><%= alert %></div>
-    <% } %>
-    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/hd_png.png" width="100%" style="margin-bottom: -15%; z-index: 1; position: relative">
-    <div class="caption container" style="padding-top: 10%;">
-      <span style="text-align: center; font-size: larger;">- 01 -<br>ร ะ เ บี ย บ ก า ร</span>
-      <span>- กําหนดการเข้าค่าย 2 วัน 1 คืน ตั้งแต่วันเสาร์ที่ 19 มกราคม 2562 เวลา 7:00 น. ถึงวันอาทิตย์ที่ 20 มกราคม 2562 เวลา 19:00 น. โดยค้างคืนที่ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช<br>- สถานที่จัดกิจกรรม : คณะแพทยศาสตร์ศิริราชพยาบาล จ.กรุงเทพมหานคร<br>- ที่พัก : ศูนย์ฝึกอบรมและปฏิบัติธรรมศิริราช อ.นครชัยศรี จ.นครปฐม<br>- คุณสมบัติผู้สมัคร : นักเรียนที่กำลังศึกษาอยู่ชั้นมัธยมศึกษาตอนปลาย (ม.4-6)<br>- จำนวนที่รับสมัครทั้งหมด : 250 คน</span>
+    <%
+      if (user && user.get('pass')) {
+    %>
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/pass.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <%
+      }
+      else {
+    %>
+    <img src="https://storage.googleapis.com/simc-web.appspot.com/public/web/fail.png" width="100%" style="margin-bottom: 0; z-index: 1; position: relative">
+    <%
+      }
+    %>
+    <br><br>
+    <br>
+    <br>
+    <div class="container-fluid">
+      <h2 style="text-align: center;">ดูผลการคัดเลือกทั้งหมดได้<a href="https://drive.google.com/file/d/1LiY106msS_0yVMaFAZCenCGOTcvCINCu/view" target="_blank" style="font-size: inherit;">ที่นี่</a></h2>
+      <br>
+      <%
+        if (user && user.get('pass')) {
+      %>
+          <h2 style="text-align: center;">จ่ายเงินผ่านระบบคณะ<a href="http://www1.si.mahidol.ac.th/division/conference/conference/sm_index.php?sm_id=771&menu=1&lang=TH" target="_blank" style="font-size: inherit;">ที่นี่</a></h2>
+      <%
+        }
+      %>
     </div>
-    <div class="parallax" id="p1"></div>
-    <div class="caption container" style="right: 0;">
-      <span style="text-align: center; font-size: larger;">- 02 -<br>ก า ร รั บ ส มั ค ร</span>
-      <span>- เปิดรับสมัครตั้งแต่ วันที่ 18 สิงหาคม เวลา 0.00 น. – 13 ตุลาคม 2561 เวลา 23.59 น.<br>- กรอกใบสมัครและทําข้อสอบคัดเลือกออนไลน์ได้ที่ www.simc20.com<br>- เอกสารประกอบการสมัคร ส่งเป็นไฟล์ .jpg ทางเว็บไซต์<br>1) ใบระเบียนแสดงผลการเรียน (ปพ.1)<br>2) หนังสือขออนุญาตจากผู้ปกครอง<br>- ประกาศผลวันอาทิตย์ที่ 28 ตุลาคม 2561 ผ่านทางเว็บไซต์ www.simc20.com และเพจค่ายเส้นทางสู่หมอศิริราช (www.facebook.com/simedicalcamp20th)<br>- โดยผู้ที่ได้รับการคัดเลือกจะมีค่าใช้จ่ายในการเข้าร่วมกิจกรรม 800 บาท</span>
-    </div>
-    <div class="parallax" id="p2"></div>
-    <div class="caption container" style="">
-      <span style="text-align: center; font-size: larger;">- 03 -<br>โ ป ร ด อ่ า น</span>
-      <span>- หากส่งเอกสารหรือตอบคําถามในการสมัครไม่ครบตามข้อกําหนด จะไม่ได้รับพิจารณาคัดเลือก<br>- การตัดสินของคณะกรรมการค่ายเส้นทางสู่หมอศิริราช ถือเป็นที่สิ้นสุด<br>- หากมีการเปลี่ยนแปลงใดๆ จะแจ้งให้ทราบผ่านทางเพจ www.facebook.com/simedicalcamp20th ผู้สมัครจึงควรติดตามข่าวสารอย่างสม่ำเสมอ<br>- ทางคณะกรรมการค่ายเส้นทางสู่หมอศิริราชขอนําข้อมูลส่วนตัวมาใช้เพื่อติดต่อผู้สมัครที่ได้รับการคัดเลือกเกี่ยวกับการศึกษาต่อในคณะแพทยศาสตร์ศิริราชพยาบาลในอนาคตเพื่อประโยชน์ในการปรับปรุงและพัฒนาค่ายเส้นทางสู่หมอศิริราชต่อไป โดยไม่มีการนําข้อมูลไปเผยแพร่ และใช้ในวัตถุประสงค์อื่นโดยไม่ได้รับอนุญาต<br>- กรณีผู้ผ่านการคัดเลือกตัดสินใจจะไม่เข้าร่วมค่าย จะต้องแจ้งแก่คณะกรรมการเพื่อพิจารณาภายในวันที่ 17 พฤศจิกายน 2561 จึงจะได้รับเงินคืนเต็มจํานวน หากแจ้งภายหลังวันดังกล่าวทางคณะกรรมการจะพิจารณาตามความเหมาะสม<br>- หากมีข้อสงสัย ติดต่อได้ทางเว็บไซต์ facebook.com/simedicalcamp20th</span>
-    </div>
-    <div class="parallax" id="p3"></div>
-    <div class="caption container" style="right: 0;">
-      <span style="text-align: center; font-size: larger;">- 04 -<br><b style="font-size: inherit;">🤩 ป ร ะ ก า ศ ผ ล 🤩</b></span>
-      <div style="text-align: center;">
-        <br>
-        <% if(!userData.email) { %>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginModalButton">
-            เข้าสู่ระบบเพื่อตรวจสอบผล
-          </button>
-        <% } 
-        else { %>
-          <p><%= userData.email %></p>
-        <% if(!userData.done) { %>
-          <a href="/exam" class="btn btn-primary">แก้ไขข้อมูลส่วนตัว</a><br><br>
-        <%
-          }
-            else if(!userData.eva) {
-        %>
-          <a href="/evaluation" class="btn btn-primary">ทำแบบประเมิน</a><br><br>
-        <% } else { %>
-          <p>ติดตามผลการคัดเลือกได้แล้ว <a href="result">ที่นี่</a></p>
-        <%
-          }
-        %>
-        <a href="/logout" class="btn btn-primary">Log Out</a>
-        <%
-          }
-        %>
-      </div>
-    </div>
-    <div class="parallax" id="p4"></div>
-    <!-- Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel">เข้าสู่ระบบ</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true"><i class="fas fa-times"></i></span>
-            </button>
-          </div>
-          <form id="loginForm" method="post" action="/login">
-            <div class="modal-body">
-              <div class="form-row">
-                <div class="col">
-                  <div class="form-group">
-                    <label for="emailInput">อีเมล</label>
-                    <input type="email" class="form-control" id="emailInput" name="email" aria-describedby="emailHelp" placeholder="อีเมล" required autofocus>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="col">
-                  <div class="form-group">
-                    <label for="passwordInput">รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="passwordInput" name="password" aria-describedby="passwordHelp" placeholder="รหัสผ่าน" required>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    <div class="container"></div>
     <%- include('includes/footer.ejs'); %>
-    <script src="/home-bundle.js" defer></script>
+    <script src="/normal-bundle.js"></script>
   </body>
 </html>

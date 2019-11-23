@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/user.js');
 
 router.get('/register', (req, res, next) => {
+  return res.redirect('/');
   res.render('register.ejs');
 });
 

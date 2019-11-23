@@ -28,7 +28,7 @@ router.get('/err', (req, res, next) => {
   next(new Error('eiei'));
 });
 router.get('/love', (req, res, next) => {
-  req.flash('love', '💖😍<span onclick="window.location=\\\'https://www.facebook.com/FahVirunthita\\\';">💓</span>');
+  req.flash('love', '💖😍<span onclick="window.location=\\\'https://www.google.com\\\';">💓</span>');
   res.redirect('/');
 });
 
@@ -76,6 +76,11 @@ router.post('/upload', multer.any(), (req, res, next) => {
   res.send('ok');
 });
 
+router.get('/delete', async (req, res, next) => {
+  let a = await db.collection('email').doc(req.query.email).delete();
+  res.send(JSON.stringify(a));
+});
+
 router.get('/agree', async (req, res, next) => {
   if (req.hostname == 'www.sirirajmedcamp.com' || req.hostname == 'sirirajmedcamp.com') res.send('--');
   let a = await db.collection('users').where('agree', '==', true).get();
@@ -121,7 +126,7 @@ router.get('/cnt', async (req, res, next) => {
     console.log(fb + ' -> ' + pre + ' ' + name + ' ' + sur);
   }); */
   
-  let a = await db.collection('users').get();
+  /* let a = await db.collection('users').get();
   console.log(a.docs.length);
   a.forEach(async e => {
     let file = (await db.collection('answers')
@@ -130,7 +135,16 @@ router.get('/cnt', async (req, res, next) => {
       .where('num', '==', 61)
       .get());
     // if (file.empty) console.log(e.get('email'));
+  }); */
+
+  let ans = (await db.collection('answers')
+    // .where('email', '==', 'a@aa.com')
+    .where('part', '==', 6)
+    .get()).docs;
+  ans.forEach(e => {
+    console.log(e.get('num') + ': ' + e.get('ans'));
   });
+
 
   /* let fb = (await db.collection('answers')
     .where('email', '==', 'khwankhwanludee@gmail.com')

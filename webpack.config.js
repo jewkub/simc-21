@@ -58,7 +58,7 @@ module.exports = {
   optimization: {
     minimizer: [
       new OptimizeCSSAssetsPlugin({})
-    ],
+    ]
   },
   mode: 'production'
 }

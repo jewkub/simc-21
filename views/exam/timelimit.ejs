@@ -76,7 +76,7 @@
     <script>
     $(document).ready(() => {
       $(window).keydown(function(event){
-        if(event.keyCode == 13) {
+        if (event.keyCode == 13) {
           event.preventDefault();
           return false;
         }
@@ -85,7 +85,11 @@
       let endTime = moment(<%- endTime %>);
       (function foo() {
         let timediff = moment.duration(endTime.diff(moment()));
-        if (timediff.asMilliseconds() <= 0) $('form').trigger('submit');
+        if (timediff.asMilliseconds() < 0) {
+          $('form').trigger('submit');
+          $('#timeleft').text('หมดเวลาแล้ว กำลังส่ง...' );
+          return ;
+        }
         $('#timeleft').text('ขณะนี้เหลือเวลาอีก ' + timediff.hours().toString().padStart(2, '0') + ' : ' + timediff.minutes().toString().padStart(2, '0') + ' : ' + timediff.seconds().toString().padStart(2, '0'));
         window.setTimeout(foo, 1000);
       })(); // http://bit.ly/2LhnMal

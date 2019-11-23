@@ -21,6 +21,7 @@ const storage = new Storage({
 const bucket = storage.bucket('simc-web.appspot.com');
 
 app.locals.shuffle = function (array, length) {
+  // return array;
   let counter = length || array.length;
 
   // While there are elements in the array
@@ -115,30 +116,23 @@ app.get('/', async (req, res, next) => {
   try {
     let alert = req.flash();
     let photos = (await bucket.getFiles({ prefix: 'public/web/photos/' }))[0];
-    let carousel = (await bucket.getFiles({ prefix: 'public/web/carousel2/' }))[0];
+    let carousel = (await bucket.getFiles({ prefix: 'public/web/carousel/' }))[0];
     // console.log(req.user);
-    if ((new Date()).getTime() > 1566478800000 || req.hostname != 'www.sirirajmedcamp.com') res.render('home.ejs', {
+    if (true || (new Date()).getTime() < 1570208400000 || req.hostname != 'www.sirirajmedcamp.com') res.render('home.ejs', {
       photos: getRandom(photos, 6),
       alert: alert,
       user: req.user,
       carousel: getRandom(carousel, 3),
+      result: !(req.hostname == 'www.sirirajmedcamp.com' && (new Date()).getTime() < 1571058000000)
     });
-    else res.render('soon.ejs');
+    else res.render('close.ejs');
   } catch (e) {
     return next(e);
   }
 });
-app.get('/old', (req, res) => {
+/* app.get('/old', (req, res) => {
   res.render('oldhome.ejs', {userData: req.user, alert: {}});
-});
-
-app.get('/secret', (req, res) => {
-  res.sendFile(__dirname + '/secret/secret.json');
-});
-app.get('/secret2', (req, res) => {
-  res.sendFile(__dirname + '/secret/SIMC-Web-4d0cc28353fd.json');
-});
-
+}); */
 
 app.use('/', require('./routes/debug.js'));
 app.use('/', require('./routes/register.js'));
@@ -147,10 +141,10 @@ app.use('/', require('./routes/evaluation.js'));
 app.use('/', require('./routes/scoreboard.js'));
 
 // set normal cache
-/* app.use(function(req, res, next) {
+app.use(function(req, res, next) {
   res.set('Cache-Control', 'public');
   next();
-}); */
+});
 
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(__dirname + '/favicon.ico');
