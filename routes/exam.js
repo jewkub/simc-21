@@ -30,7 +30,6 @@ let exam;
 
 router.get('/exam', async function (req, res, next) {
   try {
-    return res.redirect('/');
     if (!req.user) throw new Error('กรุณาเข้าสู่ระบบ');
     if (req.user.get('done')) throw new Error('ข้อสอบถูกเก็บแล้ว');
     // if (req.query.part != 1) req.query.part = 7
@@ -94,9 +93,9 @@ router.post('/exam/start', async (req, res, next) => {
     let startTime = req.user.get('startTime');
     startTime = startTime && startTime.toMillis();
     // console.log(startTime);
-    if (moment().isAfter(moment(startTime).add(35, 'm'))) {
+    if (moment().isAfter(moment(startTime).add(30, 'm'))) {
       await req.user.ref.update({
-        endTime: moment(startTime).add(35, 'm').toDate()
+        endTime: moment(startTime).add(30, 'm').toDate()
       });
       throw new Error('หมดเวลาทำข้อสอบชุดนี้แล้ว');
     }
@@ -113,7 +112,7 @@ router.post('/exam/start', async (req, res, next) => {
       });
     }
     res.render('exam/timelimit.ejs', {
-      endTime: moment(startTime).add(35, 'm').valueOf(),
+      endTime: moment(startTime).add(30, 'm').valueOf(),
       part: req.body.part,
       exam: exam,
       files: pic[0]

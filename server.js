@@ -122,8 +122,8 @@ app.get('/', async (req, res, next) => {
       photos: getRandom(photos, 6),
       alert: alert,
       user: req.user,
-      carousel: getRandom(carousel, 3),
-      result: !(req.hostname == 'www.sirirajmedcamp.com' && (new Date()).getTime() < 1571058000000)
+      carousel: carousel,
+      result: false && !(req.hostname == 'www.sirirajmedcamp.com' && (new Date()).getTime() < 1571058000000)
     });
     else res.render('close.ejs');
   } catch (e) {
